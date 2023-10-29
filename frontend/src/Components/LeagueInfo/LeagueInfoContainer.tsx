@@ -17,13 +17,7 @@ const secondCardBorderCss = 'lg:rounded-tr-lg';
 const fifthCardBorderCss = 'lg:rounded-bl-lg';
 const sixthCardBorderCss = 'rounded-bl-lg rounded-br-lg lg:rounded-bl-none';
 
-/* interface IProps {
-  playerForms: IPlayerForm[];
-  matches: IMatch[]
-} */
-
 function LeagueInfoContainer(): ReactElement {
-  /* const { playerForms, matches } = props; */
   const [winStreaks, setWinStreaks] = useState([] as IStreak[]);
   const [undefeatedStreaks, setUndefeatedStreaks] = useState([] as IStreak[]);
   const [lossStreaks, setLossStreaks] = useState([] as IStreak[]);

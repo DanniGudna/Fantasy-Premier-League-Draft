@@ -69,17 +69,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/:leagueNumber" element={<League />} />
-            <Route
-              path="/:leagueNumber/:playerNumber"
-              /*               element={(
-                              <ContentCard>
-                                <p className="text-black: dark:text-white">Individual Player info will be displayed here if I have time </p>
-                              </ContentCard>
-                            )} */
-              element={(
-                <Player />
-              )}
-            />
+            <Route path="/:leagueNumber/:playerNumber" element={(<Player />)} />
           </Routes>
         </div>
         {/* <footer className="flex-shrink-0 w-full">

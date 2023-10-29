@@ -96,56 +96,47 @@ function getPlayerTeamNameByIdFromPlayerForms(ID: number, players: IPlayerForm[]
   return 'name not found';
 }
 
-export function getAllStreaks(playerForms: IPlayerForm[]) {
-  let winStreak = 0;
-  let lossStreak = 0;
-  let undefeatedStreak = 0;
-  let currentWinStreak = 0;
-  let currentLossStreak = 0;
-  let currentUndefeatedStreak = 0;
-  let streakStart = 1;
-  let undefeatedStreakStart = 1; // we need a seperate one for undefeated since draw stops win streak but not undefeated
-  let lastResult: MatchResult | undefined;
+function getStreakEnd(numberOfFinishedGW: number, currentGW: number, matchingResult: boolean): number {
+  return currentGW === numberOfFinishedGW && matchingResult ? currentGW : currentGW - 1;
+}
 
+export function getAllStreaks(playerForms: IPlayerForm[]) {
   const winStreaks: IStreak[] = [];
   const undefeatedStreaks: IStreak[] = [];
   const lossStreaks: IStreak[] = [];
 
-  playerForms.forEach((playerForm) => {
-    console.log('🚀 ~ file: Utils.tsx:191 ~ playerForms.forEach ~ playerForm:', playerForm);
-    playerForm.matchInfo.forEach((match) => {
-      // skip matchweek 7
-      if (match.event !== 7) {
-        if (match.result === 'win') {
-          currentWinStreak++;
-          currentLossStreak = 0;
-          currentUndefeatedStreak++;
-          if (currentWinStreak > winStreak) {
-            winStreak = currentWinStreak;
-          }
-          if (currentUndefeatedStreak > undefeatedStreak) {
-            undefeatedStreak = currentUndefeatedStreak;
-          }
-        } else if (match.result === 'loss') {
-          currentLossStreak++;
-          currentWinStreak = 0;
-          currentUndefeatedStreak = 0;
-          if (currentLossStreak > lossStreak) {
-            lossStreak = currentLossStreak;
-          }
-        } else {
-          currentUndefeatedStreak++;
-          currentLossStreak = 0;
-          currentWinStreak = 0;
-          if (currentUndefeatedStreak > undefeatedStreak) {
-            undefeatedStreak = currentUndefeatedStreak;
-          }
-        }
+  // const pf = [playerForms[2]]; // used if you want to test only one
 
-        // TODO 38 SHOULD NOT BE HARDCODED
-        // Add to streaks if a streak has ended and only if it is longer than 1
-        if (lastResult !== match.result || match.event === 38) {
-          if (lastResult === 'win' && winStreak > 1) {
+  playerForms.forEach((playerForm) => {
+    let winStreak = 0;
+    let lossStreak = 0;
+    let undefeatedStreak = 0;
+    let streakStart = 1;
+    let undefeatedStreakStart = 1; // we need a seperate one for undefeated since draw stops the other streaks but not undefeated
+    let lastResult: MatchResult | undefined;
+    playerForm.matchInfo.forEach((match) => {
+      /*       console.log('event', match.event);
+      console.log('result', match.result);
+      console.log('win', winStreak);
+      console.log('undef', undefeatedStreak);
+      console.log('loss', lossStreak); */
+      /*       // skip matchweek 7
+      if (match.event !== 7) { */
+      if (match.result === 'win') {
+        winStreak++;
+        undefeatedStreak++;
+      } else if (match.result === 'loss') {
+        lossStreak++;
+      } else {
+        undefeatedStreak++;
+      }
+
+      // Add to streaks if a streak has ended and only if it is longer than 1
+      if (lastResult !== match.result || match.event === playerForm.matchInfo.length) {
+        // win streak ends
+        if (lastResult === 'win') {
+          // if current streak is bigger than 1 then add it to the streak array
+          if (winStreak > 1) {
             winStreaks.push({
               type: 'win',
               length: winStreak,
@@ -153,11 +144,15 @@ export function getAllStreaks(playerForms: IPlayerForm[]) {
               playerName: playerForm.playerName,
               teamName: playerForm.teamName,
               streakStart,
-              streakEnd: match.event - 1,
+              streakEnd: getStreakEnd(playerForm.matchInfo.length, match.event, lastResult === match.result),
             });
-            winStreak = 0;
-            currentWinStreak = 0;
-          } else if (lastResult === 'loss' && lossStreak > 1) {
+          }
+          // reset the streak counter
+          winStreak = 0;
+        }
+        else if (lastResult === 'loss') {
+          // if current streak is bigger than 1 then add it to the streak array
+          if (lossStreak > 1) {
             lossStreaks.push({
               type: 'loss',
               length: lossStreak,
@@ -165,38 +160,39 @@ export function getAllStreaks(playerForms: IPlayerForm[]) {
               playerName: playerForm.playerName,
               teamName: playerForm.teamName,
               streakStart,
-              streakEnd: match.event - 1,
+              streakEnd: getStreakEnd(playerForm.matchInfo.length, match.event, lastResult === match.result),
             });
-            lossStreak = 0;
-            currentLossStreak = 0;
           }
-          // check also for undefeated streak
-          if (match.result === 'loss') {
-            if (undefeatedStreak > 1) {
-              undefeatedStreaks.push({
-                type: 'undefeated',
-                length: undefeatedStreak,
-                playerID: playerForm.playerID,
-                playerName: playerForm.playerName,
-                teamName: playerForm.teamName,
-                streakStart: undefeatedStreakStart,
-                streakEnd: match.event - 1,
-              });
-            }
-            undefeatedStreak = 0;
-            currentUndefeatedStreak = 0;
-            undefeatedStreakStart = match.event + 1;
-          }
-          lastResult = match.result;
-          streakStart = match.event;
+          // reset the streak counter
+          lossStreak = 0;
         }
+        lastResult = match.result;
+        streakStart = match.event;
       }
+      // undefeated streak only ends if result is loss, also check if it is the last game
+      if (match.result === 'loss' || match.event === playerForm.matchInfo.length) {
+        // if current streak is bigger than 1 then add it to the streak array
+        if (undefeatedStreak > 1) {
+          undefeatedStreaks.push({
+            type: 'undefeated',
+            length: undefeatedStreak,
+            playerID: playerForm.playerID,
+            playerName: playerForm.playerName,
+            teamName: playerForm.teamName,
+            streakStart: undefeatedStreakStart,
+            streakEnd: getStreakEnd(playerForm.matchInfo.length, match.event, match.result !== 'loss'),
+          });
+        }
+        // reset the streak
+        undefeatedStreak = 0;
+        undefeatedStreakStart = match.event + 1;
+      }
+      /*       } */
     });
   });
 
   // Sort streaks by length in descending order
   winStreaks.sort((a, b) => b.length - a.length);
-  console.log('🚀 ~ file: Utils.tsx:195 ~ getAllStreaks ~ winStreaks:', winStreaks);
   lossStreaks.sort((a, b) => b.length - a.length);
   undefeatedStreaks.sort((a, b) => b.length - a.length);
 
@@ -213,18 +209,19 @@ export function getMatchScores(playerForms: IPlayerForm[]) {
   playerForms.forEach((playerForm) => {
     playerForm.matchInfo.forEach((matchInfo) => {
       // in week 7 no games were played and all players got 0 points, removing that gameweek gives better results
-      if (matchInfo.event !== 7) {
-        scores.push({
-          playerName: playerForm.playerName,
-          playerTeamName: playerForm.teamName,
-          playerID: playerForm.playerID,
-          points: matchInfo.playerPoints,
-          event: matchInfo.event,
-          opponentName: getPlayerNameByIdFromPlayerForms(matchInfo.opponentID, playerForms),
-          opponentTeamName: getPlayerTeamNameByIdFromPlayerForms(matchInfo.opponentID, playerForms),
-          opponentID: matchInfo.opponentID,
-        });
-      }
+      // NOTE this should only be for league 22/23
+      /*  if (matchInfo.event !== 7) { */
+      scores.push({
+        playerName: playerForm.playerName,
+        playerTeamName: playerForm.teamName,
+        playerID: playerForm.playerID,
+        points: matchInfo.playerPoints,
+        event: matchInfo.event,
+        opponentName: getPlayerNameByIdFromPlayerForms(matchInfo.opponentID, playerForms),
+        opponentTeamName: getPlayerTeamNameByIdFromPlayerForms(matchInfo.opponentID, playerForms),
+        opponentID: matchInfo.opponentID,
+      });
+      /*  } */
     });
   });
 

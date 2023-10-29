@@ -33,7 +33,11 @@ function LeagueInfoContainer(): ReactElement {
     const maxRenders = Math.min(streaks.length, numberOfRenders);
     for (let i = 0; i < maxRenders; i++) {
       const streak = streaks[i];
-      streakComponents.push(<StreakInfo streak={streak} key={streak.playerID + streak.streakStart} />);
+      streakComponents.push(<StreakInfo
+        streak={streak}
+        gameWeek={playerForms[0].matchInfo.length}
+        key={streak.playerID + streak.streakStart}
+      />);
     }
 
     return streakComponents;

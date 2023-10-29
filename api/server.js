@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const fs = require('fs'); // Import the fs module
 
 const app = express();
 const corsOptions = {
@@ -10,6 +11,16 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 
+function getJsonFallback(leagueID, endpointPath) {
+  const filePath = `./Json/${endpointPath}/${leagueID}.json`; // Adjust the file path as needed
+  try {
+    const data = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    return null; // Return null if there's an error reading the file
+  }
+}
+
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -17,14 +28,18 @@ app.get('/api/data/:leagueID', async (req, res) => {
   const { leagueID } = req.params;
   const url = `https://draft.premierleague.com/api/league/${leagueID}/details`;
   try {
-    console.log("try)")
     const response = await axios.get(url);
-    console.log("🚀 ~ file: server.js:21 ~ app.get ~ response:", response)
     res.json(response.data);
   } catch (error) {
-    console.log("error")
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    // attempt to get JSON fallback
+    const fallback = getJsonFallback(leagueID, "details");
+    if ( fallback) {
+       res.status(200).json(fallback)
+    }
+    else {
+      // console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 });
 
@@ -36,3 +51,4 @@ app.listen(port, () => {
 app.get('/hello', (req, res) => {
   res.send('Hello World!')
 })
+

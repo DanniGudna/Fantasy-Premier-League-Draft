@@ -1,5 +1,5 @@
 import { IAllChartData, IChartData } from '../interfaces/Generic';
-import { IGameWeekScores, IMatch, IMatchInfo, IPlayer, IPlayerForm, IPlayerStanding, IPlayerWeeklyStanding, IScoreInfo, IStreak, MatchResult } from '../interfaces/League';
+import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, MatchResult } from '../interfaces/League';
 
 function getMatchInfo(playerId: number, match: IMatch): IMatchInfo | null {
   if (match.finished) {
@@ -55,11 +55,11 @@ function getMatchInfo(playerId: number, match: IMatch): IMatchInfo | null {
   return null;
 }
 
-export function getPlayerForm(player: IPlayer, matches: IMatch[]): IPlayerForm {
+export function getPlayerForm(player: IDraftPlayer, matches: IMatch[]): IDraftPlayerForm {
   // filter out the matches that the pllayer didnt play in
   const filteredMatches = matches.filter((match) => (
     match.league_entry_1 === player.id || match.league_entry_2 === player.id) && match.finished);
-  const playerForm = {} as IPlayerForm;
+  const playerForm = {} as IDraftPlayerForm;
   playerForm.playerID = player.id;
   playerForm.playerName = player.player_first_name + ' ' + player.player_last_name;
   playerForm.teamName = player.entry_name;
@@ -75,12 +75,12 @@ export function getPlayerForm(player: IPlayer, matches: IMatch[]): IPlayerForm {
   return playerForm;
 }
 
-export function getPlayerById(ID: number, players: IPlayer[]): IPlayer | undefined {
+export function getPlayerById(ID: number, players: IDraftPlayer[]): IDraftPlayer | undefined {
   return players.find((player) => player.id === ID);
 }
 
 // todo combine these functions
-function getPlayerNameByIdFromPlayerForms(ID: number, players: IPlayerForm[]): string {
+function getPlayerNameByIdFromPlayerForms(ID: number, players: IDraftPlayerForm[]): string {
   const playerInfo = players.find((player) => player.playerID === ID);
   if (playerInfo) {
     return playerInfo.playerName;
@@ -88,7 +88,7 @@ function getPlayerNameByIdFromPlayerForms(ID: number, players: IPlayerForm[]): s
   return 'name not found';
 }
 
-function getPlayerTeamNameByIdFromPlayerForms(ID: number, players: IPlayerForm[]): string {
+function getPlayerTeamNameByIdFromPlayerForms(ID: number, players: IDraftPlayerForm[]): string {
   const playerInfo = players.find((player) => player.playerID === ID);
   if (playerInfo) {
     return playerInfo.teamName;
@@ -100,7 +100,7 @@ function getStreakEnd(numberOfFinishedGW: number, currentGW: number, matchingRes
   return currentGW === numberOfFinishedGW && matchingResult ? currentGW : currentGW - 1;
 }
 
-export function getAllStreaks(playerForms: IPlayerForm[]) {
+export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
   const winStreaks: IStreak[] = [];
   const undefeatedStreaks: IStreak[] = [];
   const lossStreaks: IStreak[] = [];
@@ -203,7 +203,7 @@ export function getAllStreaks(playerForms: IPlayerForm[]) {
   };
 }
 
-export function getMatchScores(playerForms: IPlayerForm[]) {
+export function getMatchScores(playerForms: IDraftPlayerForm[]) {
   const scores: IScoreInfo[] = [];
 
   playerForms.forEach((playerForm) => {
@@ -231,13 +231,13 @@ export function getMatchScores(playerForms: IPlayerForm[]) {
   return scores;
 }
 
-export function getPlayerStandings(playerForm: IPlayerForm) {
+export function getPlayerStandings(playerForm: IDraftPlayerForm) {
   const playerStandings = {
     playerName: playerForm.playerName,
     teamName: playerForm.teamName,
     playerID: playerForm.playerID,
-  } as IPlayerStanding;
-  const weeklyStandings = [] as IPlayerWeeklyStanding[];
+  } as IDraftPlayerStanding;
+  const weeklyStandings = [] as IDraftPlayerWeeklyStanding[];
   const pointIndicator = { win: 3, draw: 1, loss: 0 };
 
   let currentLeaguePoints = 0;
@@ -250,7 +250,7 @@ export function getPlayerStandings(playerForm: IPlayerForm) {
       event: match.event,
       leaguePoints: currentLeaguePoints,
       points: currentPoints,
-    } as IPlayerWeeklyStanding);
+    } as IDraftPlayerWeeklyStanding);
   });
 
   playerStandings.weeklyStandings = weeklyStandings;
@@ -258,7 +258,7 @@ export function getPlayerStandings(playerForm: IPlayerForm) {
   return playerStandings;
 }
 
-export function addRankToPlayerStandings(playerStandings: IPlayerStanding[]) {
+export function addRankToPlayerStandings(playerStandings: IDraftPlayerStanding[]) {
   for (let i = 0; i < playerStandings[0].weeklyStandings.length; i++) {
     const infoForCurrentWeek = [];
     for (let j = 0; j < playerStandings.length; j++) {
@@ -283,7 +283,7 @@ export function addRankToPlayerStandings(playerStandings: IPlayerStanding[]) {
   }
 }
 
-export function createChartData(playerStandings: IPlayerStanding[]): IAllChartData {
+export function createChartData(playerStandings: IDraftPlayerStanding[]): IAllChartData {
   addRankToPlayerStandings(playerStandings);
   const labels = [];
   // add numbers to labels equal to the length of weeklyStandings
@@ -321,14 +321,14 @@ export function createChartData(playerStandings: IPlayerStanding[]): IAllChartDa
       data: leaguePointsDataForPlayer,
       fill: false,
       borderColor: color,
-      tension: 0.3,
+      tension: 0.0,
     };
     const pointsDataset = {
       label: playerStanding.teamName,
       data: pointsDataForPlayer,
       fill: false,
       borderColor: color,
-      tension: 0.3,
+      tension: 0.2,
     };
     const rankDataset = {
       label: playerStanding.teamName,

@@ -13,7 +13,7 @@ import ChartContainer from '../Components/LeagueCharts/ChartContainer';
 import LeagueInfoContainer from '../Components/LeagueInfo/LeagueInfoContainer';
 import LeagueTable from '../Components/LeagueTable/LeagueTable';
 import Loading from '../Components/Loading/Loading';
-import { IPlayer, IPlayerForm, IPlayerStanding } from '../interfaces/League';
+import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding } from '../interfaces/League';
 import { getPlayerForm, getPlayerStandings } from '../Utils/Utils';
 
 const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
@@ -21,14 +21,14 @@ const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 function League(): ReactElement {
   const {
     setLeagueName,
-    setPlayers,
+    setDraftPlayers,
     standings,
     setStandings,
-    playerForms,
-    setPlayerForms,
+    draftPlayerForms,
+    setDraftPlayerForms,
     matches,
     setMatches,
-    setPlayerStandings,
+    setDraftPlayerStandings,
   } = useContext(UserContext);
   const { leagueNumber } = useParams();
   const [loading, setLoading] = useState(true);
@@ -38,30 +38,32 @@ function League(): ReactElement {
     if (leagueNumber) {
       setLoading(true);
       const leagueInfo = await fantasyPremierLeagueApi.getLeagueTableDetails(leagueNumber);
+      const FPLPlayerInfo = await fantasyPremierLeagueApi.getFPLPlayerData();
+      console.log('🚀 ~ file: League.tsx:42 ~ getLeagueInfo ~ FPLPlayerInfo:', FPLPlayerInfo);
       if (leagueInfo && leagueInfo.standings) {
         const { league_entries, league } = leagueInfo;
         setLeagueName(league.name);
-        const playersInLeague = [] as IPlayer[];
+        const playersInLeague = [] as IDraftPlayer[];
         // get all the players in the league
         league_entries.forEach((player) => {
-          playersInLeague.push(player as IPlayer);
+          playersInLeague.push(player as IDraftPlayer);
         });
-        setPlayers(playersInLeague);
+        setDraftPlayers(playersInLeague);
 
         // matches are only in H2H leagues
         if (leagueInfo.matches) {
-          const forms = [] as IPlayerForm[];
+          const forms = [] as IDraftPlayerForm[];
           // figure out the form of each player
           playersInLeague.forEach((player) => forms.push(getPlayerForm(player, leagueInfo.matches || [])));
-          setPlayerForms(forms);
+          setDraftPlayerForms(forms);
           setMatches(leagueInfo.matches);
 
-          const playerLeagueStandings = [] as IPlayerStanding[];
+          const playerLeagueStandings = [] as IDraftPlayerStanding[];
 
           forms.forEach((form) => {
             playerLeagueStandings.push(getPlayerStandings(form));
           });
-          setPlayerStandings(playerLeagueStandings);
+          setDraftPlayerStandings(playerLeagueStandings);
         }
         // add the points diff to the standings object,used for sorting
         leagueInfo.standings.forEach((standing) => {
@@ -86,9 +88,11 @@ function League(): ReactElement {
     <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-slate-750">
       {loading ?
         error ? (
-          <ContentCard>
-            <p className="text-black dark:text-white">Failed to get league with this ID, are you sure it is a draft h2h league?</p>
-          </ContentCard>
+          <div className="2xl:col-span-2 flex justify-center items-center">
+            <ContentCard>
+              <p className="text-black dark:text-white">Failed to get league with this ID, are you sure it is a draft h2h league?</p>
+            </ContentCard>
+          </div>
         ) : <Loading />
 
         : (
@@ -97,11 +101,11 @@ function League(): ReactElement {
               <LeagueTable rows={standings} />
             </ContentCard>
             <ContentCard>
-              {playerForms?.length > 0 ?
-                <FormTable rows={playerForms} /> : <p> This is not a H2H league so H2H info table cannot be shown</p>}
+              {draftPlayerForms?.length > 0 ?
+                <FormTable rows={draftPlayerForms} /> : <p> This is not a H2H league so H2H info table cannot be shown</p>}
             </ContentCard>
             <ContentCard>
-              {playerForms?.length > 0 ? <LeagueInfoContainer />
+              {draftPlayerForms?.length > 0 ? <LeagueInfoContainer />
                 : <p> This is not a H2H league so H2H info table cannot be shown</p>}
             </ContentCard>
             <ContentCard>

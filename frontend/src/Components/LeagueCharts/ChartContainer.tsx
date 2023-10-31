@@ -41,21 +41,13 @@ const rankOptions = {
   },
 };
 
-const noCurveOption = {
-  elements: {
-    line: {
-      tension: 0, // Set the lineTension option to 0 for straight lines
-    },
-  },
-};
-
 function ChartContainer(): ReactElement {
   // const [colorTheme] = useDarkMode(); // since chart.js doesnt use the tailwind dark mode we have the check the theme manually
-  const { playerStandings } = useContext(UserContext);
+  const { draftPlayerStandings } = useContext(UserContext);
   const [chartData, setChartData] = useState<IAllChartData>({} as IAllChartData);
 
   useEffect(() => {
-    const data = createChartData(playerStandings);
+    const data = createChartData(draftPlayerStandings);
     setChartData(data);
   }, []);
 
@@ -65,7 +57,7 @@ function ChartContainer(): ReactElement {
       {chartData?.leaguePointsData?.datasets.length > 0 ? (
         <div className="text-black dark:text-white mt-4">
           <p>LeaguePoints over time</p>
-          <Line data={chartData.leaguePointsData} options={noCurveOption} />
+          <Line data={chartData.leaguePointsData} />
         </div>
       )
         : null}

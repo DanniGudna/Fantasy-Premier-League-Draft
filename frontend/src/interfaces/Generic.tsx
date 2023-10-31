@@ -1,4 +1,5 @@
-import { ILeagueDetails, IMatch, IPlayer, IPlayerForm, IPlayerStanding, IStanding } from './League';
+import { IFootballPlayerInfo } from './FootballPlayer';
+import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, ILeagueDetails, IMatch, IStanding } from './League';
 
 export type TextFieldType = 'email' | 'text' | 'tel' | 'number';
 
@@ -10,18 +11,20 @@ export interface IUserContext {
   leagueID: string;
   leagueName: string;
   leagueDetails: ILeagueDetails;
-  players: IPlayer[];
+  draftPlayers: IDraftPlayer[];
+  footballPlayers: IFootballPlayerInfo[];
   standings: IStanding[];
-  playerForms: IPlayerForm[];
+  draftPlayerForms: IDraftPlayerForm[];
   matches: IMatch[];
-  playerStandings: IPlayerStanding[];
+  draftPlayerStandings: IDraftPlayerStanding[];
   setLeagueID: React.Dispatch<React.SetStateAction<string>>
   setLeagueName: React.Dispatch<React.SetStateAction<string>>
-  setPlayers: React.Dispatch<React.SetStateAction<IPlayer[]>>
+  setDraftPlayers: React.Dispatch<React.SetStateAction<IDraftPlayer[]>>
+  setFootballPlayers: React.Dispatch<React.SetStateAction<IFootballPlayerInfo[]>>
   setStandings: React.Dispatch<React.SetStateAction<IStanding[]>>
-  setPlayerForms: React.Dispatch<React.SetStateAction<IPlayerForm[]>>
+  setDraftPlayerForms: React.Dispatch<React.SetStateAction<IDraftPlayerForm[]>>
   setMatches: React.Dispatch<React.SetStateAction<IMatch[]>>
-  setPlayerStandings: React.Dispatch<React.SetStateAction<IPlayerStanding[]>>
+  setDraftPlayerStandings: React.Dispatch<React.SetStateAction<IDraftPlayerStanding[]>>
 
 }
 

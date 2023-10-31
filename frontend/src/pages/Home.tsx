@@ -1,15 +1,23 @@
 import 'tailwindcss/tailwind.css';
 
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { FantasyPremierLeagueApi } from '../api';
+import { UserContext } from '../App';
 import ContentCard from '../Components/Common/ContentCard/ContentCard';
 import PrimaryButton from '../Components/Common/PrimaryButtons/PrimaryButton';
 import TextInput from '../Components/Common/TextInput/TextInput';
 
+const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
+
 function Home(): ReactElement {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
+  const {
+    footballPlayers,
+    setFootballPlayers,
+  } = useContext(UserContext);
 
   const handleLeagueNumberChange = (value: string) => {
     setInputValue(value);
@@ -23,6 +31,19 @@ function Home(): ReactElement {
     navigateToLeage(inputValue);
   };
 
+  const getFootballPlayerInfo = async () => {
+    if (!footballPlayers) {
+      const footballPlayersInfo = await fantasyPremierLeagueApi.getFPLPlayerData();
+      if (footballPlayersInfo) {
+        setFootballPlayers(footballPlayersInfo);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getFootballPlayerInfo();
+  }, []);
+
   return (
     <div className="flex items-center justify-center mt-24">
       <ContentCard>
@@ -30,7 +51,7 @@ function Home(): ReactElement {
           <h1 className="text-bold font-bold text-lg leading-6 text-gray-900 dark:text-white">
             Enter your Fantasy Premier League leagueNumber
           </h1>
-          <TextInput title="League Number" inputType="tel" placeholder="46795" helpText="use this number for testing: 46795" updateValue={handleLeagueNumberChange} textInputValue={inputValue} />
+          <TextInput title="League Number" inputType="tel" placeholder="46795 & 48617" helpText="use this number for testing: 46795" updateValue={handleLeagueNumberChange} textInputValue={inputValue} />
           <div className="mt-2">
             <PrimaryButton buttonText="Search" handleClick={handleSearchButtonClick} isButtonDisabled={inputValue.length === 0} />
           </div>

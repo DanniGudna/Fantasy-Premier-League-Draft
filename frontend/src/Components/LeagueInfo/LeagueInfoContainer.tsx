@@ -4,7 +4,7 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { UserContext } from '../../App';
-import { IGameWeekScores, IMatch, IPlayerForm, IScoreInfo, IStreak } from '../../interfaces/League';
+import { IDraftPlayerForm, IGameWeekScores, IMatch, IScoreInfo, IStreak } from '../../interfaces/League';
 import { getAllStreaks, getHighestScoringGameWeeks, getMatchScores } from '../../Utils/Utils';
 import InfoHeader from '../InfoHeader/InfoHeader';
 import LeagueInfoCard from './LeagueInfoCard';
@@ -25,7 +25,7 @@ function LeagueInfoContainer(): ReactElement {
   const [weeklyScores, setWeeklyScores] = useState([] as IGameWeekScores[]);
   const { playerNumber } = useParams();
 
-  const { playerForms, matches } = useContext(UserContext);
+  const { draftPlayerForms, matches } = useContext(UserContext);
 
   // these function can display more info if I want to do this dynamicly in the future
   const renderXNumberOfStreaks = (streaks: IStreak[], numberOfRenders: number) => {
@@ -35,7 +35,7 @@ function LeagueInfoContainer(): ReactElement {
       const streak = streaks[i];
       streakComponents.push(<StreakInfo
         streak={streak}
-        gameWeek={playerForms[0].matchInfo.length}
+        gameWeek={draftPlayerForms[0].matchInfo.length}
         key={streak.playerID + streak.streakStart}
       />);
     }
@@ -68,8 +68,8 @@ function LeagueInfoContainer(): ReactElement {
   };
 
   useEffect(() => {
-    const streaks = getAllStreaks(playerForms);
-    let matchScores = getMatchScores(playerForms);
+    const streaks = getAllStreaks(draftPlayerForms);
+    let matchScores = getMatchScores(draftPlayerForms);
     let weekScores;
 
     // filter if player selected...
@@ -91,7 +91,7 @@ function LeagueInfoContainer(): ReactElement {
     setUndefeatedStreaks(streaks.undefeatedStreaks);
     setLossStreaks(streaks.lossStreaks);
     setWeeklyScores(weekScores);
-  }, [playerForms]);
+  }, [draftPlayerForms]);
 
   return (
     <div>

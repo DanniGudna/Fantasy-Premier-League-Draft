@@ -11,6 +11,7 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 
+// todo not all endpoints have params!
 function getJsonFallback(leagueID, endpointPath) {
   const filePath = `./Json/${endpointPath}/${leagueID}.json`; // Adjust the file path as needed
   try {
@@ -33,8 +34,8 @@ app.get('/api/data/:leagueID', async (req, res) => {
   } catch (error) {
     // attempt to get JSON fallback
     const fallback = getJsonFallback(leagueID, "details");
-    if ( fallback) {
-       res.status(200).json(fallback)
+    if (fallback) {
+      res.status(200).json(fallback)
     }
     else {
       // console.error(error);
@@ -43,12 +44,24 @@ app.get('/api/data/:leagueID', async (req, res) => {
   }
 });
 
+app.get('/api/bootstrap-static', async (req, res) => {
+  const url = `https://draft.premierleague.com/api/bootstrap-static`;
+  try {
+    const response = await axios.get(url);
+    res.json(response.data.elements);
+  } catch (error) {
+    // todo JSON fallback
+
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+// https://draft.premierleague.com/api/bootstrap-static
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-app.get('/hello', (req, res) => {
-  res.send('Hello World!')
-})
 

@@ -2,12 +2,12 @@ import 'tailwindcss/tailwind.css';
 
 import React, { ReactElement } from 'react';
 
-import { IPlayerForm } from '../../interfaces/League';
+import { IDraftPlayerForm } from '../../interfaces/League';
 import InfoHeader from '../InfoHeader/InfoHeader';
 import FormTableRow from './FormTableRow';
 
 interface IProps {
-  rows: IPlayerForm[];
+  rows: IDraftPlayerForm[];
 
 }
 

@@ -20,29 +20,27 @@ function Player(): ReactElement {
   const { playerNumber } = useParams();
   const {
     setLeagueName,
-    setPlayers,
+    setDraftPlayers,
     standings,
     setStandings,
-    playerForms,
-    setPlayerForms,
+    draftPlayerForms,
+    setDraftPlayerForms,
     matches,
     setMatches,
-    setPlayerStandings,
+    setDraftPlayerStandings,
   } = useContext(UserContext);
-  console.log('🚀 ~ file: Player.tsx:31 ~ Player ~ matches:', matches);
-  console.log('🚀 ~ file: Player.tsx:31 ~ Player ~ playerForms:', playerForms);
 
   return (
     <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-slate-750">
       <ContentCard>
-        {playerForms?.length > 0 ? (
+        {draftPlayerForms?.length > 0 ? (
           <LeagueInfoContainer />
         )
           : <p> This is not a H2H league so H2H info table cannot be shown</p>}
       </ContentCard>
       <ContentCard>
-        {playerForms?.length > 0 ?
-          <FormTable rows={playerForms.filter((playerForm) => playerForm.playerID.toString() === playerNumber)} />
+        {draftPlayerForms?.length > 0 ?
+          <FormTable rows={draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerID.toString() === playerNumber)} />
           : <p> This is not a H2H league so H2H info table cannot be shown</p>}
       </ContentCard>
     </div>

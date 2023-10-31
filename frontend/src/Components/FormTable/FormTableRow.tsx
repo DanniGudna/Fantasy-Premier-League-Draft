@@ -3,12 +3,12 @@ import 'tailwindcss/tailwind.css';
 
 import React, { ReactElement } from 'react';
 
-import { IPlayerForm } from '../../interfaces/League';
+import { IDraftPlayerForm } from '../../interfaces/League';
 import PlayerName from '../PlayerName/PlayerName';
 import FormIcon from './FormIcon';
 
 interface IProps {
-  row: IPlayerForm;
+  row: IDraftPlayerForm;
 
 }
 

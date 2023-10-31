@@ -1,6 +1,5 @@
 enum Endpoints {
 
-  // Invoice
   GetLeagueTableDetails = 'details',
 
 }

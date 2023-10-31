@@ -19,7 +19,7 @@ export interface ILeague {
   variety: string;
 }
 
-export interface IPlayer {
+export interface IDraftPlayer {
   entry_id: number;
   entry_name: string;
   id: number;
@@ -61,10 +61,10 @@ export interface IStanding {
 
 export interface ILeagueDetails {
   league: ILeague;
-  league_entries: IPlayer[];
+  league_entries: IDraftPlayer[];
   matches?: IMatch[];
   standings: IStanding[];
-  playerForms?: IPlayerForm[];
+  playerForms?: IDraftPlayerForm[];
 }
 
 export type MatchResult = 'win' | 'loss' | 'draw';
@@ -77,7 +77,7 @@ export interface IMatchInfo {
   event: number; // event is equal to gameweak in the FPL api so ill use the same name
 }
 
-export interface IPlayerForm {
+export interface IDraftPlayerForm {
   matchInfo: IMatchInfo[];
   playerID: number;
   playerName: string;
@@ -106,18 +106,18 @@ export interface IScoreInfo {
   opponentID: number;
 }
 
-export interface IPlayerWeeklyStanding {
+export interface IDraftPlayerWeeklyStanding {
   event: number;
   leaguePoints: number;
   points: number;
   rank: number;
 }
 
-export interface IPlayerStanding {
+export interface IDraftPlayerStanding {
   playerName: string;
   teamName: string;
   playerID: number;
-  weeklyStandings: IPlayerWeeklyStanding[];
+  weeklyStandings: IDraftPlayerWeeklyStanding[];
 }
 
 export interface IGameWeekScores {

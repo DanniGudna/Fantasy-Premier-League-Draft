@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../../App';
-import { IPlayer, IStanding } from '../../interfaces/League';
+import { IDraftPlayer, IStanding } from '../../interfaces/League';
 import { getPlayerById } from '../../Utils/Utils';
 import PlayerName from '../PlayerName/PlayerName';
 import LeagueMovementIdicator from './LeagueMovementIndicator';
@@ -15,12 +15,12 @@ interface IProps {
 }
 
 function LeagueTableRow({ row, h2h }: IProps): ReactElement {
-  const [player, setPlayer] = useState<IPlayer>({} as IPlayer);
-  const { players } = useContext(UserContext);
+  const [draftPlayer, setDraftPlayer] = useState<IDraftPlayer>({} as IDraftPlayer);
+  const { draftPlayers } = useContext(UserContext);
 
   useEffect(() => {
     // This should never return undefined but safeties just in case
-    setPlayer(getPlayerById(row.league_entry, players) || {} as IPlayer);
+    setDraftPlayer(getPlayerById(row.league_entry, draftPlayers) || {} as IDraftPlayer);
   }, []);
 
   return (
@@ -33,7 +33,7 @@ function LeagueTableRow({ row, h2h }: IProps): ReactElement {
 
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm border-b">
-        <PlayerName playerName={player.player_first_name + ' ' + player.player_last_name} teamName={player.entry_name} playerID={player.id} />
+        <PlayerName playerName={draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name} teamName={draftPlayer.entry_name} playerID={draftPlayer.id} />
       </td>
       {h2h ? (
         <>

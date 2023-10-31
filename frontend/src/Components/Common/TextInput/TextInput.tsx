@@ -11,10 +11,11 @@ interface IProps {
   textInputValue: string;
   updateValue(value: string): void;
   inputType: TextFieldType;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 
 }
 
-function TextInput({ title, placeholder, helpText, textInputValue, updateValue, inputType }: IProps): ReactElement {
+function TextInput({ title, placeholder, helpText, textInputValue, updateValue, inputType, onKeyDown }: IProps): ReactElement {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateValue(event.target.value);
   };
@@ -27,12 +28,13 @@ function TextInput({ title, placeholder, helpText, textInputValue, updateValue, 
           type={inputType}
           name="league number"
           id="leagueNumber"
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+          className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
           placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder={placeholder}
           aria-describedby="leagueNumber-description"
           value={textInputValue}
           onChange={handleChange}
+          onKeyDown={onKeyDown}
         />
       </div>
       <p className="mt-2 text-sm text-gray-500" id="leagueNumber-description">{helpText}</p>

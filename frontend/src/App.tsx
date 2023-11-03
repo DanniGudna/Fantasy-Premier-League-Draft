@@ -69,8 +69,8 @@ function App() {
   }), [leagueID, leagueName, draftPlayers, footballPlayers, standings, draftPlayerForms, matches, draftPlayerStandings]);
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 dark:bg-slate-600 min-h-screen">
-      <UserContext.Provider value={contextValue}>
+    <UserContext.Provider value={contextValue}>
+      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 dark:bg-slate-600 min-h-screen">
         <Header />
         <div className="content">
           <Routes>
@@ -82,8 +82,8 @@ function App() {
         {/* <footer className="flex-shrink-0 w-full">
           <Footer />
         </footer> */}
-      </UserContext.Provider>
-    </div>
+      </div>
+    </UserContext.Provider>
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import 'tailwindcss/tailwind.css';
 
 import React, { ReactElement } from 'react';

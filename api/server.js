@@ -44,7 +44,7 @@ app.get('/api/data/:leagueID', async (req, res) => {
   }
 });
 
-app.get('/api/bootstrap-static', async (req, res) => {
+app.get('/api/football-players', async (req, res) => {
   const url = `https://draft.premierleague.com/api/bootstrap-static`;
   try {
     const response = await axios.get(url);
@@ -56,6 +56,52 @@ app.get('/api/bootstrap-static', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// TODO this does not work
+app.get('/api/scores/:round', async (req, res) => {
+  const { round } = req.params;
+  const url = `https://draft.premierleague.com/api/event/${round}/live`;
+  try {
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    // todo JSON fallback
+
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// TODO = maybe this should be individual instead of all
+app.get('/api/transactions/:leagueID', async (req, res) => {
+  const { leagueID } = req.params;
+  const url = `https://draft.premierleague.com/api/draft/league/${LeagueID}/transactions`;
+  try {
+    const response = await axios.get(url);
+    res.json(response.data.transactions);
+  } catch (error) {
+    // todo JSON fallback
+
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/api/draft/:leagueID', async (req, res) => {
+  const { leagueID } = req.params;
+  const url = `https://draft.premierleague.com/api/draft/${leagueID}/choices`;
+  try {
+    const response = await axios.get(url);
+    res.json(response.data.choices);
+  } catch (error) {
+    // todo JSON fallback
+
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 
 
 // https://draft.premierleague.com/api/bootstrap-static

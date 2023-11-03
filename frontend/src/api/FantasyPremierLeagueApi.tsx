@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { AxiosInstance } from 'axios';
 
+import { IChoice } from '../interfaces/Draft';
 import { IFootballPlayerInfo } from '../interfaces/FootballPlayer';
 import { ILeagueDetails } from '../interfaces/League';
 import instance from './axios';
@@ -25,7 +26,7 @@ class FantasyPremierLeagueApi {
 
   async getFPLPlayerData(): Promise<IFootballPlayerInfo[] | null> {
     try {
-      const { data: result } = await this.httpClient.get('api/bootstrap-static');
+      const { data: result } = await this.httpClient.get('api/footballl-players');
       console.log(result);
       return result;
     } catch (e) {
@@ -33,6 +34,29 @@ class FantasyPremierLeagueApi {
       return null;
     }
   }
+
+  async getDraft(leagueID: string): Promise<IChoice[] | null> {
+    try {
+      const { data: result } = await this.httpClient.get(`api/draft/${leagueID}`);
+      console.log(result);
+      return result;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
+  // on hold
+  /* async getTransactions(leagueID: string): Promise<IChoice[] | null> {
+    try {
+      const { data: result } = await this.httpClient.get(`api/draft/${leagueID}`);
+      console.log(result);
+      return result;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  } */
 }
 
 export default FantasyPremierLeagueApi;

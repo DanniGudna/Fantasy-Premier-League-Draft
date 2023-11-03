@@ -19,6 +19,8 @@ function useDarkMode() {
     const root = window.document.documentElement;
     root.classList.remove(colorTheme);
     root.classList.add(theme);
+    // document.documentElement.classList.add('dark');
+    console.log('🚀 ~ file: UseDarkMode.tsx:22 ~ useEffect ~ theme:', theme);
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', theme);

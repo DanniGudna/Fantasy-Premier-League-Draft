@@ -55,7 +55,7 @@ function Home(): ReactElement {
     <div className="flex items-center justify-center mt-24">
       <ContentCard>
         <div className="px-2 ">
-          <h1 className="text-bold font-bold text-lg leading-6 text-gray-900 dark:text-white">
+          <h1 className="text-bold font-bold text-lg leading-6 text-text dark:text-darkmode-text">
             Enter your Fantasy Premier League leagueNumber
           </h1>
           <TextInput

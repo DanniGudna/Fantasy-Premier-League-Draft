@@ -8,7 +8,7 @@ interface IProps {
 
 function ContentCard({ children }: IProps): ReactElement {
   return (
-    <div className="p-4 overflow-auto rounded-sm border m-2 shadow-lg dark:bg-slate-950">
+    <div className="p-4 overflow-auto rounded-sm border m-2 shadow-lg dark:bg-darkmode-main">
       {children}
     </div>
 

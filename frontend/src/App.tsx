@@ -70,8 +70,8 @@ function App() {
 
   return (
     <UserContext.Provider value={contextValue}>
-      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 dark:bg-slate-600 min-h-screen">
-        <Header />
+      <Header />
+      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 bg-background dark:bg-darkmode-background min-h-screen">
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />

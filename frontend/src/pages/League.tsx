@@ -85,12 +85,12 @@ function League(): ReactElement {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-slate-750">
+    <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-darkmode-background">
       {loading ?
         error ? (
           <div className="2xl:col-span-2 flex justify-center items-center">
             <ContentCard>
-              <p className="text-black dark:text-white">Failed to get league with this ID, are you sure it is a draft h2h league?</p>
+              <p className="text-black dark:text-darkmode-text">Failed to get league with this ID, are you sure it is a draft h2h league?</p>
             </ContentCard>
           </div>
         ) : <Loading />

@@ -3,19 +3,21 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { PageType } from '../../interfaces/Generic';
+
 interface IProps {
   playerName: string;
-  playerID: number;
-  teamName: string
+  playerID?: number;
+  teamName: string;
+  type: PageType;
 }
 
-function InfoHeader({ playerName, teamName, playerID }: IProps): ReactElement {
+function InfoHeader({ playerName, teamName, playerID, type }: IProps): ReactElement {
   const navigate = useNavigate();
   const { leagueNumber } = useParams();
 
   const handleClickOnPlayer = () => {
-    // todo redirec
-    navigate('/' + leagueNumber + '/' + playerID);
+    navigate('/' + leagueNumber + '/' + type + (playerID ? '/' + playerID : ''));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

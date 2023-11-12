@@ -30,6 +30,12 @@ export interface IDraftPlayer {
   waiver_pick: number;
 }
 
+export type DraftPlayerSubset = Pick<IDraftPlayer, 'entry_name' | 'id'> & { playerName: string }; // todo
+
+export interface IDraftPlayersPerSeason {
+  [season: string]: DraftPlayerSubset[];
+}
+
 export interface IMatch {
   event: number;
   finished: boolean;

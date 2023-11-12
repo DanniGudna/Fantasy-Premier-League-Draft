@@ -11,8 +11,6 @@ import TextInput from '../Components/Common/TextInput/TextInput';
 import FormTable from '../Components/FormTable/FormTable';
 import ChartContainer from '../Components/LeagueCharts/ChartContainer';
 import LeagueInfoContainer from '../Components/LeagueInfo/LeagueInfoContainer';
-import LeagueTable from '../Components/LeagueTable/LeagueTable';
-import Loading from '../Components/Loading/Loading';
 
 function Player(): ReactElement {
   /*   const [loading, setLoading] = useState(true);

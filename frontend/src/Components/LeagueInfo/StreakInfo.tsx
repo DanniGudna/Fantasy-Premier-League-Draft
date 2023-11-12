@@ -19,7 +19,7 @@ function StreakInfo({ streak, gameWeek }: IProps): ReactElement {
       <div className="place-center">
         <div className="flex flex-col text-black dark:text-gray-100">
           <p>{streak.length + ' game ' + streak.type + ' streak'}</p>
-          <p>{'- GW: ' + streak.streakStart + ' to GW: ' + streak.streakEnd + (streak.streakEnd === gameWeek ? ' +' : '')}</p>
+          <p>{'- GW: ' + streak.streakStart + ' to GW: ' + streak.streakEnd + (streak.streakEnd === gameWeek ? '+' : '')}</p>
         </div>
       </div>
     </div>

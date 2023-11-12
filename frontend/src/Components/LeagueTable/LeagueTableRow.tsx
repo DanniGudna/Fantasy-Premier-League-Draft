@@ -3,6 +3,7 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../../App';
+import { PageType } from '../../interfaces/Generic';
 import { IDraftPlayer, IStanding } from '../../interfaces/League';
 import { getPlayerById } from '../../Utils/Utils';
 import PlayerName from '../PlayerName/PlayerName';
@@ -33,7 +34,7 @@ function LeagueTableRow({ row, h2h }: IProps): ReactElement {
 
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm border-b">
-        <PlayerName playerName={draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name} teamName={draftPlayer.entry_name} playerID={draftPlayer.id} />
+        <PlayerName playerName={draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name} teamName={draftPlayer.entry_name} playerID={draftPlayer.id} type={PageType.LeagueTable} />
       </td>
       {h2h ? (
         <>

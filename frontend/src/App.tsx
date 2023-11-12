@@ -15,7 +15,7 @@ import League from './pages/League';
 import Player from './pages/Player';
 
 const initialUserContext: IUserContext = {
-  leagueID: '',
+  leagueID: null,
   setLeagueID: () => { },
   leagueName: '',
   setLeagueName: () => { },
@@ -37,7 +37,7 @@ const initialUserContext: IUserContext = {
 export const UserContext = React.createContext<IUserContext>(initialUserContext);
 
 function App() {
-  const [leagueID, setLeagueID] = useState('');
+  const [leagueID, setLeagueID] = useState<number | null>(null);
   const [leagueName, setLeagueName] = useState('');
   const [draftPlayers, setDraftPlayers] = useState([] as IDraftPlayer[]);
   const [standings, setStandings] = useState([] as IStanding[]);

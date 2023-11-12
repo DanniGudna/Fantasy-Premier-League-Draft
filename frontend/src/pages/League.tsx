@@ -21,6 +21,7 @@ const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 function League(): ReactElement {
   const {
     setLeagueName,
+    setLeagueID,
     setDraftPlayers,
     standings,
     setStandings,
@@ -43,6 +44,7 @@ function League(): ReactElement {
       if (leagueInfo && leagueInfo.standings) {
         const { league_entries, league } = leagueInfo;
         setLeagueName(league.name);
+        setLeagueID(league.id);
         const playersInLeague = [] as IDraftPlayer[];
         // get all the players in the league
         league_entries.forEach((player) => {

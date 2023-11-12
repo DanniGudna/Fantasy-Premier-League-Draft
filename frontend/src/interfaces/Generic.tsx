@@ -7,8 +7,29 @@ export type LeagueMovementDirections = 'up' | 'down' | 'noChange';
 
 export type ChevronDirection = 'up' | 'down';
 
+// export type PageType = 'leagueTable' | 'stats' | 'charts' | 'draft' | 'transactions'; // TODO confirm this is correct
+
+export enum PageType {
+  LeagueTable = 'leagueTable',
+  Stats = 'stats',
+  Charts = 'charts',
+  Draft = 'draft',
+  Transactions = 'transactions',
+  Form = 'form'
+  // tbd
+}
+
+export const PageTypeNames: Record<PageType, string> = {
+  [PageType.LeagueTable]: 'Tables',
+  [PageType.Stats]: 'Stat Page',
+  [PageType.Charts]: 'Charts',
+  [PageType.Draft]: 'Draft Page',
+  [PageType.Transactions]: 'Transaction Page',
+  [PageType.Form]: 'Form Page',
+};
+
 export interface IUserContext {
-  leagueID: string;
+  leagueID: number | null;
   leagueName: string;
   leagueDetails: ILeagueDetails;
   draftPlayers: IDraftPlayer[];
@@ -17,7 +38,7 @@ export interface IUserContext {
   draftPlayerForms: IDraftPlayerForm[];
   matches: IMatch[];
   draftPlayerStandings: IDraftPlayerStanding[];
-  setLeagueID: React.Dispatch<React.SetStateAction<string>>
+  setLeagueID: React.Dispatch<React.SetStateAction<number | null>>
   setLeagueName: React.Dispatch<React.SetStateAction<string>>
   setDraftPlayers: React.Dispatch<React.SetStateAction<IDraftPlayer[]>>
   setFootballPlayers: React.Dispatch<React.SetStateAction<IFootballPlayerInfo[]>>

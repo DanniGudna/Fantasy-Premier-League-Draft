@@ -12,7 +12,6 @@ interface IProps {
   updateValue(value: string): void;
   inputType: TextFieldType;
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-
 }
 
 function TextInput({ title, placeholder, helpText, textInputValue, updateValue, inputType, onKeyDown }: IProps): ReactElement {

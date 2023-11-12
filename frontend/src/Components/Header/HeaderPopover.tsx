@@ -13,7 +13,6 @@ interface IProps {
 }
 
 function Footer({ pageName, leagueId }: IProps): ReactElement {
-  console.log('🚀 ~ file: HeaderPopover.tsx:16 ~ Footer ~ leagueId:', leagueId);
   return (
     <Popover>
       <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-text dark:text-darkmode-text">

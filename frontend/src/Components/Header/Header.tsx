@@ -1,42 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* import 'tailwindcss/tailwind.css';
-
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
-
-import { UserContext } from '../../App';
-import useDarkMode from '../../Hooks/UseDarkMode';
-import Toggle from '../Common/Toggle/Toggle';
-
-function Header(): ReactElement {
-  const [headerText, setHeaderText] = useState('');
-  const { leagueName } = useContext(UserContext);
-  const [colorTheme, setTheme] = useDarkMode();
-
-  const changeDarkMode = () => {
-    setTheme(colorTheme);
-  };
-
-  useEffect(() => {
-    setHeaderText(leagueName);
-  }, [leagueName]);
-  return (
-    <header className="bg-gray-800 min-h-[6vh] flex flex-row items-center justify-center text-white text-xl px-4 w-full">
-      <div className="flex flex-start w-14">
-        <Toggle changeToggle={changeDarkMode} checked={colorTheme === 'light'} />
-      </div>
-      <p className="text-center flex-1 mr-14">
-        {'Information for league: '}
-        {' '}
-        <span className="font-extrabold">{headerText}</span>
-      </p>
-    </header>
-
-  );
-}
-
-export default Header; */
-
-import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react';
+import { Dialog, Disclosure, Popover } from '@headlessui/react';
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon, RectangleGroupIcon } from '@heroicons/react/20/solid';
 import {
   Bars3Icon,
@@ -50,7 +12,6 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../../App';
 import useDarkMode from '../../Hooks/UseDarkMode';
-import { PageType } from '../../interfaces/Generic';
 import { pages } from '../../Utils/StaticObjects';
 import Toggle from '../Common/Toggle/Toggle';
 import HeaderPopover from './HeaderPopover';
@@ -131,7 +92,7 @@ export default function Header() {
           <p>{leagueName}</p>
         </div>
       </nav>
-      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+      {/*       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
@@ -210,7 +171,7 @@ export default function Header() {
             </div>
           </div>
         </Dialog.Panel>
-      </Dialog>
+      </Dialog> */}
     </header>
   );
 }

@@ -4,7 +4,7 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { UserContext } from '../../App';
-import { IDraftPlayerForm, IGameWeekScores, IMatch, IScoreInfo, IStreak } from '../../interfaces/League';
+import { IGameWeekScores, IScoreInfo, IStreak } from '../../interfaces/League';
 import { getAllStreaks, getHighestScoringGameWeeks, getMatchScores } from '../../Utils/Utils';
 import InfoHeader from '../InfoHeader/InfoHeader';
 import LeagueInfoCard from './LeagueInfoCard';

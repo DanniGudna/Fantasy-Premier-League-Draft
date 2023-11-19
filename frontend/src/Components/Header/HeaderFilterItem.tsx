@@ -1,13 +1,12 @@
-import { Popover } from '@headlessui/react';
 import {
   TrophyIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
 import React, { ReactElement } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { PageType } from '../../../interfaces/Generic';
-import PlayerName from '../../PlayerName/PlayerName';
+import { PageType } from '../../interfaces/Generic';
+import PlayerName from '../PlayerName/PlayerName';
 
 interface IProps {
   draftPlayerId?: number;

@@ -12,8 +12,9 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../../App';
 import useDarkMode from '../../Hooks/UseDarkMode';
-import { pages } from '../../Utils/StaticObjects';
+import { ENTIRE_LEAGUE_NAME_IN_HEADER, pages } from '../../Utils/StaticObjects';
 import Toggle from '../Common/Toggle/Toggle';
+import PlayerName from '../PlayerName/PlayerName';
 import HeaderPopover from './HeaderPopover';
 
 const products = [
@@ -36,11 +37,6 @@ const products = [
     href: '#',
     icon: SquaresPlusIcon,
   },
-];
-const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-  { name: 'View all products', href: '#', icon: RectangleGroupIcon },
 ];
 
 function classNames(...classes: string[]) {
@@ -83,7 +79,8 @@ export default function Header() {
               {pages.map((page) => (
                 page.playerSpecific ?
                   <HeaderPopover leagueId={league} pageName={page.name} />
-                  : page.name + ' TODO'
+                  : <PlayerName playerName={ENTIRE_LEAGUE_NAME_IN_HEADER} type={page.name} teamName={league.toString()} />
+
               ))}
             </Popover.Group>
           )

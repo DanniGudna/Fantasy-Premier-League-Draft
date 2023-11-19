@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 
 import { PageType, PageTypeNames } from '../../interfaces/Generic';
 import { draftPlayersPerSeason, ENTIRE_LEAGUE_NAME_IN_HEADER } from '../../Utils/StaticObjects';
-import HeaderFilterItem from './RadioButtons/HeaderFilterItem';
+import HeaderFilterItem from './HeaderFilterItem';
 
 interface IProps {
   pageName: PageType;

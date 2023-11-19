@@ -23,6 +23,8 @@
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
+    "start-app": "react-scripts start & cd ../api && node server.js",
+    "t": "npm start & cd ../api && node server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

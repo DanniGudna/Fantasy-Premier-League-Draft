@@ -1,72 +1,84 @@
 import { IAllChartData, IChartData } from '../interfaces/Generic';
 import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, MatchResult } from '../interfaces/League';
 
-function getMatchInfo(playerId: number, match: IMatch): IMatchInfo | null {
-  if (match.finished) {
-    const matchInfo = {} as IMatchInfo;
-    matchInfo.event = match.event;
+/**
+ * Gets the matchinfo for the draftPlayer in the provided match
+ * @param draftPlayerId the id of the draft player
+ * @param match the match, from FPL api
+ * @returns The matchInfo for the given match relating to the draftPlayer
+ */
+function getMatchInfo(draftPlayerId: number, match: IMatch): IMatchInfo | null {
+  if (!match.finished) {
+    return null;
+  }
+  const matchInfo = {} as IMatchInfo;
+  matchInfo.event = match.event;
 
-    // check first if it is a draw
-    if (match.league_entry_1_points === match.league_entry_2_points) {
-      matchInfo.result = 'draw';
-      // same points for both players
-      matchInfo.opponentPoints = match.league_entry_1_points;
-      matchInfo.playerPoints = match.league_entry_1_points;
-      matchInfo.opponentID = match.league_entry_1 === playerId ? match.league_entry_2 : match.league_entry_1;
-      return matchInfo;
-    }
-    // entry 1 win
-    if (match.league_entry_1_points > match.league_entry_2_points) {
-      // entry 1 win, if that is the player id return a win
-      if (match.league_entry_1 === playerId) {
-        // 1 is player, 2 is opponent
-        matchInfo.result = 'win';
-        matchInfo.opponentPoints = match.league_entry_2_points;
-        matchInfo.playerPoints = match.league_entry_1_points;
-        matchInfo.opponentID = match.league_entry_2;
-        return matchInfo;
-      }
-
-      // 1 is opponent, 2 is player
-      matchInfo.result = 'loss';
-      matchInfo.opponentPoints = match.league_entry_1_points;
-      matchInfo.playerPoints = match.league_entry_2_points;
-      matchInfo.opponentID = match.league_entry_1;
-      return matchInfo;
-    }
-    // else entry 2 won, we dont have to do a if check here since entry2 winning entry1 is the only remaining possibility
-    // entry 2 win, if that is the player id return a win
-    if (match.league_entry_1 === playerId) {
+  // check first if it is a draw
+  if (match.league_entry_1_points === match.league_entry_2_points) {
+    matchInfo.result = 'draw';
+    // same points for both players
+    matchInfo.opponentPoints = match.league_entry_1_points;
+    matchInfo.playerPoints = match.league_entry_1_points;
+    matchInfo.opponentID = match.league_entry_1 === draftPlayerId ? match.league_entry_2 : match.league_entry_1;
+    return matchInfo;
+  }
+  // entry 1 win
+  if (match.league_entry_1_points > match.league_entry_2_points) {
+    // entry 1 win, if that is the player id return a win
+    if (match.league_entry_1 === draftPlayerId) {
       // 1 is player, 2 is opponent
-      matchInfo.result = 'loss';
+      matchInfo.result = 'win';
       matchInfo.opponentPoints = match.league_entry_2_points;
       matchInfo.playerPoints = match.league_entry_1_points;
       matchInfo.opponentID = match.league_entry_2;
       return matchInfo;
     }
-    // else return a loss
-    // 2 is player, 1 is opponent
-    matchInfo.result = 'win';
+
+    // 1 is opponent, 2 is player
+    matchInfo.result = 'loss';
     matchInfo.opponentPoints = match.league_entry_1_points;
     matchInfo.playerPoints = match.league_entry_2_points;
     matchInfo.opponentID = match.league_entry_1;
     return matchInfo;
   }
-  return null;
+  // else entry 2 won, we dont have to do a if check here since entry2 winning entry1 is the only remaining possibility
+  // entry 2 win, if that is the player id return a win
+  if (match.league_entry_1 === draftPlayerId) {
+    // 1 is player, 2 is opponent
+    matchInfo.result = 'loss';
+    matchInfo.opponentPoints = match.league_entry_2_points;
+    matchInfo.playerPoints = match.league_entry_1_points;
+    matchInfo.opponentID = match.league_entry_2;
+    return matchInfo;
+  }
+  // else return a loss
+  // 2 is player, 1 is opponent
+  matchInfo.result = 'win';
+  matchInfo.opponentPoints = match.league_entry_1_points;
+  matchInfo.playerPoints = match.league_entry_2_points;
+  matchInfo.opponentID = match.league_entry_1;
+  return matchInfo;
 }
 
-export function getPlayerForm(player: IDraftPlayer, matches: IMatch[]): IDraftPlayerForm {
+/**
+ * Gets the reulst of all the matches the draftPlayer has played
+ * @param draftPlayer the draftPLayer id
+ * @param matches All matches from the FPL api
+ * @returns The form of the draftPlayer, i.e it contains the results of all the matches he has played
+ */
+export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDraftPlayerForm {
   // filter out the matches that the pllayer didnt play in
   const filteredMatches = matches.filter((match) => (
-    match.league_entry_1 === player.id || match.league_entry_2 === player.id) && match.finished);
+    match.league_entry_1 === draftPlayer.id || match.league_entry_2 === draftPlayer.id) && match.finished);
   const playerForm = {} as IDraftPlayerForm;
-  playerForm.playerID = player.id;
-  playerForm.playerName = player.player_first_name + ' ' + player.player_last_name;
-  playerForm.teamName = player.entry_name;
+  playerForm.playerID = draftPlayer.id;
+  playerForm.playerName = draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name;
+  playerForm.teamName = draftPlayer.entry_name;
   playerForm.matchInfo = [];
   filteredMatches.forEach((filteredMatch) => {
     // only add results for matches that have been played
-    const matchInfo = getMatchInfo(player.id, filteredMatch);
+    const matchInfo = getMatchInfo(draftPlayer.id, filteredMatch);
     if (matchInfo) {
       playerForm.matchInfo.push(matchInfo);
     }
@@ -75,8 +87,14 @@ export function getPlayerForm(player: IDraftPlayer, matches: IMatch[]): IDraftPl
   return playerForm;
 }
 
-export function getPlayerById(ID: number, players: IDraftPlayer[]): IDraftPlayer | undefined {
-  return players.find((player) => player.id === ID);
+/**
+ * Get the draftPlyaer with the given ID
+ * @param ID id for the draftPlayer
+ * @param draftPlayers all draftPlayers from the FPL api
+ * @returns The draftPLayer with the given ID
+ */
+export function getPlayerById(ID: number, draftPlayers: IDraftPlayer[]): IDraftPlayer | undefined {
+  return draftPlayers.find((draftPlayer) => draftPlayer.id === ID);
 }
 
 // todo combine these functions
@@ -115,13 +133,8 @@ export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
     let undefeatedStreakStart = 1; // we need a seperate one for undefeated since draw stops the other streaks but not undefeated
     let lastResult: MatchResult | undefined;
     playerForm.matchInfo.forEach((match) => {
-      /*       console.log('event', match.event);
-      console.log('result', match.result);
-      console.log('win', winStreak);
-      console.log('undef', undefeatedStreak);
-      console.log('loss', lossStreak); */
       /*       // skip matchweek 7
-      if (match.event !== 7) { */
+      if (match.event !== 7) { */ // TODO FIX
       if (match.result === 'win') {
         winStreak++;
         undefeatedStreak++;

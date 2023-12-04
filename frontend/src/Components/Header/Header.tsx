@@ -17,28 +17,6 @@ import Toggle from '../Common/Toggle/Toggle';
 import PlayerName from '../PlayerName/PlayerName';
 import HeaderPopover from './HeaderPopover';
 
-const products = [
-  {
-    name: 'Analytics',
-    description: 'Get a better understanding where your traffic is coming from',
-    href: '#',
-    icon: ChartPieIcon,
-  },
-  {
-    name: 'Engagement',
-    description: 'Speak directly to your customers with our engagement tool',
-    href: '#',
-    icon: CursorArrowRaysIcon,
-  },
-  { name: 'Security', description: 'Your customers’ data will be safe and secure', href: '#', icon: FingerPrintIcon },
-  {
-    name: 'Integrations',
-    description: 'Your customers’ data will be safe and secure',
-    href: '#',
-    icon: SquaresPlusIcon,
-  },
-];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
@@ -78,8 +56,8 @@ export default function Header() {
             <Popover.Group className="hidden lg:flex lg:gap-x-12">
               {pages.map((page) => (
                 page.playerSpecific ?
-                  <HeaderPopover leagueId={league} pageName={page.name} />
-                  : <PlayerName playerName={ENTIRE_LEAGUE_NAME_IN_HEADER} type={page.name} teamName={league.toString()} />
+                  <HeaderPopover leagueId={league} pageName={page.name} pageType={page.type} />
+                  : <PlayerName playerName={ENTIRE_LEAGUE_NAME_IN_HEADER} type={page.type} teamName={league.toString()} />
 
               ))}
             </Popover.Group>

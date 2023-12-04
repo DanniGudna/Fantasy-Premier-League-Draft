@@ -3,24 +3,29 @@ import { DraftPlayerSubset, IDraftPlayersPerSeason } from '../interfaces/League'
 
 export const pages = [
   {
-    name: PageType.Stats,
+    type: PageType.Stats,
     playerSpecific: true,
+    name: 'Stats',
   },
   {
-    name: PageType.LeagueTable,
+    type: PageType.LeagueTable,
     playerSpecific: false,
+    name: 'League Table',
   },
   {
-    name: PageType.Charts,
+    type: PageType.Charts,
     playerSpecific: true,
+    name: 'Charts',
   },
   {
-    name: PageType.Draft,
+    type: PageType.Draft,
     playerSpecific: false, // todo
+    name: 'Draft',
   },
   {
-    name: PageType.Transactions,
+    type: PageType.Transactions,
     playerSpecific: true, // todo
+    name: 'Transactions',
   },
 ];
 

@@ -21,7 +21,7 @@ const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 function League(): ReactElement {
   const {
     setLeagueName,
-    setLeagueID,
+    setLeagueId,
     setDraftPlayers,
     standings,
     setStandings,
@@ -39,16 +39,16 @@ function League(): ReactElement {
     if (leagueNumber) {
       setLoading(true);
       const leagueInfo = await fantasyPremierLeagueApi.getLeagueTableDetails(leagueNumber);
-      const FPLPlayerInfo = await fantasyPremierLeagueApi.getFPLPlayerData();
-      console.log('🚀 ~ file: League.tsx:42 ~ getLeagueInfo ~ FPLPlayerInfo:', FPLPlayerInfo);
+      // const FPLPlayerInfo = await fantasyPremierLeagueApi.getFPLPlayerData();
+      // console.log('🚀 ~ file: League.tsx:42 ~ getLeagueInfo ~ FPLPlayerInfo:', FPLPlayerInfo);
       if (leagueInfo && leagueInfo.standings) {
-        const { league_entries, league } = leagueInfo;
+        const { draftPlayers, league } = leagueInfo;
         setLeagueName(league.name);
-        setLeagueID(league.id);
+        setLeagueId(league.id);
         const playersInLeague = [] as IDraftPlayer[];
         // get all the players in the league
-        league_entries.forEach((player) => {
-          playersInLeague.push(player as IDraftPlayer);
+        draftPlayers.forEach((draftPlayer) => {
+          playersInLeague.push(draftPlayer);
         });
         setDraftPlayers(playersInLeague);
 

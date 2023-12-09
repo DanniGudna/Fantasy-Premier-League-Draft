@@ -1,91 +1,90 @@
 export interface ILeague {
-  admin_entry: number;
-  closed: boolean;
-  draft_dt: string;
-  draft_pick_time_limit: number;
-  draft_status: string;
-  draft_tz_show: string;
   id: number;
-  ko_rounds: number;
-  make_code_public: boolean;
-  max_entries: number;
-  min_entries: number;
   name: string;
-  scoring: string;
-  start_event: number;
-  stop_event: number;
-  trades: string;
-  transaction_mode: string;
-  variety: string;
+
 }
 
 export interface IDraftPlayer {
-  entry_id: number;
-  entry_name: string;
+  teamName: string;
   id: number;
-  joined_time: string;
-  player_first_name: string;
-  player_last_name: string;
-  short_name: string;
-  waiver_pick: number;
+  fullName: string;
+  firstName: string;
+  initials: string;
+  waiverPick: number; // currently not used, might not be check later todo
 }
 
-export type DraftPlayerSubset = Pick<IDraftPlayer, 'entry_name' | 'id'> & { playerName: string }; // todo
+// export type DraftPlayerSubset = Pick<IDraftPlayer, 'entry_name' | 'id'> & { playerName: string }; // todo
 
 export interface IDraftPlayersPerSeason {
-  [season: string]: DraftPlayerSubset[];
+  [season: string]: IDraftPlayer[];
+}
+
+export interface IDraftSeason {
+  leagueId: number;
+  leagueName: string;
+  seasonName: string;
+  currentSeason: boolean;
 }
 
 export interface IMatch {
-  event: number;
+  round: number;
   finished: boolean;
-  league_entry_1: number;
-  league_entry_1_points: number;
-  league_entry_2: number;
-  league_entry_2_points: number;
+  team1Id: number;
+  team1Points: number;
+  team2Id: number;
+  team2Points: number;
   started: boolean;
-  // winning_league_entry: number | null;
-  // winning_method: string | null;
 }
 
 export interface IStanding {
-  last_rank: number;
-  league_entry: number;
-  matches_drawn: number;
-  matches_lost: number;
-  matches_played: number;
-  matches_won: number;
-  points_against: number;
-  points_for: number;
-  rank: number;
-  rank_sort: number;
-  total: number;
-  points_diff: number;
-  event_total: number;
-  [key: string]: any; // allow access by string
+  rankLastWeek: number;
+  currentRank: number;
+  playerId: number;
+  matchesDrawn: number;
+  matchesLost: number;
+  matchesPlayed: number;
+  matchesWon: number;
+  matchPointsAgainst: number;
+  matchPointsFor: number;
+  leaguePoints: number;
+  matchPointsDiff: number;
+  [key: string]: any; // allow access by string, used for sorting
 }
 
 export interface ILeagueDetails {
   league: ILeague;
-  league_entries: IDraftPlayer[];
-  matches?: IMatch[];
+  draftPlayers: IDraftPlayer[];
+  matches: IMatch[];
   standings: IStanding[];
-  playerForms?: IDraftPlayerForm[];
+}
+
+export interface ISeasonStatsMap {
+  [id: string]: ISeasonStats;
+}
+export interface ISeasonStats {
+  leagueId: number;
+  draftPlayers: IDraftPlayer[];
+  leagueName: string;
+  seasonName: string;
+  standings: IStanding[];
+  draftPlayerForms: IDraftPlayerForm[];
+  matches: IMatch[];
+  draftPlayerStandings: IDraftPlayerStanding[];
 }
 
 export type MatchResult = 'win' | 'loss' | 'draw';
 
 export interface IMatchInfo {
   result: MatchResult;
-  opponentID: number;
+  opponentId: number;
   playerPoints: number;
   opponentPoints: number;
-  event: number; // event is equal to gameweak in the FPL api so ill use the same name
+  round: number;
 }
 
 export interface IDraftPlayerForm {
   matchInfo: IMatchInfo[];
-  playerID: number;
+  playerId: number;
   playerName: string;
   teamName: string;
 }
@@ -94,7 +93,7 @@ export type StreakTypes = 'win' | 'loss' | 'undefeated';
 export interface IStreak {
   type: StreakTypes;
   length: number;
-  playerID: number;
+  playerId: number;
   playerName: string;
   teamName: string;
   streakStart: number;
@@ -104,16 +103,16 @@ export interface IStreak {
 export interface IScoreInfo {
   playerName: string;
   playerTeamName: string;
-  playerID: number;
+  playerId: number;
   points: number;
-  event: number;
+  round: number;
   opponentName: string;
   opponentTeamName: string;
-  opponentID: number;
+  opponentId: number;
 }
 
 export interface IDraftPlayerWeeklyStanding {
-  event: number;
+  round: number;
   leaguePoints: number;
   points: number;
   rank: number;
@@ -122,11 +121,11 @@ export interface IDraftPlayerWeeklyStanding {
 export interface IDraftPlayerStanding {
   playerName: string;
   teamName: string;
-  playerID: number;
+  playerId: number;
   weeklyStandings: IDraftPlayerWeeklyStanding[];
 }
 
 export interface IGameWeekScores {
-  event: number;
+  round: number;
   score: number;
 }

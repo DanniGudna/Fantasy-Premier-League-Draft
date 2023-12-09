@@ -20,7 +20,7 @@ function FormTable({ rows }: IProps): ReactElement {
         <ul className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg min-w-full divide-y divide-gray-300">
           <li>
             {rows.map((row) => (
-              <FormTableRow row={row} key={row.playerID + 'Form'} />
+              <FormTableRow row={row} key={row.playerId + 'Form'} />
             ))}
           </li>
         </ul>

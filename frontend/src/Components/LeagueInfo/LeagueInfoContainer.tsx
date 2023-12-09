@@ -36,7 +36,7 @@ function LeagueInfoContainer(): ReactElement {
       streakComponents.push(<StreakInfo
         streak={streak}
         gameWeek={draftPlayerForms[0].matchInfo.length}
-        key={streak.playerID + streak.streakStart}
+        key={streak.playerId + streak.streakStart}
       />);
     }
 
@@ -49,7 +49,7 @@ function LeagueInfoContainer(): ReactElement {
     let startingPosition = highOrLow === 'low' ? scores.length - 1 : 0;
     for (let i = 0; i < maxRenders; i++, highOrLow === 'low' ? startingPosition-- : startingPosition++) {
       const score = scores[startingPosition];
-      scoreComponents.push(<ScoreInfo score={score} key={score.playerID + score.opponentID + score.event} />);
+      scoreComponents.push(<ScoreInfo score={score} key={score.playerId + score.opponentId + score.round} />);
     }
 
     return scoreComponents;
@@ -61,7 +61,7 @@ function LeagueInfoContainer(): ReactElement {
     let startingPosition = highOrLow === 'low' ? scores.length - 1 : 0;
     for (let i = 0; i < maxRenders; i++, highOrLow === 'low' ? startingPosition-- : startingPosition++) {
       const weekScore = weeklyScores[startingPosition];
-      weekScoreComponents.push(<WeekScoreInfo weekScore={weekScore} key={weekScore.event} />);
+      weekScoreComponents.push(<WeekScoreInfo weekScore={weekScore} key={weekScore.round} />);
     }
 
     return weekScoreComponents;
@@ -70,17 +70,17 @@ function LeagueInfoContainer(): ReactElement {
   useEffect(() => {
     const streaks = getAllStreaks(draftPlayerForms);
     let matchScores = getMatchScores(draftPlayerForms);
-    let weekScores;
+    let weekScores: IGameWeekScores[];
 
     // filter if player selected...
     if (playerNumber) {
-      streaks.winStreaks = streaks.winStreaks.filter((streak) => streak.playerID.toString() === playerNumber);
-      streaks.undefeatedStreaks = streaks.undefeatedStreaks.filter((streak) => streak.playerID.toString() === playerNumber);
-      streaks.lossStreaks = streaks.lossStreaks.filter((streak) => streak.playerID.toString() === playerNumber);
-      matchScores = matchScores.filter((matchScore) => matchScore.playerID.toString() === playerNumber);
+      streaks.winStreaks = streaks.winStreaks.filter((streak) => streak.playerId.toString() === playerNumber);
+      streaks.undefeatedStreaks = streaks.undefeatedStreaks.filter((streak) => streak.playerId.toString() === playerNumber);
+      streaks.lossStreaks = streaks.lossStreaks.filter((streak) => streak.playerId.toString() === playerNumber);
+      matchScores = matchScores.filter((matchScore) => matchScore.playerId.toString() === playerNumber);
       weekScores = getHighestScoringGameWeeks(matches.filter(
-        (match) => match.league_entry_1.toString() === playerNumber
-          || match.league_entry_2.toString() === playerNumber,
+        (match) => match.team1Id.toString() === playerNumber
+          || match.team2Id.toString() === playerNumber,
       ));
     }
     else {

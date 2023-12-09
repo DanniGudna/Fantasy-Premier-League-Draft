@@ -1,7 +1,7 @@
 import { PageType } from '../interfaces/Generic';
-import { DraftPlayerSubset, IDraftPlayersPerSeason } from '../interfaces/League';
+import { IDraftSeason } from '../interfaces/League';
 
-export const pages = [
+export const PAGES = [
   {
     type: PageType.Stats,
     playerSpecific: true,
@@ -29,7 +29,7 @@ export const pages = [
   },
 ];
 
-export const draftPlayersPerSeason: IDraftPlayersPerSeason =
+/* export const draftPlayersPerSeason: IDraftPlayersPerSeason =
 {
   // 2022/2023 season
   46795: [
@@ -37,7 +37,7 @@ export const draftPlayersPerSeason: IDraftPlayersPerSeason =
       entry_name: "3rd Time's the Charm",
       playerName: 'Daníel Guðnason',
       id: 182079,
-    } as DraftPlayerSubset,
+    },
     {
       entry_name: 'Respect the Frændi',
       playerName: 'Vésteinn Bjarnason',
@@ -78,5 +78,20 @@ export const draftPlayersPerSeason: IDraftPlayersPerSeason =
     } as DraftPlayerSubset,
   ],
 };
+*/
+export const SEASONS: IDraftSeason[] = [
+  {
+    leagueName: 'BanterLads 3 Return of the Lad',
+    leagueId: 46795,
+    seasonName: '2022/2023 Season',
+    currentSeason: false,
+  },
+  {
+    leagueName: 'Banter Lad 4: A new Lad',
+    leagueId: 48617,
+    seasonName: '2023/2024 Season',
+    currentSeason: true,
+  },
+];
 
 export const ENTIRE_LEAGUE_NAME_IN_HEADER = 'Entire League';

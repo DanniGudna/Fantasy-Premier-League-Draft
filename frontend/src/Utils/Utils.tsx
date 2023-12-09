@@ -12,57 +12,57 @@ function getMatchInfo(draftPlayerId: number, match: IMatch): IMatchInfo | null {
     return null;
   }
   const matchInfo = {} as IMatchInfo;
-  matchInfo.event = match.event;
+  matchInfo.round = match.round;
 
   // check first if it is a draw
-  if (match.league_entry_1_points === match.league_entry_2_points) {
+  if (match.team1Points === match.team2Points) {
     matchInfo.result = 'draw';
     // same points for both players
-    matchInfo.opponentPoints = match.league_entry_1_points;
-    matchInfo.playerPoints = match.league_entry_1_points;
-    matchInfo.opponentID = match.league_entry_1 === draftPlayerId ? match.league_entry_2 : match.league_entry_1;
+    matchInfo.opponentPoints = match.team1Points;
+    matchInfo.playerPoints = match.team1Points;
+    matchInfo.opponentId = match.team1Id === draftPlayerId ? match.team2Id : match.team1Id;
     return matchInfo;
   }
   // entry 1 win
-  if (match.league_entry_1_points > match.league_entry_2_points) {
+  if (match.team1Points > match.team2Points) {
     // entry 1 win, if that is the player id return a win
-    if (match.league_entry_1 === draftPlayerId) {
+    if (match.team1Id === draftPlayerId) {
       // 1 is player, 2 is opponent
       matchInfo.result = 'win';
-      matchInfo.opponentPoints = match.league_entry_2_points;
-      matchInfo.playerPoints = match.league_entry_1_points;
-      matchInfo.opponentID = match.league_entry_2;
+      matchInfo.opponentPoints = match.team2Points;
+      matchInfo.playerPoints = match.team1Points;
+      matchInfo.opponentId = match.team2Id;
       return matchInfo;
     }
 
     // 1 is opponent, 2 is player
     matchInfo.result = 'loss';
-    matchInfo.opponentPoints = match.league_entry_1_points;
-    matchInfo.playerPoints = match.league_entry_2_points;
-    matchInfo.opponentID = match.league_entry_1;
+    matchInfo.opponentPoints = match.team1Points;
+    matchInfo.playerPoints = match.team2Points;
+    matchInfo.opponentId = match.team1Id;
     return matchInfo;
   }
   // else entry 2 won, we dont have to do a if check here since entry2 winning entry1 is the only remaining possibility
   // entry 2 win, if that is the player id return a win
-  if (match.league_entry_1 === draftPlayerId) {
+  if (match.team1Id === draftPlayerId) {
     // 1 is player, 2 is opponent
     matchInfo.result = 'loss';
-    matchInfo.opponentPoints = match.league_entry_2_points;
-    matchInfo.playerPoints = match.league_entry_1_points;
-    matchInfo.opponentID = match.league_entry_2;
+    matchInfo.opponentPoints = match.team2Points;
+    matchInfo.playerPoints = match.team1Points;
+    matchInfo.opponentId = match.team2Id;
     return matchInfo;
   }
   // else return a loss
   // 2 is player, 1 is opponent
   matchInfo.result = 'win';
-  matchInfo.opponentPoints = match.league_entry_1_points;
-  matchInfo.playerPoints = match.league_entry_2_points;
-  matchInfo.opponentID = match.league_entry_1;
+  matchInfo.opponentPoints = match.team1Points;
+  matchInfo.playerPoints = match.team2Points;
+  matchInfo.opponentId = match.team1Id;
   return matchInfo;
 }
 
 /**
- * Gets the reulst of all the matches the draftPlayer has played
+ * Gets the result of all the matches the draftPlayer has played
  * @param draftPlayer the draftPLayer id
  * @param matches All matches from the FPL api
  * @returns The form of the draftPlayer, i.e it contains the results of all the matches he has played
@@ -70,11 +70,11 @@ function getMatchInfo(draftPlayerId: number, match: IMatch): IMatchInfo | null {
 export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDraftPlayerForm {
   // filter out the matches that the pllayer didnt play in
   const filteredMatches = matches.filter((match) => (
-    match.league_entry_1 === draftPlayer.id || match.league_entry_2 === draftPlayer.id) && match.finished);
+    match.team1Id === draftPlayer.id || match.team2Id === draftPlayer.id) && match.finished);
   const playerForm = {} as IDraftPlayerForm;
-  playerForm.playerID = draftPlayer.id;
-  playerForm.playerName = draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name;
-  playerForm.teamName = draftPlayer.entry_name;
+  playerForm.playerId = draftPlayer.id;
+  playerForm.playerName = draftPlayer.fullName;
+  playerForm.teamName = draftPlayer.teamName;
   playerForm.matchInfo = [];
   filteredMatches.forEach((filteredMatch) => {
     // only add results for matches that have been played
@@ -88,26 +88,26 @@ export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDr
 }
 
 /**
- * Get the draftPlyaer with the given ID
- * @param ID id for the draftPlayer
+ * Get the draftPlyaer with the given Id
+ * @param Id id for the draftPlayer
  * @param draftPlayers all draftPlayers from the FPL api
- * @returns The draftPLayer with the given ID
+ * @returns The draftPLayer with the given Id
  */
-export function getPlayerById(ID: number, draftPlayers: IDraftPlayer[]): IDraftPlayer | undefined {
-  return draftPlayers.find((draftPlayer) => draftPlayer.id === ID);
+export function getPlayerById(Id: number, draftPlayers: IDraftPlayer[]): IDraftPlayer | undefined {
+  return draftPlayers.find((draftPlayer) => draftPlayer.id === Id);
 }
 
 // todo combine these functions
-function getPlayerNameByIdFromPlayerForms(ID: number, players: IDraftPlayerForm[]): string {
-  const playerInfo = players.find((player) => player.playerID === ID);
+function getPlayerNameByIdFromPlayerForms(Id: number, players: IDraftPlayerForm[]): string {
+  const playerInfo = players.find((player) => player.playerId === Id);
   if (playerInfo) {
     return playerInfo.playerName;
   }
   return 'name not found';
 }
 
-function getPlayerTeamNameByIdFromPlayerForms(ID: number, players: IDraftPlayerForm[]): string {
-  const playerInfo = players.find((player) => player.playerID === ID);
+function getPlayerTeamNameByIdFromPlayerForms(Id: number, players: IDraftPlayerForm[]): string {
+  const playerInfo = players.find((player) => player.playerId === Id);
   if (playerInfo) {
     return playerInfo.teamName;
   }
@@ -144,8 +144,8 @@ export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
         undefeatedStreak++;
       }
 
-      // Add to streaks if a streak has ended and only if it is longer than 1
-      if (lastResult !== match.result || match.event === playerForm.matchInfo.length) {
+      // Add to streaks if it is longer than 1 and the streak has ended, or ongoing and reach the final match
+      if (lastResult !== match.result || match.round === playerForm.matchInfo.length) {
         // win streak ends
         if (lastResult === 'win') {
           // if current streak is bigger than 1 then add it to the streak array
@@ -153,11 +153,11 @@ export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
             winStreaks.push({
               type: 'win',
               length: winStreak,
-              playerID: playerForm.playerID,
+              playerId: playerForm.playerId,
               playerName: playerForm.playerName,
               teamName: playerForm.teamName,
               streakStart,
-              streakEnd: getStreakEnd(playerForm.matchInfo.length, match.event, lastResult === match.result),
+              streakEnd: getStreakEnd(playerForm.matchInfo.length, match.round, lastResult === match.result),
             });
           }
           // reset the streak counter
@@ -169,36 +169,36 @@ export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
             lossStreaks.push({
               type: 'loss',
               length: lossStreak,
-              playerID: playerForm.playerID,
+              playerId: playerForm.playerId,
               playerName: playerForm.playerName,
               teamName: playerForm.teamName,
               streakStart,
-              streakEnd: getStreakEnd(playerForm.matchInfo.length, match.event, lastResult === match.result),
+              streakEnd: getStreakEnd(playerForm.matchInfo.length, match.round, lastResult === match.result),
             });
           }
           // reset the streak counter
           lossStreak = 0;
         }
         lastResult = match.result;
-        streakStart = match.event;
+        streakStart = match.round;
       }
       // undefeated streak only ends if result is loss, also check if it is the last game
-      if (match.result === 'loss' || match.event === playerForm.matchInfo.length) {
+      if (match.result === 'loss' || match.round === playerForm.matchInfo.length) {
         // if current streak is bigger than 1 then add it to the streak array
         if (undefeatedStreak > 1) {
           undefeatedStreaks.push({
             type: 'undefeated',
             length: undefeatedStreak,
-            playerID: playerForm.playerID,
+            playerId: playerForm.playerId,
             playerName: playerForm.playerName,
             teamName: playerForm.teamName,
             streakStart: undefeatedStreakStart,
-            streakEnd: getStreakEnd(playerForm.matchInfo.length, match.event, match.result !== 'loss'),
+            streakEnd: getStreakEnd(playerForm.matchInfo.length, match.round, match.result !== 'loss'),
           });
         }
         // reset the streak
         undefeatedStreak = 0;
-        undefeatedStreakStart = match.event + 1;
+        undefeatedStreakStart = match.round + 1;
       }
       /*       } */
     });
@@ -227,12 +227,12 @@ export function getMatchScores(playerForms: IDraftPlayerForm[]) {
       scores.push({
         playerName: playerForm.playerName,
         playerTeamName: playerForm.teamName,
-        playerID: playerForm.playerID,
+        playerId: playerForm.playerId,
         points: matchInfo.playerPoints,
-        event: matchInfo.event,
-        opponentName: getPlayerNameByIdFromPlayerForms(matchInfo.opponentID, playerForms),
-        opponentTeamName: getPlayerTeamNameByIdFromPlayerForms(matchInfo.opponentID, playerForms),
-        opponentID: matchInfo.opponentID,
+        round: matchInfo.round,
+        opponentName: getPlayerNameByIdFromPlayerForms(matchInfo.opponentId, playerForms),
+        opponentTeamName: getPlayerTeamNameByIdFromPlayerForms(matchInfo.opponentId, playerForms),
+        opponentId: matchInfo.opponentId,
       });
       /*  } */
     });
@@ -248,7 +248,7 @@ export function getPlayerStandings(playerForm: IDraftPlayerForm) {
   const playerStandings = {
     playerName: playerForm.playerName,
     teamName: playerForm.teamName,
-    playerID: playerForm.playerID,
+    playerId: playerForm.playerId,
   } as IDraftPlayerStanding;
   const weeklyStandings = [] as IDraftPlayerWeeklyStanding[];
   const pointIndicator = { win: 3, draw: 1, loss: 0 };
@@ -260,7 +260,7 @@ export function getPlayerStandings(playerForm: IDraftPlayerForm) {
     currentPoints += match.playerPoints;
     currentLeaguePoints += pointIndicator[match.result];
     weeklyStandings.push({
-      event: match.event,
+      round: match.round,
       leaguePoints: currentLeaguePoints,
       points: currentPoints,
     } as IDraftPlayerWeeklyStanding);
@@ -362,29 +362,30 @@ export function createChartData(playerStandings: IDraftPlayerStanding[]): IAllCh
   };
 }
 
+// todo do this better
 export function getHighestScoringGameWeeks(matches: IMatch[]) {
   // filter out the matches that havent been played yet
   const filteredMatches = matches.filter((match) => (match.finished));
-  let currentEvent = 1;
+  let currentRound = 1;
   let currentScore = 0;
   const gameWeekScores = [] as IGameWeekScores[];
 
   filteredMatches.forEach((match) => {
     // if the event matches the current event then add to the score
-    if (match.event === currentEvent) {
-      currentScore += match.league_entry_1_points + match.league_entry_2_points;
+    if (match.round === currentRound) {
+      currentScore += match.team1Points + match.team2Points;
     }
-    // else add to the gameWeekScores array, increment currenEvent,reset the score and finally start claculating the scores again
+    // else add to the gameWeekScores array, increment currenEvent,reset the score and finally start calculating the scores again
     else {
-      gameWeekScores.push({ event: currentEvent, score: currentScore });
-      currentEvent += 1;
+      gameWeekScores.push({ round: currentRound, score: currentScore });
+      currentRound += 1;
       currentScore = 0;
-      currentScore += match.league_entry_1_points + match.league_entry_2_points;
+      currentScore += match.team1Points + match.team2Points;
     }
   });
 
   // sort the game week scores in descending order based on their scores
-  const sortedGameWeekScores = gameWeekScores.sort((a, b) => b.score - a.score);
+  gameWeekScores.sort((a, b) => b.score - a.score);
 
-  return sortedGameWeekScores;
+  return gameWeekScores;
 }

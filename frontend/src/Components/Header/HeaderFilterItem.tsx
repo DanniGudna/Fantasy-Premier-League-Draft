@@ -25,7 +25,7 @@ function HeaderFilterItem({ draftPlayerId, name, type, teamName }: IProps): Reac
           <UserIcon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" /> :
           <TrophyIcon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />}
       </div>
-      <PlayerName playerName={name} playerID={draftPlayerId} teamName={teamName} type={type} />
+      <PlayerName playerName={name} playerId={draftPlayerId} teamName={teamName} type={type} />
       {/*       <a href={item.href} className="mt-6 block font-semibold text-gray-900">
         {name}
         <span className="absolute inset-0" />

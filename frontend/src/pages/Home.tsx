@@ -48,7 +48,7 @@ function Home(): ReactElement {
   };
 
   useEffect(() => {
-    getFootballPlayerInfo();
+    // getFootballPlayerInfo();
   }, []);
 
   return (

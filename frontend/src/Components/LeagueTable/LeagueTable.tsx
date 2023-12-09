@@ -90,7 +90,7 @@ function LeagueTable({ rows }: IProps): ReactElement {
                 </thead>
                 <tbody>
                   {sortedRows.map((row) => (
-                    <LeagueTableRow row={row} h2h={!!row.matches_played} key={row.league_entry} />
+                    <LeagueTableRow row={row} key={row.league_entry} />
                   ))}
                 </tbody>
               </table>

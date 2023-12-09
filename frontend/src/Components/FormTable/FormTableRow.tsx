@@ -19,7 +19,7 @@ function FormTableRow({ row }: IProps): ReactElement {
   return (
     <div className="border-b-2 border-black">
       <div className="whitespace-nowrap px-3 py-4 text-sm  border-b ">
-        <PlayerName playerName={row.playerName} teamName={row.teamName} playerID={row.playerID} type={PageType.Form} />
+        <PlayerName playerName={row.playerName} teamName={row.teamName} playerId={row.playerId} type={PageType.Form} />
         <p className="mt-2 text-sm dark:text-gray-100">All match result for this player</p>
       </div>
       <div className="overflow-x-scroll flex flex-row scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">

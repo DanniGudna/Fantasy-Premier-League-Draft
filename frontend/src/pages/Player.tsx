@@ -38,7 +38,7 @@ function Player(): ReactElement {
       </ContentCard>
       <ContentCard>
         {draftPlayerForms?.length > 0 ?
-          <FormTable rows={draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerID.toString() === playerNumber)} />
+          <FormTable rows={draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerId.toString() === playerNumber)} />
           : <p> This is not a H2H league so H2H info table cannot be shown</p>}
       </ContentCard>
     </div>

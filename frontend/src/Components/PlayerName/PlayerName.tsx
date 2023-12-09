@@ -1,23 +1,25 @@
 import 'tailwindcss/tailwind.css';
 
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { UserContext } from '../../App';
 import { PageType } from '../../interfaces/Generic';
 
 interface IProps {
-  playerName: string;
-  playerID?: number;
+  playerName?: string;
+  playerId?: number;
   teamName: string;
   type: PageType;
 }
 
-function InfoHeader({ playerName, teamName, playerID, type }: IProps): ReactElement {
+function InfoHeader({ playerName, teamName, playerId, type }: IProps): ReactElement {
   const navigate = useNavigate();
-  const { leagueNumber } = useParams();
+  const { leagueId } = useContext(UserContext);
 
   const handleClickOnPlayer = () => {
-    navigate('/' + leagueNumber + '/' + type + (playerID ? '/' + playerID : ''));
+    console.log('🚀 ~ file: PlayerName.tsx:21 ~ handleClickOnPlayer', ('/' + leagueId + '/' + type + (playerId ? '/' + playerId : '')));
+    navigate('/' + leagueId + '/' + type + (playerId ? '/' + playerId : ''));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -35,8 +37,8 @@ function InfoHeader({ playerName, teamName, playerID, type }: IProps): ReactElem
       role="button"
       aria-label="League Player name"
     >
-      <p className="text-lg font-extrabold text-black dark:text-white">{teamName}</p>
-      <p className="text-gray-600 dark:text-gray-400">{playerName}</p>
+      <p className="text-lg font-semibold text-black dark:text-white">{teamName}</p>
+      {playerName ? <p className="text-gray-600 dark:text-gray-400">{playerName}</p> : null}
     </div>
 
   );

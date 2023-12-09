@@ -11,11 +11,10 @@ import LeagueMovementIdicator from './LeagueMovementIndicator';
 
 interface IProps {
   row: IStanding;
-  h2h: boolean;
-
 }
 
-function LeagueTableRow({ row, h2h }: IProps): ReactElement {
+function LeagueTableRow({ row }: IProps): ReactElement {
+  console.log('🚀 ~ file: LeagueTableRow.tsx:19 ~ LeagueTableRow ~ row:', row);
   const [draftPlayer, setDraftPlayer] = useState<IDraftPlayer>({} as IDraftPlayer);
   const { draftPlayers } = useContext(UserContext);
 
@@ -34,28 +33,22 @@ function LeagueTableRow({ row, h2h }: IProps): ReactElement {
 
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm border-b">
-        <PlayerName playerName={draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name} teamName={draftPlayer.entry_name} playerID={draftPlayer.id} type={PageType.LeagueTable} />
+        <PlayerName
+          playerName={draftPlayer.fullName}
+          teamName={draftPlayer.teamName}
+          playerId={draftPlayer.id}
+          type={PageType.LeagueTable}
+        />
       </td>
-      {h2h ? (
-        <>
-          {/* <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b lg:table-cell">{(row.matches_won + row.matches_drawn + row.matches_lost) + ' / 38'}</td> */}
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.matches_won}</td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.matches_drawn}</td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.matches_lost}</td>
-          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.points_for}</td>
-          <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b sm:table-cell">{row.points_against}</td>
-          <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b sm:table-cell">{row.points_diff}</td>
-          {/*       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b md:table-cell">FORM TODO</td> */}
-        </>
-      )
-        : (
-          <>
-            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.event_total}</td>
-            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{Math.round(row.total / 35)}</td>
-            {' '}
-            {/* there is no way to get number of weeks played so hard coded for now */}
-          </>
-        )}
+      {/* <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b lg:table-cell">{(row.matches_won + row.matches_drawn + row.matches_lost) + ' / 38'}</td> */}
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.matches_won}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.matches_drawn}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.matches_lost}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.points_for}</td>
+      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b sm:table-cell">{row.points_against}</td>
+      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b sm:table-cell">{row.points_diff}</td>
+      {/*       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b md:table-cell">FORM TODO</td> */}
+
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.total}</td>
     </tr>
 

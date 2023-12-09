@@ -13,10 +13,10 @@ interface IProps {
   leagueId: number;
 }
 
-function Footer({ pageName, leagueId, pageType }: IProps): ReactElement {
+function HeaderPopover({ pageName, leagueId, pageType }: IProps): ReactElement {
   return (
     <Popover>
-      <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-text dark:text-darkmode-text">
+      <Popover.Button className="flex items-center gap-x-1 text-lg font-semibold leading-6 text-text dark:text-darkmode-text">
         {pageName}
         <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
       </Popover.Button>
@@ -31,14 +31,14 @@ function Footer({ pageName, leagueId, pageType }: IProps): ReactElement {
         leaveTo="opacity-0 -translate-y-1"
       >
         <Popover.Panel className="absolute inset-x-0 top-0 -z-10 bg-background dark:bg-darkmode-background pt-14 shadow-lg ring-1 ring-gray-900/5">
-          <div className="mx-auto grid max-w-7xl grid-cols-4 gap-x-4 px-6 py-10 lg:px-8 xl:gap-x-8">
-            <HeaderFilterItem name={ENTIRE_LEAGUE_NAME_IN_HEADER} type={pageType} teamName={leagueId.toString()} />
+          <div className="mx-auto grid max-w-8xl grid-cols-5 gap-x-4 px-6 py-10 lg:px-8 xl:gap-x-8">
+            <HeaderFilterItem name="season number todo" type={pageType} teamName={ENTIRE_LEAGUE_NAME_IN_HEADER} />
             {draftPlayersPerSeason[leagueId].map((draftPlayer) => (
               <HeaderFilterItem
                 draftPlayerId={draftPlayer.id}
                 type={pageType}
-                name={draftPlayer.playerName}
-                teamName={draftPlayer.entry_name}
+                name={draftPlayer.draftPlayerName}
+                teamName={draftPlayer.teamName}
               />
             ))}
           </div>
@@ -48,4 +48,4 @@ function Footer({ pageName, leagueId, pageType }: IProps): ReactElement {
   );
 }
 
-export default Footer;
+export default HeaderPopover;

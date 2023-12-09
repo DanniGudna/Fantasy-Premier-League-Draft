@@ -1,5 +1,5 @@
 import { IFootballPlayerInfo } from './FootballPlayer';
-import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, ILeagueDetails, IMatch, IStanding } from './League';
+import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, IMatch, ISeasonStats, IStanding } from './League';
 
 export type TextFieldType = 'email' | 'text' | 'tel' | 'number';
 
@@ -8,7 +8,7 @@ export type LeagueMovementDirections = 'up' | 'down' | 'noChange';
 export type ChevronDirection = 'up' | 'down';
 
 // export type PageType = 'leagueTable' | 'stats' | 'charts' | 'draft' | 'transactions'; // TODO confirm this is correct
-
+// todo cleanup these types and add it to static objects
 export enum PageType {
   LeagueTable = 'leagueTable',
   Stats = 'stats',
@@ -28,17 +28,17 @@ export const PageTypeNames: Record<PageType, string> = {
   [PageType.Form]: 'Form Page',
 };
 
-export interface IUserContext {
-  leagueID: number | null;
+export interface ILeagueContext {
+  leagueId: number | null;
   leagueName: string;
-  leagueDetails: ILeagueDetails;
+  // leagueDetails: ILeagueDetails;
   draftPlayers: IDraftPlayer[];
   footballPlayers: IFootballPlayerInfo[];
   standings: IStanding[];
   draftPlayerForms: IDraftPlayerForm[];
   matches: IMatch[];
   draftPlayerStandings: IDraftPlayerStanding[];
-  setLeagueID: React.Dispatch<React.SetStateAction<number | null>>
+  setLeagueId: React.Dispatch<React.SetStateAction<number | null>>
   setLeagueName: React.Dispatch<React.SetStateAction<string>>
   setDraftPlayers: React.Dispatch<React.SetStateAction<IDraftPlayer[]>>
   setFootballPlayers: React.Dispatch<React.SetStateAction<IFootballPlayerInfo[]>>
@@ -46,8 +46,12 @@ export interface IUserContext {
   setDraftPlayerForms: React.Dispatch<React.SetStateAction<IDraftPlayerForm[]>>
   setMatches: React.Dispatch<React.SetStateAction<IMatch[]>>
   setDraftPlayerStandings: React.Dispatch<React.SetStateAction<IDraftPlayerStanding[]>>
-
 }
+
+/* export interface ILeagueContext {
+  season: ISeasonStats;
+  setSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
+} */
 
 export interface IDataset {
   label: string,

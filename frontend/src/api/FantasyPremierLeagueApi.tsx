@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { AxiosInstance } from 'axios';
 
+import mapLeagueDetails from '../interfaces/Api/ApiMapper';
 import { IChoice } from '../interfaces/Draft';
 import { IFootballPlayerInfo } from '../interfaces/FootballPlayer';
 import { ILeagueDetails } from '../interfaces/League';
@@ -14,10 +15,10 @@ class FantasyPremierLeagueApi {
   }
 
   // todo change names
-  async getLeagueTableDetails(leagueID: string): Promise<ILeagueDetails | null> {
+  async getLeagueTableDetails(leagueId: string): Promise<ILeagueDetails | null> {
     try {
-      const { data: result } = await this.httpClient.get(`api/data/${leagueID}`);
-      return result;
+      const { data: result } = await this.httpClient.get(`api/data/${leagueId}`);
+      return mapLeagueDetails(result);
     } catch (e) {
       console.log(e);
       return null;
@@ -26,7 +27,7 @@ class FantasyPremierLeagueApi {
 
   async getFPLPlayerData(): Promise<IFootballPlayerInfo[] | null> {
     try {
-      const { data: result } = await this.httpClient.get('api/footballl-players');
+      const { data: result } = await this.httpClient.get('api/football-players');
       console.log(result);
       return result;
     } catch (e) {
@@ -35,9 +36,9 @@ class FantasyPremierLeagueApi {
     }
   }
 
-  async getDraft(leagueID: string): Promise<IChoice[] | null> {
+  async getDraft(leagueId: string): Promise<IChoice[] | null> {
     try {
-      const { data: result } = await this.httpClient.get(`api/draft/${leagueID}`);
+      const { data: result } = await this.httpClient.get(`api/draft/${leagueId}`);
       console.log(result);
       return result;
     } catch (e) {

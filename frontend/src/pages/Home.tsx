@@ -3,21 +3,17 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { FantasyPremierLeagueApi } from '../api';
-import { UserContext } from '../App';
 import ContentCard from '../Components/Common/ContentCard/ContentCard';
 import PrimaryButton from '../Components/Common/PrimaryButtons/PrimaryButton';
 import TextInput from '../Components/Common/TextInput/TextInput';
 
-const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
-
 function Home(): ReactElement {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
-  const {
+  /*   const {
     footballPlayers,
     setFootballPlayers,
-  } = useContext(UserContext);
+  } = useContext(UserContext); */
 
   const handleLeagueNumberChange = (value: string) => {
     setInputValue(value);
@@ -31,14 +27,14 @@ function Home(): ReactElement {
     navigateToLeage(inputValue);
   };
 
-  const getFootballPlayerInfo = async () => {
+  /*   const getFootballPlayerInfo = async () => {
     if (!footballPlayers) {
       const footballPlayersInfo = await fantasyPremierLeagueApi.getFPLPlayerData();
       if (footballPlayersInfo) {
         setFootballPlayers(footballPlayersInfo);
       }
     }
-  };
+  }; */
 
   // Handle Enter key press to trigger search
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {

@@ -6,7 +6,7 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { FantasyPremierLeagueApi } from '../api';
-import { UserContext } from '../App';
+import { LeagueContext } from '../App';
 import ContentCard from '../Components/Common/ContentCard/ContentCard';
 import FormTable from '../Components/FormTable/FormTable';
 import ChartContainer from '../Components/LeagueCharts/ChartContainer';
@@ -20,95 +20,33 @@ const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 
 function League(): ReactElement {
   const {
-    setLeagueName,
-    setLeagueId,
-    setDraftPlayers,
-    standings,
-    setStandings,
-    draftPlayerForms,
-    setDraftPlayerForms,
-    matches,
-    setMatches,
-    setDraftPlayerStandings,
-  } = useContext(UserContext);
-  const { leagueNumber } = useParams();
-  const [loading, setLoading] = useState(true);
+    selectedSeason,
+  } = useContext(LeagueContext);
   const [error, setError] = useState(false);
 
-  const getLeagueInfo = async () => {
-    if (leagueNumber) {
-      setLoading(true);
-      const leagueInfo = await fantasyPremierLeagueApi.getLeagueTableDetails(leagueNumber);
-      // const FPLPlayerInfo = await fantasyPremierLeagueApi.getFPLPlayerData();
-      // console.log('🚀 ~ file: League.tsx:42 ~ getLeagueInfo ~ FPLPlayerInfo:', FPLPlayerInfo);
-      if (leagueInfo && leagueInfo.standings) {
-        const { draftPlayers, league } = leagueInfo;
-        setLeagueName(league.name);
-        setLeagueId(league.id);
-        const playersInLeague = [] as IDraftPlayer[];
-        // get all the players in the league
-        draftPlayers.forEach((draftPlayer) => {
-          playersInLeague.push(draftPlayer);
-        });
-        setDraftPlayers(playersInLeague);
-
-        // matches are only in H2H leagues
-        if (leagueInfo.matches) {
-          const forms = [] as IDraftPlayerForm[];
-          // figure out the form of each player
-          playersInLeague.forEach((player) => forms.push(getPlayerForm(player, leagueInfo.matches || [])));
-          setDraftPlayerForms(forms);
-          setMatches(leagueInfo.matches);
-
-          const playerLeagueStandings = [] as IDraftPlayerStanding[];
-
-          forms.forEach((form) => {
-            playerLeagueStandings.push(getPlayerStandings(form));
-          });
-          setDraftPlayerStandings(playerLeagueStandings);
-        }
-        // add the points diff to the standings object,used for sorting
-        leagueInfo.standings.forEach((standing) => {
-          standing.points_diff = standing.points_for - standing.points_against;
-        });
-        setStandings(leagueInfo.standings);
-        setLoading(false);
-        setError(false);
-        // history.push(`/${inputValue}/`);
-      }
-      else {
-        setError(true);
-      }
-    }
-  };
-
   useEffect(() => {
-    getLeagueInfo();
+    setError(!selectedSeason);
   }, []);
 
   return (
     <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-darkmode-background">
-      {loading ?
-        error ? (
-          <div className="2xl:col-span-2 flex justify-center items-center">
-            <ContentCard>
-              <p className="text-black dark:text-darkmode-text">Failed to get league with this ID, are you sure it is a draft h2h league?</p>
-            </ContentCard>
-          </div>
-        ) : <Loading />
-
+      {error ? (
+        <div className="2xl:col-span-2 flex justify-center items-center">
+          <ContentCard>
+            <p className="text-black dark:text-darkmode-text">Failed to get league with this ID, config files might be off or fallback might not work</p>
+          </ContentCard>
+        </div>
+      )
         : (
           <>
             <ContentCard>
-              <LeagueTable rows={standings} />
+              <LeagueTable rows={selectedSeason.standings} />
             </ContentCard>
             <ContentCard>
-              {draftPlayerForms?.length > 0 ?
-                <FormTable rows={draftPlayerForms} /> : <p> This is not a H2H league so H2H info table cannot be shown</p>}
+              <FormTable rows={selectedSeason.draftPlayerForms} />
             </ContentCard>
             <ContentCard>
-              {draftPlayerForms?.length > 0 ? <LeagueInfoContainer />
-                : <p> This is not a H2H league so H2H info table cannot be shown</p>}
+              <LeagueInfoContainer />
             </ContentCard>
             <ContentCard>
               <ChartContainer />

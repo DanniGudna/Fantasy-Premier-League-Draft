@@ -1,19 +1,21 @@
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import React, { Fragment, ReactElement } from 'react';
+import React, { Fragment, ReactElement, useContext } from 'react';
 import { useParams } from 'react-router';
 
+import { LeagueContext } from '../../App';
 import { PageType, PageTypeNames } from '../../interfaces/Generic';
-import { draftPlayersPerSeason, ENTIRE_LEAGUE_NAME_IN_HEADER } from '../../Utils/StaticObjects';
+import { ENTIRE_LEAGUE_NAME_IN_HEADER } from '../../Utils/StaticObjects';
 import HeaderFilterItem from './HeaderFilterItem';
 
 interface IProps {
   pageName: string;
   pageType: PageType;
-  leagueId: number;
 }
 
-function HeaderPopover({ pageName, leagueId, pageType }: IProps): ReactElement {
+function HeaderPopover({ pageName, pageType }: IProps): ReactElement {
+  const { selectedSeason } = useContext(LeagueContext);
+  console.log('🚀 ~ file: HeaderPopover.tsx:18 ~ HeaderPopover ~ selectedSeason:', selectedSeason);
   return (
     <Popover>
       <Popover.Button className="flex items-center gap-x-1 text-lg font-semibold leading-6 text-text dark:text-darkmode-text">
@@ -33,11 +35,11 @@ function HeaderPopover({ pageName, leagueId, pageType }: IProps): ReactElement {
         <Popover.Panel className="absolute inset-x-0 top-0 -z-10 bg-background dark:bg-darkmode-background pt-14 shadow-lg ring-1 ring-gray-900/5">
           <div className="mx-auto grid max-w-8xl grid-cols-5 gap-x-4 px-6 py-10 lg:px-8 xl:gap-x-8">
             <HeaderFilterItem name="season number todo" type={pageType} teamName={ENTIRE_LEAGUE_NAME_IN_HEADER} />
-            {draftPlayersPerSeason[leagueId].map((draftPlayer) => (
+            {selectedSeason.draftPlayers.map((draftPlayer) => (
               <HeaderFilterItem
                 draftPlayerId={draftPlayer.id}
                 type={pageType}
-                name={draftPlayer.draftPlayerName}
+                name={draftPlayer.fullName}
                 teamName={draftPlayer.teamName}
               />
             ))}

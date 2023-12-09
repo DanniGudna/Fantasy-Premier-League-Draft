@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { UserContext } from '../../App';
+import { LeagueContext } from '../../App';
 import { PageType } from '../../interfaces/Generic';
 
 interface IProps {
@@ -15,11 +15,11 @@ interface IProps {
 
 function InfoHeader({ playerName, teamName, playerId, type }: IProps): ReactElement {
   const navigate = useNavigate();
-  const { leagueId } = useContext(UserContext);
+  const { selectedSeason } = useContext(LeagueContext);
 
   const handleClickOnPlayer = () => {
-    console.log('🚀 ~ file: PlayerName.tsx:21 ~ handleClickOnPlayer', ('/' + leagueId + '/' + type + (playerId ? '/' + playerId : '')));
-    navigate('/' + leagueId + '/' + type + (playerId ? '/' + playerId : ''));
+    console.log('🚀 ~ file: PlayerName.tsx:21 ~ handleClickOnPlayer', ('/' + selectedSeason.leagueId + '/' + type + (playerId ? '/' + playerId : '')));
+    navigate('/' + selectedSeason.leagueId + '/' + type + (playerId ? '/' + playerId : ''));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

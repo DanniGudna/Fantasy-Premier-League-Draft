@@ -13,7 +13,7 @@ function WeekScoreInfo({ weekScore }: IProps): ReactElement {
     <div className="p-2 border-b h-12">
       <div className="place-center text-black dark:text-gray-100">
         <p>
-          {weekScore.score + ' points in GW: ' + weekScore.event}
+          {weekScore.score + ' points in GW: ' + weekScore.round}
         </p>
       </div>
     </div>

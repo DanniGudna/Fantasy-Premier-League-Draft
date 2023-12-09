@@ -2,7 +2,7 @@ import 'tailwindcss/tailwind.css';
 
 import React, { ReactElement, useContext } from 'react';
 
-import { UserContext } from '../../App';
+import { LeagueContext } from '../../App';
 
 interface IProps {
   title: string;
@@ -10,12 +10,12 @@ interface IProps {
 }
 
 function InfoHeader({ title, subTitle }: IProps): ReactElement {
-  const { leagueName } = useContext(UserContext);
+  const { selectedSeason } = useContext(LeagueContext);
   return (
     <div className="px-2 ">
       <h1 className="text-bold font-bold text-lg leading-6 text-gray-900 dark:text-white">
         {title + ' '}
-        <span className="font-extrabold">{leagueName}</span>
+        <span className="font-extrabold">{selectedSeason.leagueName}</span>
       </h1>
       <p className="mt-2 ml-2 text-sm text-gray-700 dark:text-gray-300">{subTitle}</p>
     </div>

@@ -13,7 +13,7 @@ import {
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
-import { UserContext } from '../../App';
+import { LeagueContext } from '../../App';
 // import useDarkMode from '../../Hooks/UseDarkMode';
 import { IAllChartData } from '../../interfaces/Generic';
 import { createChartData } from '../../Utils/Utils';
@@ -43,11 +43,11 @@ const rankOptions = {
 
 function ChartContainer(): ReactElement {
   // const [colorTheme] = useDarkMode(); // since chart.js doesnt use the tailwind dark mode we have the check the theme manually
-  const { draftPlayerStandings } = useContext(UserContext);
+  const { selectedSeason } = useContext(LeagueContext);
   const [chartData, setChartData] = useState<IAllChartData>({} as IAllChartData);
 
   useEffect(() => {
-    const data = createChartData(draftPlayerStandings);
+    const data = createChartData(selectedSeason.draftPlayerStandings);
     setChartData(data);
   }, []);
 

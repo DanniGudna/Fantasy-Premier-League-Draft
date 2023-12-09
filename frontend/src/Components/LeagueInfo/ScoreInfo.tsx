@@ -19,7 +19,7 @@ function ScoreInfo({ score }: IProps): ReactElement {
         <p>
           {score.points + ' points vs '}
           <span className="font-bold ">{score.opponentTeamName}</span>
-          {' in GW: ' + score.event}
+          {' in GW: ' + score.round}
         </p>
       </div>
     </div>

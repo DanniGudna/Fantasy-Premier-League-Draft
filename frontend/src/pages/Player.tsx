@@ -4,7 +4,7 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { UserContext } from '../App';
+import { LeagueContext } from '../App';
 import ContentCard from '../Components/Common/ContentCard/ContentCard';
 import PrimaryButton from '../Components/Common/PrimaryButtons/PrimaryButton';
 import TextInput from '../Components/Common/TextInput/TextInput';
@@ -17,29 +17,18 @@ function Player(): ReactElement {
     const [error, setError] = useState(false); */
   const { playerNumber } = useParams();
   const {
-    setLeagueName,
-    setDraftPlayers,
-    standings,
-    setStandings,
-    draftPlayerForms,
-    setDraftPlayerForms,
-    matches,
-    setMatches,
-    setDraftPlayerStandings,
-  } = useContext(UserContext);
+    selectedSeason,
+  } = useContext(LeagueContext);
 
   return (
     <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-slate-750">
       <ContentCard>
-        {draftPlayerForms?.length > 0 ? (
-          <LeagueInfoContainer />
-        )
-          : <p> This is not a H2H league so H2H info table cannot be shown</p>}
+        <LeagueInfoContainer />
       </ContentCard>
       <ContentCard>
-        {draftPlayerForms?.length > 0 ?
-          <FormTable rows={draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerId.toString() === playerNumber)} />
-          : <p> This is not a H2H league so H2H info table cannot be shown</p>}
+        <FormTable
+          rows={selectedSeason.draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerId.toString() === playerNumber)}
+        />
       </ContentCard>
     </div>
 

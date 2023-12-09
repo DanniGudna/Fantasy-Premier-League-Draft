@@ -28,7 +28,7 @@ export const PageTypeNames: Record<PageType, string> = {
   [PageType.Form]: 'Form Page',
 };
 
-export interface ILeagueContext {
+/* export interface ILeagueContext {
   leagueId: number | null;
   leagueName: string;
   // leagueDetails: ILeagueDetails;
@@ -46,12 +46,12 @@ export interface ILeagueContext {
   setDraftPlayerForms: React.Dispatch<React.SetStateAction<IDraftPlayerForm[]>>
   setMatches: React.Dispatch<React.SetStateAction<IMatch[]>>
   setDraftPlayerStandings: React.Dispatch<React.SetStateAction<IDraftPlayerStanding[]>>
-}
-
-/* export interface ILeagueContext {
-  season: ISeasonStats;
-  setSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
 } */
+
+export interface ILeagueContext {
+  selectedSeason: ISeasonStats;
+  setSelectedSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
+}
 
 export interface IDataset {
   label: string,

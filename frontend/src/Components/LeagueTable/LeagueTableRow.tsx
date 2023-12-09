@@ -2,7 +2,7 @@ import 'tailwindcss/tailwind.css';
 
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
-import { UserContext } from '../../App';
+import { LeagueContext } from '../../App';
 import { PageType } from '../../interfaces/Generic';
 import { IDraftPlayer, IStanding } from '../../interfaces/League';
 import { getPlayerById } from '../../Utils/Utils';
@@ -16,11 +16,11 @@ interface IProps {
 function LeagueTableRow({ row }: IProps): ReactElement {
   console.log('🚀 ~ file: LeagueTableRow.tsx:19 ~ LeagueTableRow ~ row:', row);
   const [draftPlayer, setDraftPlayer] = useState<IDraftPlayer>({} as IDraftPlayer);
-  const { draftPlayers } = useContext(UserContext);
+  const { selectedSeason } = useContext(LeagueContext);
 
   useEffect(() => {
     // This should never return undefined but safeties just in case
-    setDraftPlayer(getPlayerById(row.league_entry, draftPlayers) || {} as IDraftPlayer);
+    setDraftPlayer(getPlayerById(row.league_entry, selectedSeason.draftPlayers) || {} as IDraftPlayer);
   }, []);
 
   return (

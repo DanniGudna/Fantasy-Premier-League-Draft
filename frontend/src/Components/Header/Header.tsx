@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 
-import { UserContext } from '../../App';
+import { LeagueContext } from '../../App';
 import useDarkMode from '../../Hooks/UseDarkMode';
 import { ENTIRE_LEAGUE_NAME_IN_HEADER, PAGES } from '../../Utils/StaticObjects';
 import Toggle from '../Common/Toggle/Toggle';
@@ -23,23 +23,19 @@ function classNames(...classes: string[]) {
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [league, setLeague] = useState<number | null>(null);
-  const { leagueName, leagueId } = useContext(UserContext);
+  // const [league, setLeague] = useState<number | null>(null);
+  const { selectedSeason } = useContext(LeagueContext);
   const [colorTheme, setTheme] = useDarkMode();
 
   const changeDarkMode = () => {
     setTheme(colorTheme);
   };
 
-  useEffect(() => {
-    setLeague(leagueId);
-  }, [leagueId]);
-
   return (
     <header className="relative isolate z-10 bg-background dark:bg-darkmode-background text-text dark:text-darkmode-text">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="hidden lg:flex lg:flex-1 lg:justify-start">
-          <p>{leagueName}</p>
+          <p>{selectedSeason.leagueName}</p>
         </div>
 
         <div className="flex lg:hidden">
@@ -52,18 +48,14 @@ export default function Header() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        {league ?
-          (
-            <Popover.Group className="hidden lg:flex lg:gap-x-12">
-              {PAGES.map((page) => (
-                page.playerSpecific ?
-                  <HeaderPopover leagueId={league} pageName={page.name} pageType={page.type} />
-                  : <PlayerName type={page.type} teamName={page.name} />
+        <Popover.Group className="hidden lg:flex lg:gap-x-12">
+          {PAGES.map((page) => (
+            page.playerSpecific ?
+              <HeaderPopover pageName={page.name} pageType={page.type} />
+              : <PlayerName type={page.type} teamName={page.name} />
 
-              ))}
-            </Popover.Group>
-          )
-          : <div>todo</div>}
+          ))}
+        </Popover.Group>
         <div className="flex lg:flex-1 lg:justify-end">
           <Toggle changeToggle={changeDarkMode} checked={colorTheme === 'light'} />
         </div>

@@ -22,41 +22,20 @@ import { getPlayerForm, getPlayerStandings } from './Utils/Utils';
 const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 
 const initialLeagueContext: ILeagueContext = {
-  leagueId: null,
-  setLeagueId: () => { },
-  leagueName: '',
-  setLeagueName: () => { },
-  draftPlayers: [],
-  setDraftPlayers: () => { },
-  footballPlayers: [],
-  setFootballPlayers: () => { },
-  standings: [],
-  setStandings: () => { },
-  draftPlayerForms: [],
-  setDraftPlayerForms: () => { },
-  matches: [],
-  setMatches: () => { },
-  draftPlayerStandings: [],
-  setDraftPlayerStandings: () => { },
+  selectedSeason: {} as ISeasonStats,
+  setSelectedSeason: () => { },
 };
 
 export const LeagueContext = React.createContext<ILeagueContext>(initialLeagueContext);
 
 function App() {
-  const [leagueId, setLeagueId] = useState<number | null>(null);
-  const [leagueName, setLeagueName] = useState('');
-  const [draftPlayers, setDraftPlayers] = useState([] as IDraftPlayer[]);
-  const [standings, setStandings] = useState([] as IStanding[]);
-  const [draftPlayerForms, setDraftPlayerForms] = useState([] as IDraftPlayerForm[]);
-  const [matches, setMatches] = useState([] as IMatch[]);
-  const [draftPlayerStandings, setDraftPlayerStandings] = useState([] as IDraftPlayerStanding[]);
-  const [footballPlayers, setFootballPlayers] = useState([] as IFootballPlayerInfo[]);
-  const [seasons, setSeasonsInfo] = useState<ISeasonStatsMap>({} as ISeasonStatsMap);
+  const [seasons, setSeasonsInfo] = useState<ISeasonStatsMap>();
   const [selectedSeason, setSelectedSeason] = useState<ISeasonStats>({} as ISeasonStats);
-  const [loading, setLoading] = useState(true);
 
-  const contextValue = useMemo(() => ({
-    ...initialLeagueContext,
+  // const [leagueDetails, setLeagueDetails] = useState({} as ILeagueDetails);
+
+  /*   const contextValue = useMemo(() => ({
+    ...initialUserContext,
     leagueId,
     leagueName,
     draftPlayers,
@@ -73,13 +52,13 @@ function App() {
     setMatches,
     setDraftPlayerStandings,
     setFootballPlayers,
-  }), [leagueId, leagueName, draftPlayers, footballPlayers, standings, draftPlayerForms, matches, draftPlayerStandings]);
+  }), [leagueId, leagueName, draftPlayers, footballPlayers, standings, draftPlayerForms, matches, draftPlayerStandings]); */
 
-  /*   const contextValue = useMemo(() => ({
+  const contextValue = useMemo(() => ({
     ...initialLeagueContext,
     selectedSeason,
     setSelectedSeason,
-  }), [selectedSeason]); */
+  }), [selectedSeason]);
 
   const getLeagueInfoForAllSeason = async () => {
     const allSeasonInfos: ISeasonStatsMap = {};
@@ -109,7 +88,7 @@ function App() {
       }
     }));
 
-    console.log('🚀 ~ file: App.tsx:81 ~ SEASONS.forEach ~ leagueInfo:', allSeasonInfos);
+    console.log('🚀 ~ file: App.tsx:81 ~ SEASONS.forEach ~ leagueInfo:', allSeasonInfos['48617']);
     // set season info in state
     setSeasonsInfo(allSeasonInfos);
     // set current season as the context season
@@ -117,23 +96,8 @@ function App() {
       SEASONS.find((season) => season.currentSeason)?.leagueId.toString()
       ?? SEASONS[SEASONS.length - 1].leagueId.toString()
     ]);
-    setLoading(false);
   };
   // todo changer!
-
-  // when selectedSeason changes update the context
-  useEffect(() => {
-    console.log('season change');
-    // update the context
-    setDraftPlayerForms(selectedSeason.draftPlayerForms);
-    setStandings(selectedSeason.standings);
-    setLeagueId(selectedSeason.leagueId);
-    setLeagueName(selectedSeason.leagueName);
-    setDraftPlayers(selectedSeason.draftPlayers);
-    setMatches(selectedSeason.matches);
-    setDraftPlayerStandings(selectedSeason.draftPlayerStandings);
-    // setFootballPlayers() TODO
-  }, [selectedSeason]);
 
   useEffect(() => {
     console.log('init');
@@ -142,24 +106,26 @@ function App() {
   }, []);
 
   return (
-    <LeagueContext.Provider value={contextValue}>
-      <Header />
-      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 bg-background dark:bg-darkmode-background min-h-screen">
-        <div className="content">
-          {loading ? (
+    selectedSeason?.leagueId ? (
+      <LeagueContext.Provider value={contextValue}>
+        <Header />
+        <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 bg-background dark:bg-darkmode-background min-h-screen">
+          <div className="content">
+
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/:leagueNumber" element={<League />} />
               <Route path="/:leagueNumber/:playerNumber" element={(<Player />)} />
               <Route path="*" element={<TODOPAGE />} />
             </Routes>
-          ) : <Loading />}
-        </div>
-        {/* <footer className="flex-shrink-0 w-full">
+          </div>
+          {/* <footer className="flex-shrink-0 w-full">
           <Footer />
         </footer> */}
-      </div>
-    </LeagueContext.Provider>
+        </div>
+      </LeagueContext.Provider>
+    )
+      : <Loading />
   );
 }
 

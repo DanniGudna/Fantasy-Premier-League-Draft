@@ -16,6 +16,7 @@ import { ENTIRE_LEAGUE_NAME_IN_HEADER, PAGES } from '../../Utils/StaticObjects';
 import Toggle from '../Common/Toggle/Toggle';
 import PlayerName from '../PlayerName/PlayerName';
 import HeaderPopover from './HeaderPopover';
+import LeaguePicker from './LeaguePicker';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -24,7 +25,7 @@ function classNames(...classes: string[]) {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // const [league, setLeague] = useState<number | null>(null);
-  const { selectedSeason } = useContext(LeagueContext);
+  const { leagueName } = useContext(LeagueContext);
   const [colorTheme, setTheme] = useDarkMode();
 
   const changeDarkMode = () => {
@@ -34,8 +35,8 @@ export default function Header() {
   return (
     <header className="relative isolate z-10 bg-background dark:bg-darkmode-background text-text dark:text-darkmode-text">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-        <div className="hidden lg:flex lg:flex-1 lg:justify-start">
-          <p>{selectedSeason.leagueName}</p>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-start mr-2">
+          <LeaguePicker />
         </div>
 
         <div className="flex lg:hidden">
@@ -51,8 +52,8 @@ export default function Header() {
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           {PAGES.map((page) => (
             page.playerSpecific ?
-              <HeaderPopover pageName={page.name} pageType={page.type} />
-              : <PlayerName type={page.type} teamName={page.name} />
+              <HeaderPopover pageName={page.name} pageType={page.type} key={page.type} />
+              : <PlayerName type={page.type} teamName={page.name} key={page.type} />
 
           ))}
         </Popover.Group>

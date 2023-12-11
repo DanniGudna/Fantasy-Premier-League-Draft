@@ -2,19 +2,21 @@
 import './App.css';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import FantasyPremierLeagueApi from './api/FantasyPremierLeagueApi';
 import ContentCard from './Components/Common/ContentCard/ContentCard';
 // import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Loading from './Components/Loading/Loading';
+import { LeagueId } from './interfaces/App';
 import { IFootballPlayerInfo } from './interfaces/FootballPlayer';
 import { ILeagueContext } from './interfaces/Generic';
 import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, ILeagueDetails, IMatch, ISeasonStats, ISeasonStatsMap, IStanding } from './interfaces/League';
 import Home from './pages/Home';
 import League from './pages/League';
 import Player from './pages/Player';
+import Table from './pages/Table';
 import TODOPAGE from './pages/TODOPAGE';
 import { SEASONS } from './Utils/StaticObjects';
 import { getPlayerForm, getPlayerStandings } from './Utils/Utils';
@@ -22,15 +24,25 @@ import { getPlayerForm, getPlayerStandings } from './Utils/Utils';
 const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 
 const initialLeagueContext: ILeagueContext = {
-  selectedSeason: {} as ISeasonStats,
-  setSelectedSeason: () => { },
+  // selectedSeason: {} as ISeasonStats,
+  // setSelectedSeason: () => { },
+  leagueId: null,
+  draftPlayers: [],
+  leagueName: '',
+  seasonName: '',
+  standings: [],
+  draftPlayerForms: [],
+  matches: [],
+  draftPlayerStandings: [],
+  changeSeason: () => { },
 };
 
 export const LeagueContext = React.createContext<ILeagueContext>(initialLeagueContext);
 
 function App() {
-  const [seasons, setSeasonsInfo] = useState<ISeasonStatsMap>();
+  const [seasons, setSeasonsInfo] = useState<ISeasonStatsMap>({} as ISeasonStatsMap);
   const [selectedSeason, setSelectedSeason] = useState<ISeasonStats>({} as ISeasonStats);
+  const navigate = useNavigate();
 
   // const [leagueDetails, setLeagueDetails] = useState({} as ILeagueDetails);
 
@@ -54,10 +66,35 @@ function App() {
     setFootballPlayers,
   }), [leagueId, leagueName, draftPlayers, footballPlayers, standings, draftPlayerForms, matches, draftPlayerStandings]); */
 
+  const changeSeason = (newLeagueId: number) => {
+    console.log('🚀 ~ file: App.tsx:70 ~ changeSeason ~ selectedSeason:', selectedSeason);
+    if (newLeagueId !== selectedSeason.leagueId) {
+      console.log('ding');
+      setSelectedSeason(seasons[newLeagueId]);
+
+      // Get the current URL path
+      const currentPath = window.location.pathname;
+
+      // Replace the league ID in the path with the new one
+      const newPath = currentPath.replace(`/${selectedSeason.leagueId}`, `/${newLeagueId}`);
+
+      // Navigate to the new path
+      navigate(newPath);
+    }
+    // else do nothing
+  };
+
   const contextValue = useMemo(() => ({
     ...initialLeagueContext,
-    selectedSeason,
-    setSelectedSeason,
+    leagueId: selectedSeason.leagueId,
+    draftPlayers: selectedSeason.draftPlayers,
+    leagueName: selectedSeason.leagueName,
+    seasonName: selectedSeason.seasonName,
+    standings: selectedSeason.standings,
+    draftPlayerForms: selectedSeason.draftPlayerForms,
+    matches: selectedSeason.matches,
+    draftPlayerStandings: selectedSeason.draftPlayerStandings,
+    changeSeason,
   }), [selectedSeason]);
 
   const getLeagueInfoForAllSeason = async () => {
@@ -88,7 +125,6 @@ function App() {
       }
     }));
 
-    console.log('🚀 ~ file: App.tsx:81 ~ SEASONS.forEach ~ leagueInfo:', allSeasonInfos['48617']);
     // set season info in state
     setSeasonsInfo(allSeasonInfos);
     // set current season as the context season
@@ -97,6 +133,7 @@ function App() {
       ?? SEASONS[SEASONS.length - 1].leagueId.toString()
     ]);
   };
+
   // todo changer!
 
   useEffect(() => {
@@ -114,9 +151,15 @@ function App() {
 
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/:leagueNumber" element={<League />} />
+              <Route path="/:leagueNumber/stats/:playerId?" element={<League />} />
+              <Route path="/:leagueNumber/leagueTable/:playerId?" element={<Table />} />
+              <Route path="/:leagueNumber/charts/:playerId?" element={<TODOPAGE />} />
+              <Route path="/:leagueNumber/draft/:playerId?" element={<TODOPAGE />} />
+              <Route path="/:leagueNumber/transactions/:playerId?" element={<TODOPAGE />} />
+
+              {/* <Route path="/:leagueNumber" element={<League />} />
               <Route path="/:leagueNumber/:playerNumber" element={(<Player />)} />
-              <Route path="*" element={<TODOPAGE />} />
+              <Route path="*" element={<TODOPAGE />} /> */}
             </Routes>
           </div>
           {/* <footer className="flex-shrink-0 w-full">

@@ -16,9 +16,7 @@ function Player(): ReactElement {
   /*   const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false); */
   const { playerNumber } = useParams();
-  const {
-    selectedSeason,
-  } = useContext(LeagueContext);
+  const { draftPlayerForms } = useContext(LeagueContext);
 
   return (
     <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-slate-750">
@@ -27,7 +25,7 @@ function Player(): ReactElement {
       </ContentCard>
       <ContentCard>
         <FormTable
-          rows={selectedSeason.draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerId.toString() === playerNumber)}
+          rows={draftPlayerForms.filter((draftPlayerForm) => draftPlayerForm.playerId.toString() === playerNumber)}
         />
       </ContentCard>
     </div>

@@ -14,11 +14,11 @@ interface IProps {
 }
 
 function HeaderPopover({ pageName, pageType }: IProps): ReactElement {
-  const { selectedSeason } = useContext(LeagueContext);
-  console.log('🚀 ~ file: HeaderPopover.tsx:18 ~ HeaderPopover ~ selectedSeason:', selectedSeason);
+  const { draftPlayers } = useContext(LeagueContext);
+
   return (
-    <Popover>
-      <Popover.Button className="flex items-center gap-x-1 text-lg font-semibold leading-6 text-text dark:text-darkmode-text">
+    <Popover className="self-center">
+      <Popover.Button className="flex items-center gap-x-1 text-lg font-semibold leading-6 text-text dark:text-darkmode-text self-center">
         {pageName}
         <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
       </Popover.Button>
@@ -35,12 +35,13 @@ function HeaderPopover({ pageName, pageType }: IProps): ReactElement {
         <Popover.Panel className="absolute inset-x-0 top-0 -z-10 bg-background dark:bg-darkmode-background pt-14 shadow-lg ring-1 ring-gray-900/5">
           <div className="mx-auto grid max-w-8xl grid-cols-5 gap-x-4 px-6 py-10 lg:px-8 xl:gap-x-8">
             <HeaderFilterItem name="season number todo" type={pageType} teamName={ENTIRE_LEAGUE_NAME_IN_HEADER} />
-            {selectedSeason.draftPlayers.map((draftPlayer) => (
+            {draftPlayers.map((draftPlayer) => (
               <HeaderFilterItem
                 draftPlayerId={draftPlayer.id}
                 type={pageType}
                 name={draftPlayer.fullName}
                 teamName={draftPlayer.teamName}
+                key={draftPlayer.id}
               />
             ))}
           </div>

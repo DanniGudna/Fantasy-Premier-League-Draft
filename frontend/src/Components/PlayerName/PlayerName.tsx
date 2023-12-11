@@ -15,11 +15,10 @@ interface IProps {
 
 function InfoHeader({ playerName, teamName, playerId, type }: IProps): ReactElement {
   const navigate = useNavigate();
-  const { selectedSeason } = useContext(LeagueContext);
+  const { leagueId } = useContext(LeagueContext);
 
   const handleClickOnPlayer = () => {
-    console.log('🚀 ~ file: PlayerName.tsx:21 ~ handleClickOnPlayer', ('/' + selectedSeason.leagueId + '/' + type + (playerId ? '/' + playerId : '')));
-    navigate('/' + selectedSeason.leagueId + '/' + type + (playerId ? '/' + playerId : ''));
+    navigate('/' + leagueId + '/' + type + (playerId ? '/' + playerId : ''));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

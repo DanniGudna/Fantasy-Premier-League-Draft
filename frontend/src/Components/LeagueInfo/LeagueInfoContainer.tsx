@@ -25,7 +25,7 @@ function LeagueInfoContainer(): ReactElement {
   const [weeklyScores, setWeeklyScores] = useState([] as IGameWeekScores[]);
   const { playerNumber } = useParams();
 
-  const { selectedSeason } = useContext(LeagueContext);
+  const { draftPlayerForms, matches } = useContext(LeagueContext);
 
   // these function can display more info if I want to do this dynamicly in the future
   const renderXNumberOfStreaks = (streaks: IStreak[], numberOfRenders: number) => {
@@ -35,7 +35,7 @@ function LeagueInfoContainer(): ReactElement {
       const streak = streaks[i];
       streakComponents.push(<StreakInfo
         streak={streak}
-        gameWeek={selectedSeason.draftPlayerForms[0].matchInfo.length}
+        gameWeek={draftPlayerForms[0].matchInfo.length}
         key={streak.playerId + streak.streakStart}
       />);
     }
@@ -68,8 +68,8 @@ function LeagueInfoContainer(): ReactElement {
   };
 
   useEffect(() => {
-    const streaks = getAllStreaks(selectedSeason.draftPlayerForms);
-    let matchScores = getMatchScores(selectedSeason.draftPlayerForms);
+    const streaks = getAllStreaks(draftPlayerForms);
+    let matchScores = getMatchScores(draftPlayerForms);
     let weekScores: IGameWeekScores[];
 
     // filter if player selected...
@@ -78,20 +78,20 @@ function LeagueInfoContainer(): ReactElement {
       streaks.undefeatedStreaks = streaks.undefeatedStreaks.filter((streak) => streak.playerId.toString() === playerNumber);
       streaks.lossStreaks = streaks.lossStreaks.filter((streak) => streak.playerId.toString() === playerNumber);
       matchScores = matchScores.filter((matchScore) => matchScore.playerId.toString() === playerNumber);
-      weekScores = getHighestScoringGameWeeks(selectedSeason.matches.filter(
+      weekScores = getHighestScoringGameWeeks(matches.filter(
         (match) => match.team1Id.toString() === playerNumber
           || match.team2Id.toString() === playerNumber,
       ));
     }
     else {
-      weekScores = getHighestScoringGameWeeks(selectedSeason.matches);
+      weekScores = getHighestScoringGameWeeks(matches);
     }
     setScores(matchScores);
     setWinStreaks(streaks.winStreaks);
     setUndefeatedStreaks(streaks.undefeatedStreaks);
     setLossStreaks(streaks.lossStreaks);
     setWeeklyScores(weekScores);
-  }, [selectedSeason.draftPlayerForms]);
+  }, [draftPlayerForms]);
 
   return (
     <div>

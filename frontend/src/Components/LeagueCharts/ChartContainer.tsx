@@ -43,11 +43,11 @@ const rankOptions = {
 
 function ChartContainer(): ReactElement {
   // const [colorTheme] = useDarkMode(); // since chart.js doesnt use the tailwind dark mode we have the check the theme manually
-  const { selectedSeason } = useContext(LeagueContext);
+  const { draftPlayerStandings } = useContext(LeagueContext);
   const [chartData, setChartData] = useState<IAllChartData>({} as IAllChartData);
 
   useEffect(() => {
-    const data = createChartData(selectedSeason.draftPlayerStandings);
+    const data = createChartData(draftPlayerStandings);
     setChartData(data);
   }, []);
 

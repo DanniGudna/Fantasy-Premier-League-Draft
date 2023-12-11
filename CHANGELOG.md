@@ -14,13 +14,31 @@ z = bugfix - not applicable right now
 
 ### Added
 
-- Todo page
+- 
 
 ### Fixed
 
 
 ### Changed
 
+
+### Removed
+
+## [1.3.0]
+
+### Added
+
+- new table page WIP
+- selectable season in header
+- TODO page
+
+### Fixed
+
+- Header look and page mapping
+
+### Changed
+- interface mapping between api and frontend
+- stat calculations now happen at the start
 
 ### Removed
 

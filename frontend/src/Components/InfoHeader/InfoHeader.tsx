@@ -10,12 +10,12 @@ interface IProps {
 }
 
 function InfoHeader({ title, subTitle }: IProps): ReactElement {
-  const { selectedSeason } = useContext(LeagueContext);
+  const { leagueName } = useContext(LeagueContext);
   return (
     <div className="px-2 ">
       <h1 className="text-bold font-bold text-lg leading-6 text-gray-900 dark:text-white">
         {title + ' '}
-        <span className="font-extrabold">{selectedSeason.leagueName}</span>
+        <span className="font-extrabold">{leagueName}</span>
       </h1>
       <p className="mt-2 ml-2 text-sm text-gray-700 dark:text-gray-300">{subTitle}</p>
     </div>

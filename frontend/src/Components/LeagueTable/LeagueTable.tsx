@@ -45,52 +45,38 @@ function LeagueTable({ rows }: IProps): ReactElement {
               <table className=" divide-y divide-gray-300">
                 <thead className="bg-gray-50 dark:bg-slate-600">
                   <tr>
-                    <th scope="col" onClick={() => handleSort('rank')} className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
-                      <SortableTableHeader title="Rank" sortColumn={sortColumn} sortOrder={sortOrder} sortName="rank" />
+                    <th scope="col" onClick={() => handleSort('currentRank')} className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
+                      <SortableTableHeader title="Rank" sortColumn={sortColumn} sortOrder={sortOrder} sortName="currentRank" />
                     </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">Team & Manager</th>
-                    {rows[0].matches_played ? (
-                      <>
-                        {/* <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white  lg:table-cell">Played</th> */}
-                        <th onClick={() => handleSort('matches_won')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                          <SortableTableHeader title="W" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matches_won" />
-                        </th>
-                        <th onClick={() => handleSort('matches_drawn')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                          <SortableTableHeader title="D" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matches_drawn" />
-                        </th>
-                        <th onClick={() => handleSort('matches_lost')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                          <SortableTableHeader title="L" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matches_lost" />
-                        </th>
-                        <th onClick={() => handleSort('points_for')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                          <SortableTableHeader title="Points for" sortColumn={sortColumn} sortOrder={sortOrder} sortName="points_for" />
-                        </th>
-                        <th onClick={() => handleSort('points_against')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white  sm:table-cell">
-                          <SortableTableHeader title="Points against" sortColumn={sortColumn} sortOrder={sortOrder} sortName="points_against" />
-                        </th>
-                        <th onClick={() => handleSort('points_diff')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white  sm:table-cell">
-                          <SortableTableHeader title="Points diff" sortColumn={sortColumn} sortOrder={sortOrder} sortName="points_diff" />
-                        </th>
-                      </>
-                    )
-                      : (
-                        <>
-                          <th onClick={() => handleSort('event_total')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                            <SortableTableHeader title="Points this week" sortColumn={sortColumn} sortOrder={sortOrder} sortName="event_total" />
-                          </th>
-                          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                            Avereage Points per week
-                          </th>
-                        </>
-                      )}
-                    <th onClick={() => handleSort('total')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
-                      <SortableTableHeader title="League Points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="total" />
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white border-r border-gray-200">Team & Manager</th>
+                    {/* <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white  lg:table-cell">Played</th> */}
+                    <th onClick={() => handleSort('matchesWon')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
+                      <SortableTableHeader title="W" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchesWon" />
+                    </th>
+                    <th onClick={() => handleSort('matchesDrawn')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
+                      <SortableTableHeader title="D" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchesDrawn" />
+                    </th>
+                    <th onClick={() => handleSort('matchesLost')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white border-r border-gray-200">
+                      <SortableTableHeader title="L" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchesLost" />
+                    </th>
+                    <th onClick={() => handleSort('matchPointsFor')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                      <SortableTableHeader title="Points for" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchPointsFor" />
+                    </th>
+                    <th onClick={() => handleSort('matchPointsAgainst')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell">
+                      <SortableTableHeader title="Points against" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchPointsAgainst" />
+                    </th>
+                    <th onClick={() => handleSort('matchPointsDiff')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                      <SortableTableHeader title="Points diff" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchPointsDiff" />
+                    </th>
+                    <th onClick={() => handleSort('leaguePoints')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
+                      <SortableTableHeader title="League Points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="leaguePoints" />
                     </th>
                     {/*                     <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white  md:table-cell">Form TODO</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {sortedRows.map((row) => (
-                    <LeagueTableRow row={row} key={row.league_entry} />
+                    <LeagueTableRow row={row} key={row.playerId} />
                   ))}
                 </tbody>
               </table>

@@ -49,8 +49,18 @@ export const PageTypeNames: Record<PageType, string> = {
 } */
 
 export interface ILeagueContext {
-  selectedSeason: ISeasonStats;
-  setSelectedSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
+  // selectedSeason: ISeasonStats; not sure if needed
+  leagueId: number | null;
+  leagueName: string;
+  seasonName: string;
+  draftPlayers: IDraftPlayer[];
+  // footballPlayers: IFootballPlayerInfo[]; todo
+  standings: IStanding[];
+  draftPlayerForms: IDraftPlayerForm[];
+  matches: IMatch[];
+  draftPlayerStandings: IDraftPlayerStanding[];
+  // setSelectedSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
+  changeSeason: (leagueId: number) => void
 }
 
 export interface IDataset {

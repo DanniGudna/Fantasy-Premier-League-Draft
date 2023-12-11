@@ -83,13 +83,13 @@ export const SEASONS: IDraftSeason[] = [
   {
     leagueName: 'BanterLads 3 Return of the Lad',
     leagueId: 46795,
-    seasonName: '2022/2023 Season',
+    seasonName: '22/23 Season',
     currentSeason: false,
   },
   {
     leagueName: 'Banter Lad 4: A new Lad',
     leagueId: 48617,
-    seasonName: '2023/2024 Season',
+    seasonName: '23/24 Season',
     currentSeason: true,
   },
 ];

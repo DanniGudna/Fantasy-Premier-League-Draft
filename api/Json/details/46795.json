@@ -195,28 +195,6 @@
       "winning_method": null
     },
     {
-      "event": 7,
-      "finished": true,
-      "league_entry_1": 517156,
-      "league_entry_1_points": 0,
-      "league_entry_2": 182079,
-      "league_entry_2_points": 0,
-      "started": true,
-      "winning_league_entry": null,
-      "winning_method": null
-    },
-    {
-      "event": 7,
-      "finished": true,
-      "league_entry_1": 191447,
-      "league_entry_1_points": 0,
-      "league_entry_2": 467444,
-      "league_entry_2_points": 0,
-      "started": true,
-      "winning_league_entry": null,
-      "winning_method": null
-    },
-    {
       "event": 8,
       "finished": true,
       "league_entry_1": 182079,

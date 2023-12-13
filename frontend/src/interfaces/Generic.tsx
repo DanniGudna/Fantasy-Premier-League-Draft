@@ -1,5 +1,5 @@
 import { IFootballPlayerInfo } from './FootballPlayer';
-import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, IMatch, ISeasonStats, IStanding } from './League';
+import { IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, IMatch, IScoreInfo, ISeasonStats, IStanding, IStreakMap } from './League';
 
 export type TextFieldType = 'email' | 'text' | 'tel' | 'number';
 
@@ -35,7 +35,7 @@ export const PageTypeNames: Record<PageType, string> = {
   draftPlayers: IDraftPlayer[];
   footballPlayers: IFootballPlayerInfo[];
   standings: IStanding[];
-  draftPlayerForms: IDraftPlayerForm[];
+  draftPlayerForms: IDraftPlayerStats[];
   matches: IMatch[];
   draftPlayerStandings: IDraftPlayerStanding[];
   setLeagueId: React.Dispatch<React.SetStateAction<number | null>>
@@ -43,7 +43,7 @@ export const PageTypeNames: Record<PageType, string> = {
   setDraftPlayers: React.Dispatch<React.SetStateAction<IDraftPlayer[]>>
   setFootballPlayers: React.Dispatch<React.SetStateAction<IFootballPlayerInfo[]>>
   setStandings: React.Dispatch<React.SetStateAction<IStanding[]>>
-  setDraftPlayerForms: React.Dispatch<React.SetStateAction<IDraftPlayerForm[]>>
+  setDraftPlayerForms: React.Dispatch<React.SetStateAction<IDraftPlayerStats[]>>
   setMatches: React.Dispatch<React.SetStateAction<IMatch[]>>
   setDraftPlayerStandings: React.Dispatch<React.SetStateAction<IDraftPlayerStanding[]>>
 } */
@@ -56,9 +56,11 @@ export interface ILeagueContext {
   draftPlayers: IDraftPlayer[];
   // footballPlayers: IFootballPlayerInfo[]; todo
   standings: IStanding[];
-  draftPlayerForms: IDraftPlayerForm[];
+  draftPlayerForms: IDraftPlayerStats[];
   matches: IMatch[];
   draftPlayerStandings: IDraftPlayerStanding[];
+  streaks: IStreakMap;
+  matchScores: IScoreInfo[];
   // setSelectedSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
   changeSeason: (leagueId: number) => void
 }

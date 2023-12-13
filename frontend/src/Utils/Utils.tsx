@@ -1,5 +1,5 @@
 import { IAllChartData, IChartData } from '../interfaces/Generic';
-import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, MatchResult } from '../interfaces/League';
+import { IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, IStreakMap, MatchResult } from '../interfaces/League';
 
 /**
  * Gets the matchinfo for the draftPlayer in the provided match
@@ -67,22 +67,55 @@ function getMatchInfo(draftPlayerId: number, match: IMatch): IMatchInfo | null {
  * @param matches All matches from the FPL api
  * @returns The form of the draftPlayer, i.e it contains the results of all the matches he has played
  */
-export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDraftPlayerForm {
-  // filter out the matches that the pllayer didnt play in
+export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDraftPlayerStats {
+  // filter out the matches that the player didnt play in
   const filteredMatches = matches.filter((match) => (
     match.team1Id === draftPlayer.id || match.team2Id === draftPlayer.id) && match.finished);
-  const playerForm = {} as IDraftPlayerForm;
+  const playerForm = {} as IDraftPlayerStats;
   playerForm.playerId = draftPlayer.id;
   playerForm.playerName = draftPlayer.fullName;
   playerForm.teamName = draftPlayer.teamName;
   playerForm.matchInfo = [];
+  playerForm.lostByOnePoint = 0;
+  playerForm.wonByOnePoint = 0;
   filteredMatches.forEach((filteredMatch) => {
     // only add results for matches that have been played
     const matchInfo = getMatchInfo(draftPlayer.id, filteredMatch);
     if (matchInfo) {
+      // check if it was a loss/win by 1 point
+      if (Math.abs(matchInfo.opponentPoints - matchInfo.playerPoints) === 1) {
+        if (matchInfo.result === 'win') {
+          playerForm.wonByOnePoint += 1;
+        }
+        else {
+          playerForm.lostByOnePoint += 1;
+        }
+      }
+      const otherMatchInGameWeek = matches.find(
+        (match) => match.round === filteredMatch.round &&
+          (match.team1Id !== filteredMatch.team1Id && match.team1Id !== filteredMatch.team2Id),
+      );
+      // this should always be true but the check is here for typescript reasons
+      if (otherMatchInGameWeek) {
+        const playerPoints = [
+          { id: filteredMatch.team1Id, points: filteredMatch.team1Points },
+          { id: filteredMatch.team2Id, points: filteredMatch.team2Points },
+          { id: otherMatchInGameWeek.team1Id, points: otherMatchInGameWeek.team1Points },
+          { id: otherMatchInGameWeek.team2Id, points: otherMatchInGameWeek.team2Points },
+        ];
+
+        // Sort players by points in descending order
+        playerPoints.sort((a, b) => b.points - a.points);
+
+        // Find the index of the current player in the sorted array and add 1 to get the rank
+        matchInfo.rankForThisGW = playerPoints.findIndex((player) => player.id === draftPlayer.id) + 1 as 1 | 2 | 3 | 4;
+      }
       playerForm.matchInfo.push(matchInfo);
     }
   });
+
+  playerForm.wonWithThirdMostPoints = playerForm.matchInfo.filter((match) => match.result === 'win' && match.rankForThisGW === 3).length;
+  playerForm.lostWithSecondMostPoints = playerForm.matchInfo.filter((match) => match.result === 'loss' && match.rankForThisGW === 2).length;
 
   return playerForm;
 }
@@ -98,7 +131,7 @@ export function getPlayerById(Id: number, draftPlayers: IDraftPlayer[]): IDraftP
 }
 
 // todo combine these functions
-function getPlayerNameByIdFromPlayerForms(Id: number, players: IDraftPlayerForm[]): string {
+function getPlayerNameByIdFromPlayerForms(Id: number, players: IDraftPlayerStats[]): string {
   const playerInfo = players.find((player) => player.playerId === Id);
   if (playerInfo) {
     return playerInfo.playerName;
@@ -106,7 +139,7 @@ function getPlayerNameByIdFromPlayerForms(Id: number, players: IDraftPlayerForm[
   return 'name not found';
 }
 
-function getPlayerTeamNameByIdFromPlayerForms(Id: number, players: IDraftPlayerForm[]): string {
+function getPlayerTeamNameByIdFromPlayerForms(Id: number, players: IDraftPlayerStats[]): string {
   const playerInfo = players.find((player) => player.playerId === Id);
   if (playerInfo) {
     return playerInfo.teamName;
@@ -118,7 +151,7 @@ function getStreakEnd(numberOfFinishedGW: number, currentGW: number, matchingRes
   return currentGW === numberOfFinishedGW && matchingResult ? currentGW : currentGW - 1;
 }
 
-export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
+export function getAllStreaks(playerForms: IDraftPlayerStats[]): IStreakMap {
   const winStreaks: IStreak[] = [];
   const undefeatedStreaks: IStreak[] = [];
   const lossStreaks: IStreak[] = [];
@@ -133,8 +166,6 @@ export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
     let undefeatedStreakStart = 1; // we need a seperate one for undefeated since draw stops the other streaks but not undefeated
     let lastResult: MatchResult | undefined;
     playerForm.matchInfo.forEach((match) => {
-      /*       // skip matchweek 7
-      if (match.event !== 7) { */ // TODO FIX
       if (match.result === 'win') {
         winStreak++;
         undefeatedStreak++;
@@ -216,7 +247,7 @@ export function getAllStreaks(playerForms: IDraftPlayerForm[]) {
   };
 }
 
-export function getMatchScores(playerForms: IDraftPlayerForm[]) {
+export function getMatchScores(playerForms: IDraftPlayerStats[]) {
   const scores: IScoreInfo[] = [];
 
   playerForms.forEach((playerForm) => {
@@ -244,7 +275,7 @@ export function getMatchScores(playerForms: IDraftPlayerForm[]) {
   return scores;
 }
 
-export function getPlayerStandings(playerForm: IDraftPlayerForm) {
+export function getPlayerStandings(playerForm: IDraftPlayerStats) {
   const playerStandings = {
     playerName: playerForm.playerName,
     teamName: playerForm.teamName,

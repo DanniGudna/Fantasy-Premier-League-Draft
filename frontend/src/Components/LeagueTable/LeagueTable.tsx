@@ -13,6 +13,7 @@ interface IProps {
 }
 
 function LeagueTable({ rows }: IProps): ReactElement {
+  console.log('🚀 ~ file: LeagueTable.tsx:16 ~ LeagueTable ~ rows:', rows);
   const [sortColumn, setSortColumn] = useState<string>('rank');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -65,9 +66,27 @@ function LeagueTable({ rows }: IProps): ReactElement {
                     <th onClick={() => handleSort('matchPointsAgainst')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell">
                       <SortableTableHeader title="Points against" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchPointsAgainst" />
                     </th>
-                    <th onClick={() => handleSort('matchPointsDiff')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                    <th onClick={() => handleSort('matchPointsDiff')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell">
                       <SortableTableHeader title="Points diff" sortColumn={sortColumn} sortOrder={sortOrder} sortName="matchPointsDiff" />
                     </th>
+                    <th onClick={() => handleSort('averageMatchPoints')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                      <SortableTableHeader title="Average points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="averageMatchPoints" />
+                    </th>
+
+                    {/*                     <th onClick={() => handleSort('won')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                      <SortableTableHeader title="Won by 1 point" sortColumn={sortColumn} sortOrder={sortOrder} sortName="averageMatchPoints" />
+                    </th>
+                    <th onClick={() => handleSort('averageMatchPoints')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                      <SortableTableHeader title="Average points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="averageMatchPoints" />
+                    </th>
+                    <th onClick={() => handleSort('averageMatchPoints')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                      <SortableTableHeader title="Average points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="averageMatchPoints" />
+                    </th>
+                    <th onClick={() => handleSort('averageMatchPoints')} scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white sm:table-cell border-r border-gray-200">
+                      <SortableTableHeader title="Average points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="averageMatchPoints" />
+                    </th>
+ */}
+
                     <th onClick={() => handleSort('leaguePoints')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
                       <SortableTableHeader title="League Points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="leaguePoints" />
                     </th>

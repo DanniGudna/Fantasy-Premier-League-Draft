@@ -45,9 +45,10 @@ function LeagueTableRow({ row }: IProps): ReactElement {
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b border-r border-gray-200">{row.matchesLost}</td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b">{row.matchPointsFor}</td>
       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell">{row.matchPointsAgainst}</td>
-      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">
+      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell ">
         {row.matchPointsDiff > 0 ? `+${row.matchPointsDiff}` : row.matchPointsDiff}
       </td>
+      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">{row.averageMatchPoints}</td>
       {/*       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b md:table-cell">FORM TODO</td> */}
 
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.leaguePoints}</td>

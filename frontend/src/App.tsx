@@ -5,21 +5,23 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import FantasyPremierLeagueApi from './api/FantasyPremierLeagueApi';
-import ContentCard from './Components/Common/ContentCard/ContentCard';
 // import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Loading from './Components/Loading/Loading';
 import { LeagueId } from './interfaces/App';
 import { IFootballPlayerInfo } from './interfaces/FootballPlayer';
 import { ILeagueContext } from './interfaces/Generic';
-import { IDraftPlayer, IDraftPlayerForm, IDraftPlayerStanding, ILeagueDetails, IMatch, ISeasonStats, ISeasonStatsMap, IStanding } from './interfaces/League';
+import { IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, ILeagueDetails, IMatch, ISeasonStats, ISeasonStatsMap, IStanding, IStreakMap } from './interfaces/League';
 import Home from './pages/Home';
 import League from './pages/League';
+import NextVersion from './pages/NextVersion';
+import NotFound from './pages/NotFound';
 import Player from './pages/Player';
+import Stats from './pages/Stats';
 import Table from './pages/Table';
 import TODOPAGE from './pages/TODOPAGE';
 import { SEASONS } from './Utils/StaticObjects';
-import { getPlayerForm, getPlayerStandings } from './Utils/Utils';
+import { getAllStreaks, getHighestScoringGameWeeks, getMatchScores, getPlayerForm, getPlayerStandings } from './Utils/Utils';
 
 const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 
@@ -34,6 +36,8 @@ const initialLeagueContext: ILeagueContext = {
   draftPlayerForms: [],
   matches: [],
   draftPlayerStandings: [],
+  streaks: {} as IStreakMap,
+  matchScores: [],
   changeSeason: () => { },
 };
 
@@ -94,6 +98,8 @@ function App() {
     draftPlayerForms: selectedSeason.draftPlayerForms,
     matches: selectedSeason.matches,
     draftPlayerStandings: selectedSeason.draftPlayerStandings,
+    streaks: selectedSeason.streaks,
+    matchScores: selectedSeason.matchScores,
     changeSeason,
   }), [selectedSeason]);
 
@@ -105,12 +111,16 @@ function App() {
       const leagueInfo = await fantasyPremierLeagueApi.getLeagueTableDetails(season.leagueId.toString());
       if (leagueInfo) {
         // figure out the form of each player
-        const forms = [] as IDraftPlayerForm[];
+        const forms = [] as IDraftPlayerStats[];
         const playerLeagueStandings = [] as IDraftPlayerStanding[];
         leagueInfo.draftPlayers.forEach((player) => forms.push(getPlayerForm(player, leagueInfo.matches || [])));
         forms.forEach((form) => {
           playerLeagueStandings.push(getPlayerStandings(form));
         });
+        const streaks = getAllStreaks(forms);
+        console.log('🚀 ~ file: App.tsx:116 ~ awaitPromise.all ~ streaks:', streaks);
+        const matchScores = getMatchScores(forms);
+        // const weekScores = getHighestScoringGameWeeks(leagueInfo.matches); might not be used....
 
         seasonInfo.matches = leagueInfo.matches; // todo these is maybe not used in the context
         seasonInfo.leagueId = season.leagueId;
@@ -120,6 +130,8 @@ function App() {
         seasonInfo.draftPlayerStandings = playerLeagueStandings;
         seasonInfo.draftPlayers = leagueInfo.draftPlayers;
         seasonInfo.standings = leagueInfo.standings;
+        seasonInfo.streaks = streaks;
+        seasonInfo.matchScores = matchScores;
 
         allSeasonInfos[seasonInfo.leagueId.toString()] = seasonInfo;
       }
@@ -129,8 +141,10 @@ function App() {
     setSeasonsInfo(allSeasonInfos);
     // set current season as the context season
     setSelectedSeason(allSeasonInfos[
-      SEASONS.find((season) => season.currentSeason)?.leagueId.toString()
-      ?? SEASONS[SEASONS.length - 1].leagueId.toString()
+      SEASONS[SEASONS.length - 1].leagueId.toString()
+    ]);
+    console.log('🚀 ~ file: App.tsx:144 ~ getLeague ', allSeasonInfos[
+      SEASONS[SEASONS.length - 1].leagueId.toString()
     ]);
   };
 
@@ -151,11 +165,12 @@ function App() {
 
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/:leagueNumber/stats/:playerId?" element={<League />} />
+              <Route path="/:leagueNumber/stats/:playerId?" element={<Stats />} />
               <Route path="/:leagueNumber/leagueTable/:playerId?" element={<Table />} />
               <Route path="/:leagueNumber/charts/:playerId?" element={<TODOPAGE />} />
               <Route path="/:leagueNumber/draft/:playerId?" element={<TODOPAGE />} />
-              <Route path="/:leagueNumber/transactions/:playerId?" element={<TODOPAGE />} />
+              <Route path="/:leagueNumber/transactions/:playerId?" element={<NextVersion />} />
+              <Route path="*" element={<NotFound />} />
 
               {/* <Route path="/:leagueNumber" element={<League />} />
               <Route path="/:leagueNumber/:playerNumber" element={(<Player />)} />

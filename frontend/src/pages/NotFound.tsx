@@ -3,13 +3,13 @@ import 'tailwindcss/tailwind.css';
 
 import React, { ReactElement } from 'react';
 
-function TodoPage(): ReactElement {
+function NotFound(): ReactElement {
   return (
     <div className="grid grid-cols-1 2xl:grid-cols-2 dark:bg-slate-750">
-      THIS PAGE IS WIP
+      You are lost! Page not found!
     </div>
 
   );
 }
 
-export default TodoPage;
+export default NotFound;

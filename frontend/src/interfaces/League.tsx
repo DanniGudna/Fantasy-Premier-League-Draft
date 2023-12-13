@@ -48,8 +48,14 @@ export interface IStanding {
   matchPointsFor: number;
   leaguePoints: number;
   matchPointsDiff: number;
+  averageMatchPoints: number;
   [key: string]: any; // allow access by string, used for sorting
 }
+
+export interface ILeagueTableDetails extends IStanding, Pick<
+  IDraftPlayerStats,
+  'wonByOnePoint' | 'lostByOnePoint' | 'wonWithThirdMostPoints' | 'lostWithSecondMostPoints'
+> { }
 
 export interface ILeagueDetails {
   league: ILeague;
@@ -63,13 +69,15 @@ export interface ISeasonStatsMap {
 }
 export interface ISeasonStats {
   leagueId: number;
-  draftPlayers: IDraftPlayer[];
   leagueName: string;
   seasonName: string;
+  draftPlayers: IDraftPlayer[];
+  draftPlayerForms: IDraftPlayerStats[];
   standings: IStanding[];
-  draftPlayerForms: IDraftPlayerForm[];
+  draftPlayerStandings: IDraftPlayerStanding[]; // used for charts
   matches: IMatch[];
-  draftPlayerStandings: IDraftPlayerStanding[];
+  streaks: IStreakMap;
+  matchScores: IScoreInfo[];
 }
 
 export type MatchResult = 'win' | 'loss' | 'draw';
@@ -80,13 +88,20 @@ export interface IMatchInfo {
   playerPoints: number;
   opponentPoints: number;
   round: number;
+  rankForThisGW: 1 | 2 | 3 | 4;
 }
 
-export interface IDraftPlayerForm {
+export interface IDraftPlayerStats {
   matchInfo: IMatchInfo[];
   playerId: number;
   playerName: string;
   teamName: string;
+  wonByOnePoint: number;
+  lostByOnePoint: number;
+  wonWithThirdMostPoints: number;
+  lostWithSecondMostPoints: number;
+
+  // streaks: IStreakMap;
 }
 
 export type StreakTypes = 'win' | 'loss' | 'undefeated';
@@ -98,6 +113,12 @@ export interface IStreak {
   teamName: string;
   streakStart: number;
   streakEnd: number;
+}
+
+export interface IStreakMap {
+  winStreaks: IStreak[];
+  undefeatedStreaks: IStreak[];
+  lossStreaks: IStreak[];
 }
 
 export interface IScoreInfo {

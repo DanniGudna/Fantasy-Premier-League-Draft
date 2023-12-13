@@ -32,6 +32,7 @@ const mapStanding = (standing: APIStanding): IStanding => ({
   matchPointsFor: standing.points_for,
   leaguePoints: standing.total,
   matchPointsDiff: standing.points_for - standing.points_against,
+  averageMatchPoints: Math.round(standing.points_for / standing.matches_played),
 });
 
 const mapLeague = (league: APILeague): ILeague => ({

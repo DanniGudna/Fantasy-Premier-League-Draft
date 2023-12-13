@@ -3,7 +3,7 @@ export interface APILeagueDetails {
   league_entries: APIDraftPlayer[];
   matches: APIMatch[];
   standings: APIStanding[];
-  // playerForms?: IDraftPlayerForm[]; hmm not api!!
+  // playerForms?: IDraftPlayerStats[]; hmm not api!!
 }
 
 export interface APILeague {

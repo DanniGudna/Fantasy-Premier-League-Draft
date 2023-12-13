@@ -4,12 +4,12 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement } from 'react';
 
 import { PageType } from '../../interfaces/Generic';
-import { IDraftPlayerForm } from '../../interfaces/League';
+import { IDraftPlayerStats } from '../../interfaces/League';
 import PlayerName from '../PlayerName/PlayerName';
 import FormIcon from './FormIcon';
 
 interface IProps {
-  row: IDraftPlayerForm;
+  row: IDraftPlayerStats;
 
 }
 

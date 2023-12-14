@@ -162,14 +162,13 @@ function App() {
         <Header />
         <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 bg-background dark:bg-darkmode-background min-h-screen">
           <div className="content">
-
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/:leagueNumber/stats/:playerId?" element={<Stats />} />
               <Route path="/:leagueNumber/leagueTable/:playerId?" element={<Table />} />
               <Route path="/:leagueNumber/charts/:playerId?" element={<TODOPAGE />} />
-              <Route path="/:leagueNumber/draft/:playerId?" element={<TODOPAGE />} />
-              <Route path="/:leagueNumber/transactions/:playerId?" element={<NextVersion />} />
+              <Route path="/:leagueNumber/draft/:playerId?" element={<NextVersion info="It will show info about the original draft and how well you did in the draft" />} />
+              <Route path="/:leagueNumber/transactions/:playerId?" element={<NextVersion info="It will display all of a players transaction and if it was a good transaction or not" />} />
               <Route path="*" element={<NotFound />} />
 
               {/* <Route path="/:leagueNumber" element={<League />} />

@@ -5,7 +5,7 @@ const mapDraftPlayer = (draftPlayer: APIDraftPlayer): IDraftPlayer => ({
   id: draftPlayer.id,
   fullName: draftPlayer.player_first_name + ' ' + draftPlayer.player_last_name,
   initials: draftPlayer.short_name,
-  firstName: draftPlayer.player_first_name,
+  firstName: draftPlayer.player_first_name.split(' ')[0], // dont display middle names
   waiverPick: draftPlayer.waiver_pick,
   teamName: draftPlayer.entry_name,
 });
@@ -32,7 +32,7 @@ const mapStanding = (standing: APIStanding): IStanding => ({
   matchPointsFor: standing.points_for,
   leaguePoints: standing.total,
   matchPointsDiff: standing.points_for - standing.points_against,
-  averageMatchPoints: Math.round(standing.points_for / standing.matches_played),
+  averageMatchPoints: Math.round(standing.points_for / (standing.matches_drawn + standing.matches_lost + standing.matches_won)),
 });
 
 const mapLeague = (league: APILeague): ILeague => ({

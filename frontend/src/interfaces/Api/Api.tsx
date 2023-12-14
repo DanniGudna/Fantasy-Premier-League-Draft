@@ -56,7 +56,7 @@ export interface APIStanding {
   league_entry: number;
   matches_drawn: number;
   matches_lost: number;
-  matches_played: number;
+  matches_played: number; // this is always 38
   matches_won: number;
   points_against: number;
   points_for: number;

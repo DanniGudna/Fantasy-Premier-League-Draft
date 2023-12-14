@@ -73,7 +73,7 @@ export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDr
     match.team1Id === draftPlayer.id || match.team2Id === draftPlayer.id) && match.finished);
   const playerForm = {} as IDraftPlayerStats;
   playerForm.playerId = draftPlayer.id;
-  playerForm.playerName = draftPlayer.fullName;
+  playerForm.playerName = draftPlayer.firstName;
   playerForm.teamName = draftPlayer.teamName;
   playerForm.matchInfo = [];
   playerForm.lostByOnePoint = 0;

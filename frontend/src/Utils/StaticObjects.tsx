@@ -14,17 +14,17 @@ export const PAGES = [
   },
   {
     type: PageType.Charts,
-    playerSpecific: true,
+    playerSpecific: false,
     name: 'Charts',
   },
   {
     type: PageType.Draft,
-    playerSpecific: false, // todo
+    playerSpecific: false, // todo might be true in the future
     name: 'Draft',
   },
   {
     type: PageType.Transactions,
-    playerSpecific: true, // todo
+    playerSpecific: false, // todo will probably be true in the future
     name: 'Transactions',
   },
 ];

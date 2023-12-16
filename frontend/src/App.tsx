@@ -8,20 +8,15 @@ import FantasyPremierLeagueApi from './api/FantasyPremierLeagueApi';
 // import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Loading from './Components/Loading/Loading';
-import { LeagueId } from './interfaces/App';
-import { IFootballPlayerInfo } from './interfaces/FootballPlayer';
-import { ILeagueContext } from './interfaces/Generic';
-import { IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, ILeagueDetails, IMatch, ISeasonStats, ISeasonStatsMap, IStanding, IStreakMap } from './interfaces/League';
+import { IAllChartData, IDraftPlayerStanding, IDraftPlayerStats, ILeagueContext, ISeasonStats, ISeasonStatsMap, IStreakMap } from './interfaces/League';
+import Charts from './pages/Charts';
 import Home from './pages/Home';
-import League from './pages/League';
 import NextVersion from './pages/NextVersion';
 import NotFound from './pages/NotFound';
-import Player from './pages/Player';
 import Stats from './pages/Stats';
 import Table from './pages/Table';
-import TODOPAGE from './pages/TODOPAGE';
 import { SEASONS } from './Utils/StaticObjects';
-import { getAllStreaks, getHighestScoringGameWeeks, getMatchScores, getPlayerForm, getPlayerStandings } from './Utils/Utils';
+import { createChartData, getAllStreaks, getMatchScores, getPlayerForm, getPlayerStandings } from './Utils/Utils';
 
 const fantasyPremierLeagueApi = new FantasyPremierLeagueApi();
 
@@ -33,11 +28,12 @@ const initialLeagueContext: ILeagueContext = {
   leagueName: '',
   seasonName: '',
   standings: [],
-  draftPlayerForms: [],
+  draftPlayerStats: [],
   matches: [],
   draftPlayerStandings: [],
   streaks: {} as IStreakMap,
   matchScores: [],
+  chartData: {} as IAllChartData,
   changeSeason: () => { },
 };
 
@@ -48,32 +44,8 @@ function App() {
   const [selectedSeason, setSelectedSeason] = useState<ISeasonStats>({} as ISeasonStats);
   const navigate = useNavigate();
 
-  // const [leagueDetails, setLeagueDetails] = useState({} as ILeagueDetails);
-
-  /*   const contextValue = useMemo(() => ({
-    ...initialUserContext,
-    leagueId,
-    leagueName,
-    draftPlayers,
-    standings,
-    draftPlayerForms,
-    matches,
-    draftPlayerStandings,
-    footballPlayers,
-    setDraftPlayerForms,
-    setStandings,
-    setLeagueId,
-    setLeagueName,
-    setDraftPlayers,
-    setMatches,
-    setDraftPlayerStandings,
-    setFootballPlayers,
-  }), [leagueId, leagueName, draftPlayers, footballPlayers, standings, draftPlayerForms, matches, draftPlayerStandings]); */
-
   const changeSeason = (newLeagueId: number) => {
-    console.log('🚀 ~ file: App.tsx:70 ~ changeSeason ~ selectedSeason:', selectedSeason);
     if (newLeagueId !== selectedSeason.leagueId) {
-      console.log('ding');
       setSelectedSeason(seasons[newLeagueId]);
 
       // Get the current URL path
@@ -95,11 +67,12 @@ function App() {
     leagueName: selectedSeason.leagueName,
     seasonName: selectedSeason.seasonName,
     standings: selectedSeason.standings,
-    draftPlayerForms: selectedSeason.draftPlayerForms,
+    draftPlayerStats: selectedSeason.draftPlayerStats,
     matches: selectedSeason.matches,
     draftPlayerStandings: selectedSeason.draftPlayerStandings,
     streaks: selectedSeason.streaks,
     matchScores: selectedSeason.matchScores,
+    chartData: selectedSeason.chartData,
     changeSeason,
   }), [selectedSeason]);
 
@@ -118,20 +91,23 @@ function App() {
           playerLeagueStandings.push(getPlayerStandings(form));
         });
         const streaks = getAllStreaks(forms);
-        console.log('🚀 ~ file: App.tsx:116 ~ awaitPromise.all ~ streaks:', streaks);
+        console.log('🚀 ~ file: App.tsx:97 ~ awaitPromise.all ~ forms:', forms);
         const matchScores = getMatchScores(forms);
+        const chartData = createChartData(playerLeagueStandings);
+
         // const weekScores = getHighestScoringGameWeeks(leagueInfo.matches); might not be used....
 
         seasonInfo.matches = leagueInfo.matches; // todo these is maybe not used in the context
         seasonInfo.leagueId = season.leagueId;
         seasonInfo.leagueName = season.leagueName;
         seasonInfo.seasonName = season.seasonName;
-        seasonInfo.draftPlayerForms = forms;
+        seasonInfo.draftPlayerStats = forms;
         seasonInfo.draftPlayerStandings = playerLeagueStandings;
         seasonInfo.draftPlayers = leagueInfo.draftPlayers;
         seasonInfo.standings = leagueInfo.standings;
         seasonInfo.streaks = streaks;
         seasonInfo.matchScores = matchScores;
+        seasonInfo.chartData = chartData;
 
         allSeasonInfos[seasonInfo.leagueId.toString()] = seasonInfo;
       }
@@ -161,12 +137,12 @@ function App() {
       <LeagueContext.Provider value={contextValue}>
         <Header />
         <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden pb-16 bg-background dark:bg-darkmode-background min-h-screen">
-          <div className="content">
+          <div className="content w-full">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/:leagueNumber/stats/:playerId?" element={<Stats />} />
               <Route path="/:leagueNumber/leagueTable/:playerId?" element={<Table />} />
-              <Route path="/:leagueNumber/charts/:playerId?" element={<TODOPAGE />} />
+              <Route path="/:leagueNumber/charts/:playerId?" element={<Charts />} />
               <Route path="/:leagueNumber/draft/:playerId?" element={<NextVersion info="It will show info about the original draft and how well you did in the draft" />} />
               <Route path="/:leagueNumber/transactions/:playerId?" element={<NextVersion info="It will display all of a players transaction and if it was a good transaction or not" />} />
               <Route path="*" element={<NotFound />} />

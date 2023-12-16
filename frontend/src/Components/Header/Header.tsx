@@ -13,6 +13,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { LeagueContext } from '../../App';
 import useDarkMode from '../../Hooks/UseDarkMode';
 import { ENTIRE_LEAGUE_NAME_IN_HEADER, PAGES } from '../../Utils/StaticObjects';
+import ClickableDiv from '../Common/ClickableDIv/ClickableDiv';
 import Toggle from '../Common/Toggle/Toggle';
 import PlayerName from '../PlayerName/PlayerName';
 import HeaderPopover from './HeaderPopover';
@@ -53,7 +54,11 @@ export default function Header() {
           {PAGES.map((page) => (
             page.playerSpecific ?
               <HeaderPopover pageName={page.name} pageType={page.type} key={page.type} />
-              : <PlayerName type={page.type} teamName={page.name} key={page.type} />
+              : (
+                <ClickableDiv type={page.type} key={page.type}>
+                  <PlayerName teamName={page.name} key={page.type} />
+                </ClickableDiv>
+              )
 
           ))}
         </Popover.Group>

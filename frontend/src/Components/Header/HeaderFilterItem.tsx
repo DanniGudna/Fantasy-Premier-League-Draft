@@ -2,10 +2,12 @@ import {
   TrophyIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import React, { ReactElement } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { ReactElement, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { LeagueContext } from '../../App';
 import { PageType } from '../../interfaces/Generic';
+import ClickableDiv from '../Common/ClickableDIv/ClickableDiv';
 import PlayerName from '../PlayerName/PlayerName';
 
 interface IProps {
@@ -13,24 +15,43 @@ interface IProps {
   name: string;
   teamName: string;
   type: PageType;
+  close: () => void;
 }
 
-function HeaderFilterItem({ draftPlayerId, name, type, teamName }: IProps): ReactElement {
-  const { leagueNumber } = useParams();
+function HeaderFilterItem({ draftPlayerId, name, type, teamName, close }: IProps): ReactElement {
+  const navigate = useNavigate();
+  const { leagueId } = useContext(LeagueContext);
+
+  const handleClickOnPlayer = () => {
+    navigate('/' + leagueId + '/' + type + (draftPlayerId ? '/' + draftPlayerId : ''));
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleClickOnPlayer();
+    }
+  };
 
   return (
-    <div key={draftPlayerId + type + 'headerOption' || leagueNumber + type + 'headerOption'} className="group relative rounded-lg p-6 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-indigo-600">
+    <div
+      key={draftPlayerId + type + 'headerOption' || leagueId + type + 'headerOption'}
+      className="group relative rounded-lg p-6 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-indigo-600 flex items-center"
+      onClick={handleClickOnPlayer}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label="League Player name"
+    >
       <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-background group-hover:bg-white">
         {draftPlayerId ?
           <UserIcon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" /> :
           <TrophyIcon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />}
       </div>
-      <PlayerName playerName={name} playerId={draftPlayerId} teamName={teamName} type={type} />
-      {/*       <a href={item.href} className="mt-6 block font-semibold text-gray-900">
-        {name}
-        <span className="absolute inset-0" />
-      </a> */}
-    </div>
+      <ClickableDiv draftPlayerId={draftPlayerId} close={close} type={type}>
+        <PlayerName playerName={name} teamName={teamName} />
+      </ClickableDiv>
+    </div >
 
   );
 }

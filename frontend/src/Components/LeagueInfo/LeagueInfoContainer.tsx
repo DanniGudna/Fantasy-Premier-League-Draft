@@ -21,7 +21,7 @@ function LeagueInfoContainer(): ReactElement {
   const [weeklyScores, setWeeklyScores] = useState([] as IGameWeekScores[]);
   const { playerId } = useParams();
 
-  const { draftPlayerForms, matches, matchScores, streaks } = useContext(LeagueContext);
+  const { draftPlayerStats, matches, matchScores, streaks, leagueName } = useContext(LeagueContext);
 
   // these function can display more info if I want to do this dynamicly in the future
   const renderXNumberOfStreaks = (selectedStreaks: IStreak[], numberOfRenders: number) => {
@@ -35,7 +35,7 @@ function LeagueInfoContainer(): ReactElement {
       const streak = filteredStreaks[i];
       streakComponents.push(<StreakInfo
         streak={streak}
-        currentGameWeek={draftPlayerForms[0].matchInfo.length}
+        currentGameWeek={draftPlayerStats[0].matchInfo.length}
         key={streak.playerId.toString() + streak.streakStart.toString() + streak.streakEnd.toString()}
       />);
     }
@@ -84,11 +84,11 @@ function LeagueInfoContainer(): ReactElement {
       weekScores = getHighestScoringGameWeeks(matches); // TODO maybe dont claclulate this stat, if it should be calculated then move it app.tsx
     }
     setWeeklyScores(weekScores);
-  }, [draftPlayerForms]);
+  }, [draftPlayerStats]);
 
   return (
     <div>
-      <InfoHeader title="Fun stats about " subTitle="Note there is a week where no games were played so everyone got a draw and 0 points, that gameweek has been filtered out for these stats" />
+      <InfoHeader title={`Fun stats about ${leagueName}`} subTitle="Note there is a week where no games were played so everyone got a draw and 0 points, that gameweek has been filtered out for these stats" />
       <div className="mt-4 divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow lg:grid lg:grid-cols-2 lg:gap-px lg:divide-y-0">
         {streaks.winStreaks.length > 0 ? (
           <LeagueInfoCard statTitle="Top 5 Longest win streaks" borderCss={firstCardBorderCss}>

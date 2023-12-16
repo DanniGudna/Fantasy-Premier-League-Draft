@@ -6,10 +6,12 @@ import { IMatchInfo, MatchResult } from '../../interfaces/League';
 import CheckMark from '../Common/BasicIcons/CheckMark/CheckMark';
 import Line from '../Common/BasicIcons/Line/Line';
 import XMark from '../Common/BasicIcons/XMark/XMark';
+import Tooltip from '../Tooltip/Tooltip';
 
 interface IProps {
   matchInfo: IMatchInfo;
-  gameWeek: number
+  gameWeek: number;
+  toolTipText: string;
 
 }
 const winCss = 'rounded-full w-4 h-4 bg-green-500 self-center';
@@ -22,7 +24,7 @@ const resultCSS: Record<MatchResult, string> = {
   loss: lossCss,
 };
 
-function FormIcon({ matchInfo, gameWeek }: IProps): ReactElement {
+function FormIcon({ matchInfo, gameWeek, toolTipText }: IProps): ReactElement {
   const getCorrectIcon = () => {
     if (matchInfo.result === 'win') {
       return <CheckMark />;
@@ -34,13 +36,17 @@ function FormIcon({ matchInfo, gameWeek }: IProps): ReactElement {
   };
 
   return (
-    <div className="flex flex-col whitespace-nowrap px-3 py-4 text-sm text-black dark:text-white border-b">
-      <div className="mb-2 self-center">
-        {gameWeek}
-      </div>
-      <div className={resultCSS[matchInfo.result]}>
-        {getCorrectIcon()}
-      </div>
+    <div className="whitespace-nowrap px-3 py-4 border-b">
+      <Tooltip message={toolTipText}>
+        <div className="flex flex-col whitespace-nowrap px-3 py-4 text-sm text-black dark:text-white border-b">
+          <div className="mb-2 self-center">
+            {gameWeek}
+          </div>
+          <div className={resultCSS[matchInfo.result]}>
+            {getCorrectIcon()}
+          </div>
+        </div>
+      </Tooltip>
     </div>
 
   );

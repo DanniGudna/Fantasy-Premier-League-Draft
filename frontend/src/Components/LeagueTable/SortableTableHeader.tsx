@@ -8,10 +8,11 @@ interface IProps {
   title: string;
   sortColumn: string;
   sortOrder: string;
-  sortName: string;
+  sortName?: string;
 
 }
 
+// todo this header is not necesseraly sortable any more so name change might be in order
 function SortableTableHeader({ title, sortColumn, sortOrder, sortName }: IProps): ReactElement {
   return (
     <div className="flex flex-row items-center">

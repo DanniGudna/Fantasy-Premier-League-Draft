@@ -4,23 +4,34 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
 import { LeagueContext } from '../../App';
 import { PageType } from '../../interfaces/Generic';
-import { IDraftPlayer, IStanding } from '../../interfaces/League';
-import { getPlayerById } from '../../Utils/Utils';
+import { IDraftPlayerStats, ILeagueTableDetails } from '../../interfaces/League';
+import { getPlayerStatsById, getTooltipText } from '../../Utils/Utils';
+import FormIcon from '../FormTable/FormIcon';
 import PlayerName from '../PlayerName/PlayerName';
 import LeagueMovementIdicator from './LeagueMovementIndicator';
 
 interface IProps {
-  row: IStanding;
+  row: ILeagueTableDetails;
 }
 
 function LeagueTableRow({ row }: IProps): ReactElement {
-  const [draftPlayer, setDraftPlayer] = useState<IDraftPlayer>({} as IDraftPlayer);
-  const { draftPlayers } = useContext(LeagueContext);
+  const [draftPlayer, setDraftPlayer] = useState<IDraftPlayerStats>({} as IDraftPlayerStats);
+  const { draftPlayerStats, draftPlayers } = useContext(LeagueContext);
 
   useEffect(() => {
     // This should never return undefined but safeties just in case
-    setDraftPlayer(getPlayerById(row.playerId, draftPlayers) || {} as IDraftPlayer);
+    console.log('🚀 ~ file: LeagueTableRow.tsx:24 ~ useEffect ~ getPlayerStatsById(row.playerId, draftPlayerStats):', getPlayerStatsById(row.playerId, draftPlayerStats));
+    setDraftPlayer(getPlayerStatsById(row.playerId, draftPlayerStats) || {} as IDraftPlayerStats);
   }, []);
+
+  const renderLast5Gmaes = () => draftPlayer?.matchInfo.slice(-5).map((matchInfo) => (
+    <FormIcon
+      matchInfo={matchInfo}
+      gameWeek={matchInfo.round}
+      key={matchInfo.round + row.playerId}
+      toolTipText={getTooltipText(matchInfo, draftPlayer.playerName, draftPlayers)}
+    />
+  ));
 
   return (
     <tr>
@@ -33,25 +44,43 @@ function LeagueTableRow({ row }: IProps): ReactElement {
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm border-b border-r border-gray-200">
         <PlayerName
-          playerName={draftPlayer.fullName}
+          playerName={draftPlayer.playerName}
           teamName={draftPlayer.teamName}
-          playerId={draftPlayer.id}
-          type={PageType.LeagueTable}
         />
       </td>
-      {/* <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b lg:table-cell">{(row.matches_won + row.matches_drawn + row.matches_lost) + ' / 38'}</td> */}
+
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b">{row.matchesWon}</td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b">{row.matchesDrawn}</td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b border-r border-gray-200">{row.matchesLost}</td>
+
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b">{row.matchPointsFor}</td>
-      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell">{row.matchPointsAgainst}</td>
-      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell ">
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell">{row.matchPointsAgainst}</td>
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell ">
         {row.matchPointsDiff > 0 ? `+${row.matchPointsDiff}` : row.matchPointsDiff}
       </td>
-      <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">{row.averageMatchPoints}</td>
-      {/*       <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b md:table-cell">FORM TODO</td> */}
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">{row.averageMatchPoints}</td>
 
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200  border-b">{row.leaguePoints}</td>
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell">{row.wonByOnePoint}</td>
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">{row.lostByOnePoint}</td>
+
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell">{row.wonWithThirdMostPoints}</td>
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">{row.lostWithSecondMostPoints}</td>
+
+      <td className=" whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">
+        {
+          draftPlayer.playerId ? (
+            <div className="flex flex-row">
+              {renderLast5Gmaes()}
+            </div>
+          )
+            : null
+        }
+
+      </td>
+
+      {/*    <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">FROM TODO</td> */}
+
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b ">{row.leaguePoints}</td>
     </tr>
 
   );

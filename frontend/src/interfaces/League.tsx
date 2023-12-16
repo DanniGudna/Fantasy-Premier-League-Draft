@@ -72,12 +72,13 @@ export interface ISeasonStats {
   leagueName: string;
   seasonName: string;
   draftPlayers: IDraftPlayer[];
-  draftPlayerForms: IDraftPlayerStats[];
+  draftPlayerStats: IDraftPlayerStats[];
   standings: IStanding[];
   draftPlayerStandings: IDraftPlayerStanding[]; // used for charts
   matches: IMatch[];
   streaks: IStreakMap;
   matchScores: IScoreInfo[];
+  chartData: IAllChartData;
 }
 
 export type MatchResult = 'win' | 'loss' | 'draw';
@@ -149,4 +150,41 @@ export interface IDraftPlayerStanding {
 export interface IGameWeekScores {
   round: number;
   score: number;
+}
+
+export interface ILeagueContext {
+  // selectedSeason: ISeasonStats; not sure if needed
+  leagueId: number | null;
+  leagueName: string;
+  seasonName: string;
+  draftPlayers: IDraftPlayer[];
+  // footballPlayers: IFootballPlayerInfo[]; todo
+  standings: IStanding[];
+  draftPlayerStats: IDraftPlayerStats[];
+  matches: IMatch[];
+  draftPlayerStandings: IDraftPlayerStanding[];
+  streaks: IStreakMap;
+  matchScores: IScoreInfo[];
+  chartData: IAllChartData;
+  // setSelectedSeason: React.Dispatch<React.SetStateAction<ISeasonStats>>
+  changeSeason: (leagueId: number) => void
+}
+
+export interface IDataset {
+  label: string,
+  data: number[],
+  fill: boolean,
+  borderColor: string,
+  tension: number
+}
+
+export interface IChartData {
+  labels: string[],
+  datasets: IDataset[],
+}
+
+export interface IAllChartData {
+  leaguePointsData: IChartData;
+  pointsData: IChartData;
+  rankData: IChartData;
 }

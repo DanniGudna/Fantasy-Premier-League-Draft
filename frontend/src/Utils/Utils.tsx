@@ -1,5 +1,4 @@
-import { IAllChartData, IChartData } from '../interfaces/Generic';
-import { IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, IStreakMap, MatchResult } from '../interfaces/League';
+import { IAllChartData, IChartData, IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, IStreakMap, MatchResult } from '../interfaces/League';
 
 /**
  * Gets the matchinfo for the draftPlayer in the provided match
@@ -128,6 +127,10 @@ export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDr
  */
 export function getPlayerById(Id: number, draftPlayers: IDraftPlayer[]): IDraftPlayer | undefined {
   return draftPlayers.find((draftPlayer) => draftPlayer.id === Id);
+}
+
+export function getPlayerStatsById(Id: number, draftPlayersStats: IDraftPlayerStats[]): IDraftPlayerStats | undefined {
+  return draftPlayersStats.find((draftPlayersStat) => draftPlayersStat.playerId === Id);
 }
 
 // todo combine these functions
@@ -420,3 +423,9 @@ export function getHighestScoringGameWeeks(matches: IMatch[]) {
 
   return gameWeekScores;
 }
+
+export const getTooltipText = (matchInfo: IMatchInfo, playerName: string, draftPlayers: IDraftPlayer[]) => {
+  const opponent = getPlayerById(matchInfo.opponentId, draftPlayers);
+
+  return `${playerName} ${matchInfo.playerPoints} - ${matchInfo.opponentPoints}  ${opponent?.firstName}`;
+};

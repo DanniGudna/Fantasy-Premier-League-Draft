@@ -1,10 +1,9 @@
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import React, { Fragment, ReactElement, useContext } from 'react';
-import { useParams } from 'react-router';
 
 import { LeagueContext } from '../../App';
-import { PageType, PageTypeNames } from '../../interfaces/Generic';
+import { PageType } from '../../interfaces/Generic';
 import { ENTIRE_LEAGUE_NAME_IN_HEADER } from '../../Utils/StaticObjects';
 import HeaderFilterItem from './HeaderFilterItem';
 
@@ -14,7 +13,7 @@ interface IProps {
 }
 
 function HeaderPopover({ pageName, pageType }: IProps): ReactElement {
-  const { draftPlayers } = useContext(LeagueContext);
+  const { draftPlayers, seasonName } = useContext(LeagueContext);
 
   return (
     <Popover className="self-center">
@@ -33,18 +32,21 @@ function HeaderPopover({ pageName, pageType }: IProps): ReactElement {
         leaveTo="opacity-0 -translate-y-1"
       >
         <Popover.Panel className="absolute inset-x-0 top-0 -z-10 bg-background dark:bg-darkmode-background pt-14 shadow-lg ring-1 ring-gray-900/5">
-          <div className="mx-auto grid max-w-8xl grid-cols-5 gap-x-4 px-6 py-10 lg:px-8 xl:gap-x-8">
-            <HeaderFilterItem name="season number todo" type={pageType} teamName={ENTIRE_LEAGUE_NAME_IN_HEADER} />
-            {draftPlayers.map((draftPlayer) => (
-              <HeaderFilterItem
-                draftPlayerId={draftPlayer.id}
-                type={pageType}
-                name={draftPlayer.fullName}
-                teamName={draftPlayer.teamName}
-                key={draftPlayer.id}
-              />
-            ))}
-          </div>
+          {({ close }) => (
+            <div className="mx-auto grid max-w-8xl grid-cols-5 gap-x-2 px-6 py-6 lg:px-8 xl:gap-x-6">
+              <HeaderFilterItem name={seasonName} type={pageType} teamName={ENTIRE_LEAGUE_NAME_IN_HEADER} close={close} />
+              {draftPlayers.map((draftPlayer) => (
+                <HeaderFilterItem
+                  draftPlayerId={draftPlayer.id}
+                  type={pageType}
+                  name={draftPlayer.firstName}
+                  teamName={draftPlayer.teamName}
+                  key={draftPlayer.id}
+                  close={close}
+                />
+              ))}
+            </div>
+          )}
         </Popover.Panel>
       </Transition>
     </Popover>

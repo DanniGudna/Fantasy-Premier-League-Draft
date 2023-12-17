@@ -13,6 +13,11 @@ export const PAGES = [
     name: 'Stats',
   },
   {
+    type: PageType.H2H,
+    playerSpecific: true,
+    name: 'H2H',
+  },
+  {
     type: PageType.Charts,
     playerSpecific: false,
     name: 'Charts',

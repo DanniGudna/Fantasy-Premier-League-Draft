@@ -112,16 +112,37 @@ function getH2HStats(playerForm: IDraftPlayerStats) {
     let playerScore = 0;
     let opponentScore = 0;
     let wins = 0;
+    let biggestWinPointDifference = 0;
+    let biggestWin = null;
+    let biggestLossPointDifference = 0;
+    let biggestLoss = null;
     opponentMatches.forEach((match) => {
       playerScore += match.playerPoints;
       opponentScore += match.opponentPoints;
       if (match.result === 'win') {
         wins += 1;
+        // check if it is the biggestWin
+        const differece = match.playerPoints - match.opponentPoints;
+        if (differece > biggestWinPointDifference) {
+          biggestWinPointDifference = differece;
+          biggestWin = match;
+        }
+      }
+      else if (match.result === 'loss') {
+        // check if it is the biggestLoss
+        const differece = match.opponentPoints - match.playerPoints;
+        if (differece > biggestLossPointDifference) {
+          biggestLossPointDifference = differece;
+          biggestLoss = match;
+        }
       }
     });
     h2hStat.pointsFor = playerScore;
     h2hStat.pointsAgainst = opponentScore;
-    h2hStat.winPercentage = Math.round(wins / opponentMatches.length);
+    h2hStat.winPercentage = Math.round((wins / opponentMatches.length) * 100);
+    h2hStat.biggestWin = biggestWin;
+    h2hStat.biggestLoss = biggestLoss;
+
     head2HeadStats.push(h2hStat);
   });
 

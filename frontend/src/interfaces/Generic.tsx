@@ -12,10 +12,12 @@ export enum PageType {
   Charts = 'charts',
   Draft = 'draft',
   Transactions = 'transactions',
-  Form = 'form'
+  Form = 'form',
+  H2H = 'H2H'
   // tbd
 }
 
+// this is currently no used
 export const PageTypeNames: Record<PageType, string> = {
   [PageType.LeagueTable]: 'Tables',
   [PageType.Stats]: 'Stat Page',
@@ -23,6 +25,7 @@ export const PageTypeNames: Record<PageType, string> = {
   [PageType.Draft]: 'Draft Page',
   [PageType.Transactions]: 'Transaction Page',
   [PageType.Form]: 'Form Page',
+  [PageType.H2H]: 'Head 2 Head',
 };
 
 // export default TextFieldType;

@@ -9,7 +9,7 @@ const mapDraftPlayer = (draftPlayer: APIDraftPlayer): IDraftPlayer => ({
   waiverPick: draftPlayer.waiver_pick,
   teamName: draftPlayer.entry_name,
 });
-
+// todo maybe add the names here in the mapping
 const mapMatch = (match: APIMatch): IMatch => ({
   round: match.event,
   finished: match.finished,

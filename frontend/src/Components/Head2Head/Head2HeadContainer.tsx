@@ -4,94 +4,174 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { LeagueContext } from '../../App';
-import { IDraftPlayer, IStreak } from '../../interfaces/League';
-import { getPlayerById } from '../../Utils/Utils';
+import { IDraftPlayer, IDraftPlayerStats, IH2HStats, IStreak } from '../../interfaces/League';
+import { getPlayerById, getPlayerStatsById } from '../../Utils/Utils';
 import InfoHeader from '../InfoHeader/InfoHeader';
+import GenericStatInfo from '../LeagueInfo/GenericStatInfo';
 import LeagueInfoCard from '../LeagueInfo/LeagueInfoCard';
 import ScoreInfo from '../LeagueInfo/ScoreInfo';
-import StreakInfo from '../LeagueInfo/StreakInfo';
 
 const firstCardBorderCss = 'rounded-tl-lg rounded-tr-lg lg:rounded-tr-none';
 const secondCardBorderCss = 'lg:rounded-tr-lg';
 const fifthCardBorderCss = 'lg:rounded-bl-lg';
 const sixthCardBorderCss = 'rounded-bl-lg rounded-br-lg lg:rounded-bl-none';
 
+// todo do a full league version of this!
 function LeagueInfoContainer(): ReactElement {
   const { playerId } = useParams();
-  const [player, setPlayer] = useState<IDraftPlayer>();
+  const [allH2HStats, setAllH2HStats] = useState<IH2HStats[]>([] as IH2HStats[]);
 
-  const { draftPlayerStats, matchScores, streaks, draftPlayers, seasonName } = useContext(LeagueContext);
+  const { draftPlayerStats, matchScores, streaks, draftPlayers, seasonName, leagueName } = useContext(LeagueContext);
 
-  // these function can display more info if I want to do this dynamicly in the future
-  const renderXNumberOfStreaks = (selectedStreaks: IStreak[], numberOfRenders: number) => {
-    let filteredStreaks = selectedStreaks;
-    if (playerId) {
-      filteredStreaks = selectedStreaks.filter((streak) => streak.playerId.toString() === playerId);
-    }
-    const streakComponents = [];
-    const maxRenders = Math.min(filteredStreaks.length, numberOfRenders);
-    for (let i = 0; i < maxRenders; i++) {
-      const streak = filteredStreaks[i];
-      streakComponents.push(<StreakInfo
-        streak={streak}
-        currentGameWeek={draftPlayerStats[0].matchInfo.length}
-        key={streak.playerId.toString() + streak.streakStart.toString() + streak.streakEnd.toString()}
-      />);
-    }
+  const renderWinRates = (id: string) => {
+    const winRates = [] as JSX.Element[];
+    const filteredH2HStats = allH2HStats.filter((stat) => stat.playerId.toString() === id);
 
-    return streakComponents;
+    filteredH2HStats.forEach((head2HeadStat) => {
+      winRates.push(
+        <GenericStatInfo
+          text={`${head2HeadStat.playerName} has a ${head2HeadStat.winPercentage}% win rate vs ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''}`}
+        />,
+      );
+    });
+
+    return winRates;
   };
 
-  const renderXNumberOfScores = (numberOfRenders: number, highOrLow: 'high' | 'low') => {
-    const scoreComponents = [];
-    let filteredMatchScores = matchScores;
-    if (playerId) {
-      filteredMatchScores = matchScores.filter((matchScore) => matchScore.playerId.toString() === playerId);
-    }
-    const maxRenders = Math.min(filteredMatchScores.length, numberOfRenders);
-    let startingPosition = highOrLow === 'low' ? filteredMatchScores.length - 1 : 0;
-    for (let i = 0; i < maxRenders; i++, highOrLow === 'low' ? startingPosition-- : startingPosition++) {
-      const score = filteredMatchScores[startingPosition];
-      scoreComponents.push(<ScoreInfo
-        score={score}
-        key={score.playerId.toString() + score.opponentId.toString() + score.round.toString()}
-      />);
-    }
+  const renderTotalScores = (id: string) => {
+    const totalScores = [] as JSX.Element[];
+    const filteredH2HStats = allH2HStats.filter((stat) => stat.playerId.toString() === id);
 
-    return scoreComponents;
+    filteredH2HStats.forEach((head2HeadStat) => {
+      totalScores.push(
+        <GenericStatInfo
+          text={`${head2HeadStat.playerName} ${head2HeadStat.pointsFor} - ${head2HeadStat.pointsAgainst} ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''}`}
+        />,
+      );
+    });
+
+    return totalScores;
+  };
+
+  // TODO combine these functions
+  const renderBiggestWins = (id: string) => {
+    const totalScores = [] as JSX.Element[];
+    const filteredH2HStats = allH2HStats.filter((stat) => stat.playerId.toString() === id);
+
+    filteredH2HStats.forEach((head2HeadStat) => {
+      if (head2HeadStat.biggestWin) {
+        totalScores.push(
+          <GenericStatInfo
+            text={`${head2HeadStat.playerName} ${head2HeadStat.biggestWin.playerPoints} - ${head2HeadStat.biggestWin.opponentPoints} ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''} in round ${head2HeadStat.biggestWin.round}`}
+          />,
+        );
+      }
+    });
+
+    return totalScores;
+  };
+
+  const renderBiggestLoss = (id: string) => {
+    const totalScores = [] as JSX.Element[];
+    const filteredH2HStats = allH2HStats.filter((stat) => stat.playerId.toString() === id);
+
+    filteredH2HStats.forEach((head2HeadStat) => {
+      if (head2HeadStat.biggestLoss) {
+        totalScores.push(
+          <GenericStatInfo
+            text={`${head2HeadStat.playerName} ${head2HeadStat.biggestLoss.playerPoints} - ${head2HeadStat.biggestLoss.opponentPoints} ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''} in round ${head2HeadStat.biggestLoss.round}`}
+          />,
+        );
+      }
+    });
+
+    return totalScores;
   };
 
   useEffect(() => {
-    console.warn('PLAYER CHANGE');
-    if (playerId) {
-      console.error('PLAYER CHANGE');
-      setPlayer(getPlayerById(parseInt(playerId, 10), draftPlayers));
-    }
-  }, [playerId]);
+    const head2HeadStats: IH2HStats[] = [];
+    draftPlayerStats.forEach((draftPlayerStat) => {
+      draftPlayerStat.head2HeadStats.forEach((head2HeadStat) => {
+        head2HeadStats.push(head2HeadStat);
+      });
+    });
+    setAllH2HStats(head2HeadStats);
+  }, []);
 
   return (
     <div>
-      <InfoHeader title={`Head 2 Head stats for  ${player?.firstName} -  ${player?.teamName}`} subTitle={`In ${seasonName}`} />
+      <InfoHeader
+        title={playerId ?
+          `Head 2 Head stats for 
+          ${getPlayerById(parseInt(playerId, 10), draftPlayers)?.firstName} - 
+          ${getPlayerById(parseInt(playerId, 10), draftPlayers)?.teamName}`
+          : leagueName}
+        subTitle={`In ${seasonName} - NOTE version three will contain recent H2H form as well`}
+      />
       <div className="mt-4 divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow lg:grid lg:grid-cols-2 lg:gap-px lg:divide-y-0">
         <LeagueInfoCard statTitle="Win rate vs other players" borderCss={firstCardBorderCss}>
-          <div>
-            {renderXNumberOfStreaks(streaks.winStreaks, 5)}
-          </div>
+          {draftPlayerStats.map((draftPlayer) => {
+            const playerIdToRender = playerId ? parseInt(playerId, 10) : null;
+
+            // Conditionally render based on playerId
+            if (!playerId || draftPlayer.playerId === playerIdToRender) {
+              return (
+                <div className="p-2 grid grid-cols-1 border-b h-24" key={draftPlayer.playerId}>
+                  {renderWinRates(draftPlayer.playerId.toString())}
+                </div>
+              );
+            }
+
+            return null; // If playerId is provided and the current player does not match, return null
+          })}
         </LeagueInfoCard>
-        <LeagueInfoCard statTitle="Top 5 Highest single week score" borderCss={secondCardBorderCss}>
-          {renderXNumberOfScores(5, 'high')}
+        <LeagueInfoCard statTitle="Total scores between players" borderCss={secondCardBorderCss}>
+          {draftPlayerStats.map((draftPlayer) => {
+            const playerIdToRender = playerId ? parseInt(playerId, 10) : null;
+
+            // Conditionally render based on playerId
+            if (!playerId || draftPlayer.playerId === playerIdToRender) {
+              return (
+                <div className="p-2 grid grid-cols-1 border-b h-24" key={draftPlayer.playerId}>
+                  {renderTotalScores(draftPlayer.playerId.toString())}
+                </div>
+              );
+            }
+
+            return null; // If playerId is provided and the current player does not match, return null
+          })}
         </LeagueInfoCard>
-        {streaks.undefeatedStreaks.length > 0 ? (
-          <LeagueInfoCard statTitle="Top 5 Longest undefeated streaks" borderCss={fifthCardBorderCss}>
-            <div>
-              {renderXNumberOfStreaks(streaks.undefeatedStreaks, 5)}
-            </div>
-          </LeagueInfoCard>
-        ) : null}
-        <LeagueInfoCard statTitle="Idea for another stat welcome" borderCss={sixthCardBorderCss}>
-          <div>
-            Some cool stat
-          </div>
+        <LeagueInfoCard statTitle="Biggest wins" borderCss={fifthCardBorderCss}>
+          {draftPlayerStats.map((draftPlayer) => {
+            const playerIdToRender = playerId ? parseInt(playerId, 10) : null;
+
+            // Conditionally render based on playerId
+            if (!playerId || draftPlayer.playerId === playerIdToRender) {
+              return (
+                <div className="p-2 grid grid-cols-1 border-b h-24" key={draftPlayer.playerId}>
+                  {renderBiggestWins(draftPlayer.playerId.toString())}
+                </div>
+              );
+            }
+
+            return null; // If playerId is provided and the current player does not match, return null
+          })}
+        </LeagueInfoCard>
+        <LeagueInfoCard statTitle="Biggest losses" borderCss={sixthCardBorderCss}>
+          {draftPlayerStats.map((draftPlayer) => {
+            const playerIdToRender = playerId ? parseInt(playerId, 10) : null;
+
+            // Conditionally render based on playerId
+            if (!playerId || draftPlayer.playerId === playerIdToRender) {
+              return (
+                <div className="p-2 grid grid-cols-1 border-b h-24" key={draftPlayer.playerId}>
+                  {renderBiggestLoss(draftPlayer.playerId.toString())}
+                </div>
+              );
+            }
+
+            return null; // If playerId is provided and the current player does not match, return null
+          })}
         </LeagueInfoCard>
       </div>
 

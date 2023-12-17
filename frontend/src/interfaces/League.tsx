@@ -115,8 +115,8 @@ export interface IH2HStats {
   winPercentage: number;
   pointsFor: number;
   pointsAgainst: number;
-  biggestWin: IMatchInfo;
-  biggestLoss: IMatchInfo;
+  biggestWin: IMatchInfo | null;
+  biggestLoss: IMatchInfo | null;
 }
 
 export type StreakTypes = 'win' | 'loss' | 'undefeated';

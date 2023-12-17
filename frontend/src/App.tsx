@@ -10,6 +10,7 @@ import Header from './Components/Header/Header';
 import Loading from './Components/Loading/Loading';
 import { IAllChartData, IDraftPlayerStanding, IDraftPlayerStats, ILeagueContext, ISeasonStats, ISeasonStatsMap, IStreakMap } from './interfaces/League';
 import Charts from './pages/Charts';
+import Head2Head from './pages/Head2Head';
 import Home from './pages/Home';
 import NextVersion from './pages/NextVersion';
 import NotFound from './pages/NotFound';
@@ -138,6 +139,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/:leagueNumber/stats/:playerId?" element={<Stats />} />
               <Route path="/:leagueNumber/leagueTable/:playerId?" element={<Table />} />
+              <Route path="/:leagueNumber/H2H/:playerId?" element={<Head2Head />} />
               <Route path="/:leagueNumber/charts/:playerId?" element={<Charts />} />
               <Route path="/:leagueNumber/draft/:playerId?" element={<NextVersion info="It will show info about the original draft and how well you did in the draft" />} />
               <Route path="/:leagueNumber/transactions/:playerId?" element={<NextVersion info="It will display all of a players transaction and if it was a good transaction or not" />} />

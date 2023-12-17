@@ -8,11 +8,11 @@ import {
   SquaresPlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { LeagueContext } from '../../App';
 import useDarkMode from '../../Hooks/UseDarkMode';
-import { ENTIRE_LEAGUE_NAME_IN_HEADER, PAGES } from '../../Utils/StaticObjects';
+import { PAGES } from '../../Utils/StaticObjects';
 import ClickableDiv from '../Common/ClickableDIv/ClickableDiv';
 import Toggle from '../Common/Toggle/Toggle';
 import PlayerName from '../PlayerName/PlayerName';

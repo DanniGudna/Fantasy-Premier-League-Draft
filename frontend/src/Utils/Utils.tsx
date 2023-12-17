@@ -423,7 +423,7 @@ export function createChartData(playerStandings: IDraftPlayerStanding[]): IAllCh
     playerStanding.weeklyStandings.forEach((weeklyStanding) => {
       leaguePointsDataForPlayer.push(weeklyStanding.leaguePoints);
       pointsDataForPlayer.push(weeklyStanding.points);
-      rankDataForPlayer.push(weeklyStanding.rank); // todo
+      rankDataForPlayer.push(weeklyStanding.rank);
     });
     const leaguePointsDataset = {
       label: playerStanding.teamName,
@@ -458,7 +458,7 @@ export function createChartData(playerStandings: IDraftPlayerStanding[]): IAllCh
   };
 }
 
-// todo do this better
+// todo do this better - note this isnt used anymore. maybe delete in the future
 export function getHighestScoringGameWeeks(matches: IMatch[]) {
   // filter out the matches that havent been played yet
   const filteredMatches = matches.filter((match) => (match.finished));

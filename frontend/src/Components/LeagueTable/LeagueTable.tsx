@@ -99,7 +99,6 @@ function LeagueTable({ rows }: IProps): ReactElement {
                     <th onClick={() => handleSort('leaguePoints')} scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white ">
                       <SortableTableHeader title="League Points" sortColumn={sortColumn} sortOrder={sortOrder} sortName="leaguePoints" />
                     </th>
-                    {/*                     <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white  md:table-cell">Form TODO</th> */}
                   </tr>
                 </thead>
                 <tbody>

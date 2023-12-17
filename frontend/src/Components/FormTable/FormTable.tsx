@@ -17,7 +17,7 @@ function FormTable({ rows }: IProps): ReactElement {
 
   return (
     <div className="p-2">
-      <InfoHeader title={`Player form for players in league: ${leagueName}`} subTitle="Hover over the icons to see match info TODO" />
+      <InfoHeader title={`Player form for players in league: ${leagueName}`} subTitle="Hover over the icons to see match info" />
       {' '}
       <div className="mt-2 flow-root">
         <ul className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg min-w-full divide-y divide-gray-300">

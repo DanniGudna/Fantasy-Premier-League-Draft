@@ -33,7 +33,7 @@ function LeagueInfoContainer(): ReactElement {
       streakComponents.push(<StreakInfo
         streak={streak}
         currentGameWeek={draftPlayerStats[0].matchInfo.length}
-        key={streak.playerId.toString() + streak.streakStart.toString() + streak.streakEnd.toString()}
+        key={streak.playerId.toString() + streak.streakStart.toString() + streak.streakEnd.toString() + streak.type}
       />);
     }
 

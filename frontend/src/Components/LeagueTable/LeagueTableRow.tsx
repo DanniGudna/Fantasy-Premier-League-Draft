@@ -73,11 +73,7 @@ function LeagueTableRow({ row }: IProps): ReactElement {
           )
             : null
         }
-
       </td>
-
-      {/*    <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b sm:table-cell border-r border-gray-200">FROM TODO</td> */}
-
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-200 border-b ">{row.leaguePoints}</td>
     </tr>
 

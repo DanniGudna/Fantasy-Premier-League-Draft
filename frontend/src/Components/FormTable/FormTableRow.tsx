@@ -3,7 +3,6 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext } from 'react';
 
 import { LeagueContext } from '../../App';
-import { PageType } from '../../interfaces/Generic';
 import { IDraftPlayerStats } from '../../interfaces/League';
 import { getTooltipText } from '../../Utils/Utils';
 import PlayerName from '../PlayerName/PlayerName';

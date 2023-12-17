@@ -4,25 +4,24 @@ import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { LeagueContext } from '../../App';
-import { IDraftPlayer, IDraftPlayerStats, IH2HStats, IStreak } from '../../interfaces/League';
-import { getPlayerById, getPlayerStatsById } from '../../Utils/Utils';
+import { IH2HStats } from '../../interfaces/League';
+import { getPlayerById } from '../../Utils/Utils';
 import InfoHeader from '../InfoHeader/InfoHeader';
 import GenericStatInfo from '../LeagueInfo/GenericStatInfo';
 import LeagueInfoCard from '../LeagueInfo/LeagueInfoCard';
-import ScoreInfo from '../LeagueInfo/ScoreInfo';
 
 const firstCardBorderCss = 'rounded-tl-lg rounded-tr-lg lg:rounded-tr-none';
 const secondCardBorderCss = 'lg:rounded-tr-lg';
 const fifthCardBorderCss = 'lg:rounded-bl-lg';
 const sixthCardBorderCss = 'rounded-bl-lg rounded-br-lg lg:rounded-bl-none';
 
-// todo do a full league version of this!
-function LeagueInfoContainer(): ReactElement {
+function H2HContainer(): ReactElement {
   const { playerId } = useParams();
   const [allH2HStats, setAllH2HStats] = useState<IH2HStats[]>([] as IH2HStats[]);
 
-  const { draftPlayerStats, matchScores, streaks, draftPlayers, seasonName, leagueName } = useContext(LeagueContext);
+  const { draftPlayerStats, draftPlayers, seasonName, leagueName } = useContext(LeagueContext);
 
+  // TODO combine these functions
   const renderWinRates = (id: string) => {
     const winRates = [] as JSX.Element[];
     const filteredH2HStats = allH2HStats.filter((stat) => stat.playerId.toString() === id);
@@ -30,6 +29,7 @@ function LeagueInfoContainer(): ReactElement {
     filteredH2HStats.forEach((head2HeadStat) => {
       winRates.push(
         <GenericStatInfo
+          key={`WinRates-${head2HeadStat.playerId}-${head2HeadStat.opponentId}`}
           text={`${head2HeadStat.playerName} has a ${head2HeadStat.winPercentage}% win rate vs ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''}`}
         />,
       );
@@ -45,6 +45,7 @@ function LeagueInfoContainer(): ReactElement {
     filteredH2HStats.forEach((head2HeadStat) => {
       totalScores.push(
         <GenericStatInfo
+          key={`TotalScores-${head2HeadStat.playerId}-${head2HeadStat.opponentId}`}
           text={`${head2HeadStat.playerName} ${head2HeadStat.pointsFor} - ${head2HeadStat.pointsAgainst} ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''}`}
         />,
       );
@@ -53,7 +54,6 @@ function LeagueInfoContainer(): ReactElement {
     return totalScores;
   };
 
-  // TODO combine these functions
   const renderBiggestWins = (id: string) => {
     const totalScores = [] as JSX.Element[];
     const filteredH2HStats = allH2HStats.filter((stat) => stat.playerId.toString() === id);
@@ -62,6 +62,7 @@ function LeagueInfoContainer(): ReactElement {
       if (head2HeadStat.biggestWin) {
         totalScores.push(
           <GenericStatInfo
+            key={`BiggestWin-${head2HeadStat.playerId}-${head2HeadStat.opponentId}`}
             text={`${head2HeadStat.playerName} ${head2HeadStat.biggestWin.playerPoints} - ${head2HeadStat.biggestWin.opponentPoints} ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''} in round ${head2HeadStat.biggestWin.round}`}
           />,
         );
@@ -79,6 +80,7 @@ function LeagueInfoContainer(): ReactElement {
       if (head2HeadStat.biggestLoss) {
         totalScores.push(
           <GenericStatInfo
+            key={`BiggestLoss-${head2HeadStat.playerId}-${head2HeadStat.opponentId}`}
             text={`${head2HeadStat.playerName} ${head2HeadStat.biggestLoss.playerPoints} - ${head2HeadStat.biggestLoss.opponentPoints} ${getPlayerById(head2HeadStat.opponentId, draftPlayers)?.firstName ?? ''} in round ${head2HeadStat.biggestLoss.round}`}
           />,
         );
@@ -180,4 +182,4 @@ function LeagueInfoContainer(): ReactElement {
   );
 }
 
-export default LeagueInfoContainer;
+export default H2HContainer;

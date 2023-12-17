@@ -3,7 +3,7 @@ import {
   UserIcon,
 } from '@heroicons/react/24/outline';
 import React, { ReactElement, useContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { LeagueContext } from '../../App';
 import { PageType } from '../../interfaces/Generic';

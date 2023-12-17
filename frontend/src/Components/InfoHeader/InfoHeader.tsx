@@ -1,8 +1,6 @@
 import 'tailwindcss/tailwind.css';
 
-import React, { ReactElement, useContext } from 'react';
-
-import { LeagueContext } from '../../App';
+import React, { ReactElement } from 'react';
 
 interface IProps {
   title: string;

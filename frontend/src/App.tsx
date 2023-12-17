@@ -121,8 +121,6 @@ function App() {
     ]);
   };
 
-  // todo changer!
-
   useEffect(() => {
     console.log('init');
     // calculate all data
@@ -144,10 +142,6 @@ function App() {
               <Route path="/:leagueNumber/draft/:playerId?" element={<NextVersion info="It will show info about the original draft and how well you did in the draft" />} />
               <Route path="/:leagueNumber/transactions/:playerId?" element={<NextVersion info="It will display all of a players transaction and if it was a good transaction or not" />} />
               <Route path="*" element={<NotFound />} />
-
-              {/* <Route path="/:leagueNumber" element={<League />} />
-              <Route path="/:leagueNumber/:playerNumber" element={(<Player />)} />
-              <Route path="*" element={<TODOPAGE />} /> */}
             </Routes>
           </div>
           {/* <footer className="flex-shrink-0 w-full">

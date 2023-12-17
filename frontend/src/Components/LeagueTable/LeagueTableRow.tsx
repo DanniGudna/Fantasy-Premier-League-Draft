@@ -3,7 +3,6 @@ import 'tailwindcss/tailwind.css';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
 import { LeagueContext } from '../../App';
-import { PageType } from '../../interfaces/Generic';
 import { IDraftPlayerStats, ILeagueTableDetails } from '../../interfaces/League';
 import { getPlayerStatsById, getTooltipText } from '../../Utils/Utils';
 import FormIcon from '../FormTable/FormIcon';
@@ -20,7 +19,6 @@ function LeagueTableRow({ row }: IProps): ReactElement {
 
   useEffect(() => {
     // This should never return undefined but safeties just in case
-    console.log('🚀 ~ file: LeagueTableRow.tsx:24 ~ useEffect ~ getPlayerStatsById(row.playerId, draftPlayerStats):', getPlayerStatsById(row.playerId, draftPlayerStats));
     setDraftPlayer(getPlayerStatsById(row.playerId, draftPlayerStats) || {} as IDraftPlayerStats);
   }, []);
 

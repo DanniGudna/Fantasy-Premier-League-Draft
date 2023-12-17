@@ -1,4 +1,35 @@
-import { IAllChartData, IChartData, IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, IDraftPlayerWeeklyStanding, IGameWeekScores, IMatch, IMatchInfo, IScoreInfo, IStreak, IStreakMap, MatchResult } from '../interfaces/League';
+import { IAllChartData, IChartData, IDraftPlayer, IDraftPlayerStanding, IDraftPlayerStats, IDraftPlayerWeeklyStanding, IGameWeekScores, IH2HStats, IMatch, IMatchInfo, IScoreInfo, IStreak, IStreakMap, MatchResult } from '../interfaces/League';
+
+/**
+ * Get the draftPlyaer with the given Id
+ * @param Id id for the draftPlayer
+ * @param draftPlayers all draftPlayers from the FPL api
+ * @returns The draftPLayer with the given Id
+ */
+export function getPlayerById(Id: number, draftPlayers: IDraftPlayer[]): IDraftPlayer | undefined {
+  return draftPlayers.find((draftPlayer) => draftPlayer.id === Id);
+}
+
+export function getPlayerStatsById(Id: number, draftPlayersStats: IDraftPlayerStats[]): IDraftPlayerStats | undefined {
+  return draftPlayersStats.find((draftPlayersStat) => draftPlayersStat.playerId === Id);
+}
+
+// todo combine these functions
+function getPlayerNameByIdFromPlayerForms(Id: number, players: IDraftPlayerStats[]): string {
+  const playerInfo = players.find((player) => player.playerId === Id);
+  if (playerInfo) {
+    return playerInfo.playerName;
+  }
+  return 'name not found';
+}
+
+function getPlayerTeamNameByIdFromPlayerForms(Id: number, players: IDraftPlayerStats[]): string {
+  const playerInfo = players.find((player) => player.playerId === Id);
+  if (playerInfo) {
+    return playerInfo.teamName;
+  }
+  return 'name not found';
+}
 
 /**
  * Gets the matchinfo for the draftPlayer in the provided match
@@ -60,6 +91,44 @@ function getMatchInfo(draftPlayerId: number, match: IMatch): IMatchInfo | null {
   return matchInfo;
 }
 
+function getH2HStats(playerForm: IDraftPlayerStats) {
+  // the first three matches should give us the ids of all the opponents
+  const opponentIds = [
+    playerForm.matchInfo[0].opponentId,
+    playerForm.matchInfo[1].opponentId,
+    playerForm.matchInfo[2].opponentId,
+  ];
+
+  const head2HeadStats = [] as IH2HStats[];
+
+  opponentIds.forEach((opponent) => {
+    const h2hStat = {
+      playerId: playerForm.playerId,
+      playerName: playerForm.playerName,
+      playerTeamName: playerForm.teamName,
+      opponentId: opponent,
+    } as IH2HStats;
+    const opponentMatches = playerForm.matchInfo.filter((match) => match.opponentId === opponent);
+    let playerScore = 0;
+    let opponentScore = 0;
+    let wins = 0;
+    opponentMatches.forEach((match) => {
+      playerScore += match.playerPoints;
+      opponentScore += match.opponentPoints;
+      if (match.result === 'win') {
+        wins += 1;
+      }
+    });
+    h2hStat.pointsFor = playerScore;
+    h2hStat.pointsAgainst = opponentScore;
+    h2hStat.winPercentage = Math.round(wins / opponentMatches.length);
+    head2HeadStats.push(h2hStat);
+  });
+
+  playerForm.head2HeadStats = head2HeadStats;
+}
+
+// Todo split up this function as much as makes sense
 /**
  * Gets the result of all the matches the draftPlayer has played
  * @param draftPlayer the draftPLayer id
@@ -113,41 +182,13 @@ export function getPlayerForm(draftPlayer: IDraftPlayer, matches: IMatch[]): IDr
     }
   });
 
+  // calculate H2H stats
+  getH2HStats(playerForm);
+
   playerForm.wonWithThirdMostPoints = playerForm.matchInfo.filter((match) => match.result === 'win' && match.rankForThisGW === 3).length;
   playerForm.lostWithSecondMostPoints = playerForm.matchInfo.filter((match) => match.result === 'loss' && match.rankForThisGW === 2).length;
 
   return playerForm;
-}
-
-/**
- * Get the draftPlyaer with the given Id
- * @param Id id for the draftPlayer
- * @param draftPlayers all draftPlayers from the FPL api
- * @returns The draftPLayer with the given Id
- */
-export function getPlayerById(Id: number, draftPlayers: IDraftPlayer[]): IDraftPlayer | undefined {
-  return draftPlayers.find((draftPlayer) => draftPlayer.id === Id);
-}
-
-export function getPlayerStatsById(Id: number, draftPlayersStats: IDraftPlayerStats[]): IDraftPlayerStats | undefined {
-  return draftPlayersStats.find((draftPlayersStat) => draftPlayersStat.playerId === Id);
-}
-
-// todo combine these functions
-function getPlayerNameByIdFromPlayerForms(Id: number, players: IDraftPlayerStats[]): string {
-  const playerInfo = players.find((player) => player.playerId === Id);
-  if (playerInfo) {
-    return playerInfo.playerName;
-  }
-  return 'name not found';
-}
-
-function getPlayerTeamNameByIdFromPlayerForms(Id: number, players: IDraftPlayerStats[]): string {
-  const playerInfo = players.find((player) => player.playerId === Id);
-  if (playerInfo) {
-    return playerInfo.teamName;
-  }
-  return 'name not found';
 }
 
 function getStreakEnd(numberOfFinishedGW: number, currentGW: number, matchingResult: boolean): number {

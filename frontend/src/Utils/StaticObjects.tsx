@@ -3,14 +3,14 @@ import { IDraftSeason } from '../interfaces/League';
 
 export const PAGES = [
   {
-    type: PageType.Stats,
-    playerSpecific: true,
-    name: 'Stats',
-  },
-  {
     type: PageType.LeagueTable,
     playerSpecific: false,
     name: 'League Table',
+  },
+  {
+    type: PageType.Stats,
+    playerSpecific: true,
+    name: 'Stats',
   },
   {
     type: PageType.Charts,

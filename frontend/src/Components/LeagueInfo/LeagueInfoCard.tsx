@@ -10,7 +10,7 @@ interface IProps {
   children: React.ReactNode;
 
 }
-
+// Todo this is used by other stuff as well, move this in version 3
 function LeagueInfoCard({ borderCss, statTitle, children }: IProps): ReactElement {
   return (
 

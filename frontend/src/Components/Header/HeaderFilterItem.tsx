@@ -36,7 +36,7 @@ function HeaderFilterItem({ draftPlayerId, name, type, teamName, close }: IProps
   return (
     <div
       key={draftPlayerId + type + 'headerOption' || leagueId + type + 'headerOption'}
-      className="group relative rounded-lg p-6 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-indigo-600 flex items-center"
+      className="group relative rounded-lg p-2 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-indigo-600 flex items-center"
       onClick={handleClickOnPlayer}
       onKeyDown={handleKeyDown}
       tabIndex={0}

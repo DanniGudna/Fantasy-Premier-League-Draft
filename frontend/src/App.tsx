@@ -91,7 +91,6 @@ function App() {
           playerLeagueStandings.push(getPlayerStandings(form));
         });
         const streaks = getAllStreaks(forms);
-        console.log('🚀 ~ file: App.tsx:97 ~ awaitPromise.all ~ forms:', forms);
         const matchScores = getMatchScores(forms);
         const chartData = createChartData(playerLeagueStandings);
 
@@ -117,9 +116,6 @@ function App() {
     setSeasonsInfo(allSeasonInfos);
     // set current season as the context season
     setSelectedSeason(allSeasonInfos[
-      SEASONS[SEASONS.length - 1].leagueId.toString()
-    ]);
-    console.log('🚀 ~ file: App.tsx:144 ~ getLeague ', allSeasonInfos[
       SEASONS[SEASONS.length - 1].leagueId.toString()
     ]);
   };

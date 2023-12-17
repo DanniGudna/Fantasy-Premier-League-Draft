@@ -101,8 +101,22 @@ export interface IDraftPlayerStats {
   lostByOnePoint: number;
   wonWithThirdMostPoints: number;
   lostWithSecondMostPoints: number;
-
+  head2HeadStats: IH2HStats[];
   // streaks: IStreakMap;
+}
+
+export interface IH2HStats {
+  playerId: number;
+  playerName: string;
+  playerTeamName: string;
+  opponentId: number;
+  // opponentName: string;
+  // opponentTeamName: string;
+  winPercentage: number;
+  pointsFor: number;
+  pointsAgainst: number;
+  biggestWin: IMatchInfo;
+  biggestLoss: IMatchInfo;
 }
 
 export type StreakTypes = 'win' | 'loss' | 'undefeated';
@@ -147,6 +161,7 @@ export interface IDraftPlayerStanding {
   weeklyStandings: IDraftPlayerWeeklyStanding[];
 }
 
+// not used
 export interface IGameWeekScores {
   round: number;
   score: number;
@@ -170,6 +185,7 @@ export interface ILeagueContext {
   changeSeason: (leagueId: number) => void
 }
 
+// Charts
 export interface IDataset {
   label: string,
   data: number[],

@@ -35,7 +35,7 @@ export default function Header() {
 
   return (
     <header className="relative isolate z-10 bg-background dark:bg-darkmode-background text-text dark:text-darkmode-text">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <nav className="mx-4 flex  items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="hidden lg:flex lg:flex-1 lg:justify-start mr-2">
           <LeaguePicker />
         </div>

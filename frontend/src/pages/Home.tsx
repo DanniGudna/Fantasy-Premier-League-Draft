@@ -1,6 +1,6 @@
 import 'tailwindcss/tailwind.css';
 
-import React, { ReactElement, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { LeagueContext } from '../App';

@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const fs = require('fs'); // Import the fs module
+const path = require('path'); // Import the path module
 
 const app = express();
 const corsOptions = {
@@ -24,6 +25,14 @@ function getJsonFallback(leagueID, endpointPath) {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Serve the React app build files
+app.use(express.static(path.join(__dirname, '../Frontend/build')));
+
+// Add a catch-all route to serve the React app's index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend/build', 'index.html'));
+});
 
 app.get('/api/data/:leagueID', async (req, res) => {
   const { leagueID } = req.params;
@@ -75,7 +84,7 @@ app.get('/api/scores/:round', async (req, res) => {
 // TODO = maybe this should be individual instead of all
 app.get('/api/transactions/:leagueID', async (req, res) => {
   const { leagueID } = req.params;
-  const url = `https://draft.premierleague.com/api/draft/league/${LeagueID}/transactions`;
+  const url = `https://draft.premierleague.com/api/draft/league/${leagueID}/transactions`;
   try {
     const response = await axios.get(url);
     res.json(response.data.transactions);

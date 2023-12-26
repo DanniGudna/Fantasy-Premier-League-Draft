@@ -3,11 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const fs = require('fs'); // Import the fs module
-const path = require('path'); // Import the path module
 
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*',
   credentials: true, // access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -25,14 +24,6 @@ function getJsonFallback(leagueID, endpointPath) {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
-// Serve the React app build files
-app.use(express.static(path.join(__dirname, '../Frontend/build')));
-
-// Add a catch-all route to serve the React app's index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend/build', 'index.html'));
-});
 
 app.get('/api/data/:leagueID', async (req, res) => {
   const { leagueID } = req.params;
@@ -109,8 +100,6 @@ app.get('/api/draft/:leagueID', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
 
 
 // https://draft.premierleague.com/api/bootstrap-static

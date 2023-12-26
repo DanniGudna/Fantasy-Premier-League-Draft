@@ -135,6 +135,7 @@ function App() {
           <div className="content w-full">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/Fantasy-Premier-League-Draft/" element={<Home />} />
               <Route path="/:leagueNumber/stats/:playerId?" element={<Stats />} />
               <Route path="/:leagueNumber/leagueTable/:playerId?" element={<Table />} />
               <Route path="/:leagueNumber/H2H/:playerId?" element={<Head2Head />} />

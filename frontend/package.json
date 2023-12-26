@@ -1,7 +1,8 @@
 {
   "name": "fantasy-draft-stat-page",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "private": true,
+  "homepage": "https://dannigudna.github.io/Fantasy-Premier-League-Draft",
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
@@ -9,8 +10,9 @@
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "autoprefixer": "^10.4.14",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "chart.js": "^4.3.0",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -26,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -61,7 +64,7 @@
     "typescript": "^5.3.3"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.tsx",
+  "main": "src/index.tsx",
   "keywords": [],
   "author": "Daníel Guðnason",
   "license": "ISC"

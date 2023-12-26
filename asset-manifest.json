@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Fantasy-Premier-League-Draft/static/css/main.e8d26a66.css",
+    "main.js": "/Fantasy-Premier-League-Draft/static/js/main.6b36373f.js",
+    "index.html": "/Fantasy-Premier-League-Draft/index.html",
+    "main.e8d26a66.css.map": "/Fantasy-Premier-League-Draft/static/css/main.e8d26a66.css.map",
+    "main.6b36373f.js.map": "/Fantasy-Premier-League-Draft/static/js/main.6b36373f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e8d26a66.css",
+    "static/js/main.6b36373f.js"
+  ]
+}

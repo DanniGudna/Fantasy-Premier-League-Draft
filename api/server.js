@@ -26,7 +26,6 @@ function getJsonFallback(leagueID, endpointPath) {
   const filePath = `./Json/${endpointPath}/${leagueID}.json`; // Adjust the file path as needed
   try {
     const data = fs.readFileSync(filePath, 'utf8');
-    console.log('🚀 ~ getJsonFallback ~ data:', data === null);
     return JSON.parse(data);
   } catch (error) {
     console.log(error)

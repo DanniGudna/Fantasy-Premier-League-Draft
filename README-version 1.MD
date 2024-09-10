@@ -59,7 +59,7 @@ for example>
 - ranking over time had to be figured out by analyzing the data as the current rank is the only thing the api returns
 - Highest and lowest scores in a week.
 
-## ➤ TODOs
+Things on the todo list I didnt have time to finish are>
 
 - individual player stats pages
 - better look for the scoring and streak content card
@@ -68,7 +68,21 @@ for example>
 - last 5 games result in the table
 - better look for the charts in dark mode (also in general)
 - fix mobile view after version 2 changes
-- convert to vite and next.js
+
+## ➤ External API
+
+The external api is the Fantasy premier league api. There is no documentation for it so in order to find the endpoints to use I had to inspect the network tab to
+see the api calls. It is an open API and many people have done something with it for the normal fantasy league. My project focuses on draft head to head leagues and
+displayes info about it not found on their website.
+
+## ➤ Eslint
+
+I used eslint and copy pasted the eslint.config I normally use in my job at the moment. There are probably things there that do no apply to this project.
+
+    ## ➤ Testing
+
+There is a single e2e cypress test written. It test to see if the stats are rendered after entering the league id.
+To test use the command npm run cypress:open (while the project is running). That opens the cypress window where you can run the test
 
 League numbers> 48617
 

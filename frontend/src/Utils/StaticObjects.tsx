@@ -95,6 +95,12 @@ export const SEASONS: IDraftSeason[] = [
     leagueName: 'Banter Lad 4: A new Lad',
     leagueId: 48617,
     seasonName: '23/24 Season',
+    currentSeason: false,
+  },
+  {
+    leagueName: 'Banter Lad 5: The Lad Strikes Back',
+    leagueId: 34397,
+    seasonName: '24/25 Season',
     currentSeason: true,
   },
 ];

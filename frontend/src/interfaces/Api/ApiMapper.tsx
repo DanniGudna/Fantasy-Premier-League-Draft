@@ -40,11 +40,12 @@ const mapLeague = (league: APILeague): ILeague => ({
   name: league.name,
 });
 
-const mapLeagueDetails = (leagueDetails: APILeagueDetails): ILeagueDetails => ({
-  league: mapLeague(leagueDetails.league),
-  draftPlayers: leagueDetails.league_entries.map((leagueEntry) => mapDraftPlayer(leagueEntry)),
-  matches: leagueDetails.matches.map((match) => mapMatch(match)),
-  standings: leagueDetails.standings.map((standing) => mapStanding(standing)),
-});
+const mapLeagueDetails = (leagueDetails: APILeagueDetails): ILeagueDetails => (
+  {
+    league: mapLeague(leagueDetails.league),
+    draftPlayers: leagueDetails.league_entries.map((leagueEntry) => mapDraftPlayer(leagueEntry)),
+    matches: leagueDetails.matches.map((match) => mapMatch(match)),
+    standings: leagueDetails.standings.map((standing) => mapStanding(standing)),
+  });
 
 export default mapLeagueDetails;

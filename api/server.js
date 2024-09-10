@@ -11,13 +11,25 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 
+
+// For some reason the league number 48617 is returning a response from the API with no data. This is a quick and dirty temp
+// solution to get the data from a local json file instead.
+// TODO do the check based on the SEASONS const object if possible
+function checkIfPreviousSeason(leagueID) {
+  if (leagueID === "48617" || leagueID === "46795") {
+    return true;
+  }
+}
+
 // todo not all endpoints have params!
 function getJsonFallback(leagueID, endpointPath) {
   const filePath = `./Json/${endpointPath}/${leagueID}.json`; // Adjust the file path as needed
   try {
     const data = fs.readFileSync(filePath, 'utf8');
+    console.log('🚀 ~ getJsonFallback ~ data:', data === null);
     return JSON.parse(data);
   } catch (error) {
+    console.log(error)
     return null; // Return null if there's an error reading the file
   }
 }
@@ -27,8 +39,13 @@ app.use(express.json());
 
 app.get('/api/data/:leagueID', async (req, res) => {
   const { leagueID } = req.params;
+  
   const url = `https://draft.premierleague.com/api/league/${leagueID}/details`;
   try {
+    if (checkIfPreviousSeason(leagueID)) {
+      const fallback = getJsonFallback(leagueID, "details");
+      res.status(200).json(fallback)
+    }
     const response = await axios.get(url);
     res.json(response.data);
   } catch (error) {

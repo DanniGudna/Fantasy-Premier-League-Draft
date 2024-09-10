@@ -69,6 +69,7 @@ for example>
 - better look for the charts in dark mode (also in general)
 - fix mobile view after version 2 changes
 - convert to vite and next.js
+- fix bug for page name when deployed to github pages
 
 League numbers> 48617
 
